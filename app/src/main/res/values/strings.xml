@@ -1,3 +1,27 @@
 <resources>
-    <string name="app_name">BrowserDownloader</string>
+    <string name="app_name">Video Downloader</string>
+
+    <string name="download_video_guild">1. Open <b>\'Browser Screen\'</b> to search video or enter video url\n\n2. If a video found, click to download button at right bottom corner\n\n3. Download Manager will start download your video\n\n4. After download video completed, back to home and open <b>\'Video Screen\'</b> to watch your video</string>
+
+    <string name="splash_text_1">Welcome to Video Downloader!</string>
+    <string name="splash_text_2">What\'s Video Downloader?</string>
+    <string name="splash_text_3">Video Downloader allows you to download your favorite videos from Facebook, Instagram, Twitter and any other websites.</string>
+    <string name="splash_text_4">Wow that\'s awesome</string>
+    <string name="splash_text_5">Just give it a try and download your favorite videos now!</string>
+
+    <string name="rate_app">Do you enjoy our app? Please take a second to rate and review it!</string>
+    <string name="text_not_support">YOUTUBE IS NOT SUPPORTED DUE TO THEIR TERMS OF SERVICE !!!</string>
+
+    <string name="rename_title">Rename video</string>
+    <string name="rename_invalid">Invalid name. Please try again!</string>
+    <string name="rename_exist">Video name already exists!</string>
+
+    <string name="screen_home">Screen Home</string>
+    <string name="screen_browser">Screen Browser</string>
+    <string name="screen_video">Screen Video</string>
+    <string name="action_rate_us">Action Rate Us</string>
+    <string name="action_rate_us_exit_app">Action Rate Us - Exit App</string>
+    <string name="action_show_ad_home">Action Show Ad - Home</string>
+    <string name="action_show_ad_browser">Action Show Ad - Browser</string>
+    <string name="action_show_ad_video">Action Show Ad - Video</string>
 </resources>

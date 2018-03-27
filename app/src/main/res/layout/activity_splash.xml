@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:paddingLeft="@dimen/padding_16"
+            android:paddingRight="@dimen/padding_16">
+
+            <ImageView
+                android:layout_width="@dimen/size_80"
+                android:layout_height="@dimen/size_80"
+                android:layout_gravity="center"
+                android:layout_marginBottom="@dimen/padding_30"
+                android:layout_marginTop="@dimen/padding_20"
+                android:background="@drawable/ic_launcher" />
+
+            <TextView
+                android:id="@+id/tv_message_1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="right"
+                android:layout_marginBottom="@dimen/padding_15"
+                android:background="@drawable/bg_border_chat_color"
+                android:paddingBottom="@dimen/padding_8"
+                android:paddingLeft="@dimen/padding_15"
+                android:paddingRight="@dimen/padding_15"
+                android:paddingTop="@dimen/padding_8"
+                android:text="@string/splash_text_1"
+                android:textColor="@android:color/white"
+                android:textSize="@dimen/text_16" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/padding_15"
+                android:background="@drawable/bg_border_chat"
+                android:paddingBottom="@dimen/padding_8"
+                android:paddingLeft="@dimen/padding_15"
+                android:paddingRight="@dimen/padding_15"
+                android:paddingTop="@dimen/padding_8"
+                android:text="@string/splash_text_2"
+                android:textSize="@dimen/text_16" />
+
+            <TextView
+                android:id="@+id/tv_message_3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="right"
+                android:layout_marginLeft="@dimen/padding_50"
+                android:background="@drawable/bg_border_chat_color"
+                android:paddingBottom="@dimen/padding_8"
+                android:paddingLeft="@dimen/padding_15"
+                android:paddingRight="@dimen/padding_15"
+                android:paddingTop="@dimen/padding_8"
+                android:text="@string/splash_text_3"
+                android:textColor="@android:color/white"
+                android:textSize="@dimen/text_16" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/padding_15"
+                android:layout_marginTop="@dimen/padding_15"
+                android:background="@drawable/bg_border_chat"
+                android:paddingBottom="@dimen/padding_8"
+                android:paddingLeft="@dimen/padding_15"
+                android:paddingRight="@dimen/padding_15"
+                android:paddingTop="@dimen/padding_8"
+                android:text="@string/splash_text_4"
+                android:textSize="@dimen/text_16" />
+
+            <TextView
+                android:id="@+id/tv_message_5"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="right"
+                android:layout_marginLeft="@dimen/padding_50"
+                android:background="@drawable/bg_border_chat_color"
+                android:paddingBottom="@dimen/padding_8"
+                android:paddingLeft="@dimen/padding_15"
+                android:paddingRight="@dimen/padding_15"
+                android:paddingTop="@dimen/padding_8"
+                android:text="@string/splash_text_5"
+                android:textColor="@android:color/white"
+                android:textSize="@dimen/text_16" />
+
+        </LinearLayout>
+
+        <android.support.v7.widget.AppCompatButton
+            android:id="@+id/btn_done"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginBottom="@dimen/padding_32"
+            android:backgroundTint="@color/colorPrimary"
+            android:paddingLeft="@dimen/padding_32"
+            android:paddingRight="@dimen/padding_32"
+            android:text="I GOT IT"
+            android:textColor="@android:color/white"
+            android:textSize="@dimen/text_16" />
+    </LinearLayout>
+</layout>
