@@ -1,27 +1,9 @@
-package core.common;
+package vd.core.util;
 
-public class Constant {
+public class ScriptUtil {
 
-    // App data
-    public final static String SEARCH_URL = "https://www.google.com/search?tbm=vid&q=%s -youtube";
-
-    // Remote data
-    public final static String REMOTE_URL = "https://generaldata-79d9b.firebaseapp.com/api/videodownloader/";
-
-    // Parser server
-    public final static String URL_SERVER_1 = "http://youtube-dl55.herokuapp.com/api/info?url=%s";
-    public final static String URL_SERVER_2 = "http://youtube-dl99.herokuapp.com/api/info?url=%s";
-
-    // App config
-    public final static String UA_ID = "UA-102761433-1";
-
-    public final static String AD_APP_ID = "ca-app-pub-9480296373139891~2380509503";
-    public final static String AD_BANNER_ID = "ca-app-pub-9480296373139891/5668963921";
-    public final static String AD_INTERSTITIAL_ID = "ca-app-pub-9480296373139891/2707812565";
-
-    // get video data script
-    public static String VIDEO_SCRIPT = "javascript:function clickOnVideo(link, name, classValueName){" +
-            "browser.getVideoData(link, name);" +
+    public static String FACEBOOK_SCRIPT = "javascript:function clickOnVideo(link, classValueName){" +
+            "browser.getVideoData(link);" +
             "var element = document.getElementById(\"mInlineVideoPlayer\");" +
             "element.muted = true;" +
             "var parent = element.parentNode; " +
@@ -36,7 +18,7 @@ public class Constant {
             "var obj = JSON && JSON.parse(jsonString) || $.parseJSON(jsonString);" +
             "var videoLink = obj.src;" +
             "var videoName = obj.videoID;" +
-            "items[i].setAttribute('onclick', \"clickOnVideo('\"+videoLink+\"','\"+videoName+\"','\"+classValueName+\"')\");}}" +
+            "items[i].setAttribute('onclick', \"clickOnVideo('\"+videoLink+\"','\"+classValueName+\"')\");}}" +
             "var links = document.getElementsByTagName(\"a\");" +
             "for(i = 0; i < links.length; i++){" +
             "if(links[ i ].hasAttribute(\"data-store\")){" +
@@ -46,10 +28,29 @@ public class Constant {
             "var videoLink = links[i].getAttribute(\"href\");" +
             "var res = videoLink.split(\"src=\");" +
             "var myLink = res[1];" +
-            "links[i].parentNode.setAttribute('onclick', \"browser.getVideoData('\"+myLink+\"','\"+videoName+\"')\");" +
+            "links[i].parentNode.setAttribute('onclick', \"browser.getVideoData('\"+myLink+\"')\");" +
             "while (links[i].firstChild){" +
             "links[i].parentNode.insertBefore(links[i].firstChild," +
             "links[i]);}" +
             "links[i].parentNode.removeChild(links[i]);}}}catch(e){}}" +
             "getVideoLink();";
+
+    public static String INSTAGRAM_SCRIPT = "javascript:function clickOnVideo() {var videoLink;" +
+            "try{ar items = document.getElementsByTagName(\"video\");" +
+            "for (i = 0; i < items.length; i++) {" +
+            "videoLink = items[i].getAttribute(\"src\");" +
+            "var classValueName = items[i].getAttribute(\"class\");}" +
+            "var links = document.getElementsByTagName(\"a\");" +
+            "for (i = 0; i < links.length; i++) {" +
+            "f (links[i].getAttribute(\"role\") == \"button\"){" +
+            "console.log('links[i].getAttribute: '+i);" +
+            "links[i].parentNode.setAttribute('onclick', \"browser.getVideoData('\"+videoLink+\"')\");}}" +
+            "}catch(e){}}clickOnVideo();";
+
+    public static String TWITTER_SCRIPT = "javascript:function clickOnVideo() {" +
+            "try{var items = document.getElementsByTagName(\"source\");" +
+            "for (i = 0; i < items.length; i++) {" +
+            "if (items[ i ].getAttribute(\"type\") == \"video/mp4\"){" +
+            "var videoLink = items[i].getAttribute(\"src\");" +
+            "browser.getVideoData(videoLink);}}}catch(e){}}clickOnVideo();";
 }

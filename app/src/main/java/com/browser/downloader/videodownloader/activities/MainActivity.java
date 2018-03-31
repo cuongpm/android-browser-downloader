@@ -10,9 +10,10 @@ import com.browser.downloader.videodownloader.databinding.ActivityMainBinding;
 
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import core.common.PreferencesManager;
-import core.util.AdUtil;
-import core.util.IntentUtil;
+import vd.core.common.PreferencesManager;
+import vd.core.util.AdUtil;
+import vd.core.util.IntentUtil;
+import vd.core.util.ViewUtil;
 
 public class MainActivity extends BaseActivity {
 
@@ -39,6 +40,7 @@ public class MainActivity extends BaseActivity {
     }
 
     private void initUI() {
+        mBinding.layoutItem.getLayoutParams().height = (ViewUtil.getScreenWidth() - ViewUtil.dpToPx(64)) / 3;
     }
 
     @OnClick(R.id.tv_browser)

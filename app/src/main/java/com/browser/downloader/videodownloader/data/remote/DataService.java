@@ -1,14 +1,13 @@
 package com.browser.downloader.videodownloader.data.remote;
 
-
 import com.browser.downloader.videodownloader.data.model.StaticData;
 
-import core.common.Constant;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
 import retrofit2.http.GET;
 import rx.Observable;
+import vd.core.common.Constant;
 
 public interface DataService {
 

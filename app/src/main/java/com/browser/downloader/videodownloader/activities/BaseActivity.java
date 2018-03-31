@@ -7,7 +7,7 @@ import com.google.android.gms.analytics.GoogleAnalytics;
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
 
-import core.common.Constant;
+import vd.core.common.Constant;
 
 public class BaseActivity extends AppCompatActivity {
 

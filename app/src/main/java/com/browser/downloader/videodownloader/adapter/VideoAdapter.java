@@ -19,8 +19,8 @@ import com.browser.downloader.videodownloader.databinding.ItemVideoBinding;
 import java.io.File;
 import java.util.ArrayList;
 
-import core.util.FileUtil;
-import core.util.IntentUtil;
+import vd.core.util.FileUtil;
+import vd.core.util.IntentUtil;
 
 public class VideoAdapter
         extends RecyclerView.Adapter<VideoAdapter.FileViewHolder> {

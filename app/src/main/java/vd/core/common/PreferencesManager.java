@@ -1,11 +1,11 @@
-package core.common;
+package vd.core.common;
 
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.text.TextUtils;
 
-import com.browser.downloader.videodownloader.data.model.StaticData;
 import com.google.gson.Gson;
+import com.browser.downloader.videodownloader.data.model.StaticData;
 
 public class PreferencesManager {
 

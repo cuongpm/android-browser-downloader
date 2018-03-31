@@ -22,6 +22,7 @@
             android:padding="@dimen/padding_16">
 
             <LinearLayout
+                android:id="@+id/layout_item"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/size_100"
                 android:orientation="horizontal">
@@ -66,35 +67,41 @@
 
             </LinearLayout>
 
-            <android.support.v7.widget.AppCompatTextView
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="@dimen/padding_16"
                 android:layout_marginTop="@dimen/padding_16"
-                android:text="How to download video:"
-                android:textAllCaps="true"
-                android:textColor="@color/black_85"
-                android:textSize="@dimen/text_16"
-                android:textStyle="bold" />
+                android:background="@drawable/bg_border_guide"
+                android:orientation="vertical"
+                android:padding="@dimen/padding_16">
 
-            <android.support.v7.widget.AppCompatTextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/download_video_guild"
-                android:textColor="@color/black_85"
-                android:textSize="@dimen/text_16" />
+                <android.support.v7.widget.AppCompatTextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/padding_16"
+                    android:text="How to download video:"
+                    android:textAllCaps="true"
+                    android:textColor="@color/black_85"
+                    android:textSize="@dimen/text_14"
+                    android:textStyle="bold" />
 
-            <android.support.v7.widget.AppCompatTextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="@dimen/padding_16"
-                android:layout_marginTop="@dimen/padding_16"
-                android:text="@string/text_not_support"
-                android:textAllCaps="true"
-                android:textColor="@android:color/holo_red_dark"
-                android:textSize="@dimen/text_16"
-                android:textStyle="bold" />
+                <android.support.v7.widget.AppCompatTextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/download_video_guild"
+                    android:textColor="@color/black_85"
+                    android:textSize="@dimen/text_14" />
 
+                <android.support.v7.widget.AppCompatTextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/padding_16"
+                    android:text="@string/text_not_support"
+                    android:textAllCaps="true"
+                    android:textColor="@android:color/holo_red_dark"
+                    android:textSize="@dimen/text_14"
+                    android:textStyle="bold" />
+            </LinearLayout>
         </LinearLayout>
 
         <LinearLayout

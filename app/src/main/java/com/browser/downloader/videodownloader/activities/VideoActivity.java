@@ -4,20 +4,20 @@ import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 
+import com.google.android.gms.ads.AdListener;
+import com.google.android.gms.ads.InterstitialAd;
 import com.browser.downloader.videodownloader.R;
 import com.browser.downloader.videodownloader.adapter.VideoAdapter;
 import com.browser.downloader.videodownloader.data.model.StaticData;
 import com.browser.downloader.videodownloader.databinding.ActivityVideoBinding;
-import com.google.android.gms.ads.AdListener;
-import com.google.android.gms.ads.InterstitialAd;
 
 import java.io.File;
 import java.util.ArrayList;
 
-import core.common.PreferencesManager;
-import core.util.AdUtil;
-import core.util.DialogUtil;
-import core.util.FileUtil;
+import vd.core.common.PreferencesManager;
+import vd.core.util.AdUtil;
+import vd.core.util.DialogUtil;
+import vd.core.util.FileUtil;
 
 public class VideoActivity extends BaseActivity {
 

@@ -1,4 +1,4 @@
-package core.util;
+package vd.core.util;
 
 import android.content.Context;
 import android.view.View;
@@ -10,7 +10,7 @@ import com.google.android.gms.ads.AdSize;
 import com.google.android.gms.ads.AdView;
 import com.google.android.gms.ads.InterstitialAd;
 
-import core.common.Constant;
+import vd.core.common.Constant;
 
 public class AdUtil {
 

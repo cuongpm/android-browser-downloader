@@ -1,4 +1,4 @@
-package core.util;
+package vd.core.util;
 
 import android.content.Context;
 import android.content.Intent;

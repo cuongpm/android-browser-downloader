@@ -4,22 +4,22 @@ import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 
+import com.google.android.gms.ads.AdListener;
+import com.google.android.gms.ads.InterstitialAd;
+import com.google.android.gms.ads.MobileAds;
 import com.browser.downloader.videodownloader.R;
 import com.browser.downloader.videodownloader.data.model.StaticData;
 import com.browser.downloader.videodownloader.data.remote.DataService;
 import com.browser.downloader.videodownloader.databinding.ActivitySplashBinding;
-import com.google.android.gms.ads.AdListener;
-import com.google.android.gms.ads.InterstitialAd;
-import com.google.android.gms.ads.MobileAds;
 
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import core.common.Constant;
-import core.common.PreferencesManager;
-import core.util.AdUtil;
-import core.util.DialogUtil;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
+import vd.core.common.Constant;
+import vd.core.common.PreferencesManager;
+import vd.core.util.AdUtil;
+import vd.core.util.DialogUtil;
 
 public class SplashActivity extends BaseActivity {
 

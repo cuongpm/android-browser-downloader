@@ -1,4 +1,4 @@
-package core.util;
+package vd.core.util;
 
 import android.app.DownloadManager;
 import android.content.Context;
@@ -12,8 +12,8 @@ import java.io.File;
 import java.util.Calendar;
 import java.util.Date;
 
-import core.common.Constant;
-import core.common.PreferencesManager;
+import vd.core.common.Constant;
+import vd.core.common.PreferencesManager;
 
 public class AppUtil {
 

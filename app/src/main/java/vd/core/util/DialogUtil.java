@@ -1,4 +1,4 @@
-package core.util;
+package vd.core.util;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -9,6 +9,7 @@ import android.graphics.drawable.ColorDrawable;
 import android.view.Window;
 
 import com.browser.downloader.videodownloader.R;
+
 
 public class DialogUtil {
 
@@ -58,6 +59,14 @@ public class DialogUtil {
                 .setMessage(message)
                 .setPositiveButton(android.R.string.yes, onClickListener)
                 .setNegativeButton(android.R.string.no, (dialog, which) -> dialog.dismiss())
+                .show();
+    }
+
+    public static void showAlertDialog(Context context, String message) {
+        AlertDialog.Builder arAlertDialog = new AlertDialog.Builder(context);
+        arAlertDialog.setTitle(context.getString(R.string.app_name))
+                .setMessage(message)
+                .setPositiveButton(android.R.string.ok, (dialog, which) -> dialog.dismiss())
                 .show();
     }
 }

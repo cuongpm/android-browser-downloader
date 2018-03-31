@@ -19,9 +19,31 @@
     <string name="screen_home">Screen Home</string>
     <string name="screen_browser">Screen Browser</string>
     <string name="screen_video">Screen Video</string>
+
     <string name="action_rate_us">Action Rate Us</string>
     <string name="action_rate_us_exit_app">Action Rate Us - Exit App</string>
     <string name="action_show_ad_home">Action Show Ad - Home</string>
     <string name="action_show_ad_browser">Action Show Ad - Browser</string>
     <string name="action_show_ad_video">Action Show Ad - Video</string>
+
+    <string name="action_search">Action Search</string>
+    <string name="action_open_facebook">Action Click - Facebook</string>
+    <string name="action_open_twitter">Action Click - Twitter</string>
+    <string name="action_open_instagram">Action Click - Instagram</string>
+
+    <string name="event_unsupported_site">Event Unsupported Site</string>
+    <string name="event_get_link_fail">Event Get Link - Failed</string>
+    <string name="event_get_link_success">Event Get Link - Succeed</string>
+    <string name="event_get_link_facebook">Event Get Link - Facebook</string>
+    <string name="event_get_link_twitter">Event Get Link - Twitter</string>
+    <string name="event_get_link_instagram">Event Get Link - Instagram</string>
+
+    <string name="link_facebook">https://facebook.com</string>
+    <string name="link_twitter">https://twitter.com</string>
+    <string name="link_instagram">https://instagram.com</string>
+
+    <string name="error_valid_link">Please enter a valid video link!</string>
+    <string name="error_social_app">Please click on video to download it or go to video page and try again!</string>
+    <string name="error_facebook">Please click on video to download it!</string>
+    <string name="error_get_link">Can\'t get video link. Please go to video page and try again!</string>
 </resources>
