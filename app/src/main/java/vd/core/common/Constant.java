@@ -6,7 +6,7 @@ public class Constant {
     public final static String SEARCH_URL = "https://www.google.com/search?tbm=vid&q=%s -youtube";
 
     // Remote data
-    public final static String REMOTE_URL = "https://generaldata-79d9b.firebaseapp.com/api/videodownloader/";
+    public final static String REMOTE_URL = "https://videodownloader-16668.firebaseapp.com/api/";
 
     // Parser server
     public final static String URL_SERVER_1 = "http://youtube-dl55.herokuapp.com/api/info?url=%s";

@@ -11,7 +11,7 @@ import vd.core.common.Constant;
 
 public interface DataService {
 
-    @GET("static_data.json")
+    @GET("config.json")
     Observable<StaticData> getStaticData();
 
     class Factory {
