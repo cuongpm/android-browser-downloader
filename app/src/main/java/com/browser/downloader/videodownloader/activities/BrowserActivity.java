@@ -2,6 +2,7 @@ package com.browser.downloader.videodownloader.activities;
 
 import android.Manifest;
 import android.content.pm.PackageManager;
+import android.content.res.ColorStateList;
 import android.databinding.DataBindingUtil;
 import android.graphics.Bitmap;
 import android.os.Bundle;
@@ -11,6 +12,8 @@ import android.text.TextUtils;
 import android.util.Patterns;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.webkit.JavascriptInterface;
 import android.webkit.WebChromeClient;
 import android.webkit.WebView;
@@ -43,6 +46,12 @@ public class BrowserActivity extends BaseActivity {
     private InterstitialAd mInterstitialAd;
 
     private boolean isAdShowed = false;
+
+    private LinkStatus mLinkStatus;
+
+    private enum LinkStatus {
+        SUPPORTED, GENERAL, UNSUPPORTED
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -175,6 +184,8 @@ public class BrowserActivity extends BaseActivity {
             mBinding.progressBar.setVisibility(View.VISIBLE);
             mBinding.layoutBottom.setVisibility(View.VISIBLE);
             mBinding.layoutSocial.setVisibility(View.GONE);
+
+            checkLinkStatus(url);
             super.onPageStarted(view, url, favicon);
         }
 
@@ -189,12 +200,12 @@ public class BrowserActivity extends BaseActivity {
         @Override
         public void onLoadResource(WebView view, String url) {
             super.onLoadResource(view, url);
-            if (view.getUrl().contains("m.facebook.com")) {
-                view.loadUrl(ScriptUtil.FACEBOOK_SCRIPT);
-            } else if (view.getUrl().contains("instagram.com")) {
-                view.loadUrl(ScriptUtil.INSTAGRAM_SCRIPT);
-            } else if (view.getUrl().contains("mobile.twitter.com")) {
-                view.loadUrl(ScriptUtil.TWITTER_SCRIPT);
+            try {
+                if (url.contains("facebook.com")) {
+                    view.loadUrl(ScriptUtil.FACEBOOK_SCRIPT);
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
             }
         }
 
@@ -203,15 +214,65 @@ public class BrowserActivity extends BaseActivity {
             mBinding.etSearch.setText(url);
             mBinding.progressBar.setVisibility(View.GONE);
             checkWebViewData(view);
+            checkLinkStatus(url);
             super.onPageFinished(view, url);
         }
     };
+
+    private void checkLinkStatus(String url) {
+        StaticData staticData = PreferencesManager.getInstance(this).getStaticData();
+        if (staticData != null) {
+            // General sites
+            if (staticData.getPagesGeneral() != null) {
+                for (String link : staticData.getPagesGeneral()) {
+                    if (url.startsWith(link)) {
+                        mLinkStatus = LinkStatus.GENERAL;
+                        disableDownloadBtn();
+                        return;
+                    }
+                }
+            }
+            // Unsupported sites
+            if (staticData.getPagesUnsupported() != null) {
+                for (String link : staticData.getPagesUnsupported()) {
+                    if (url.startsWith(link)) {
+                        mLinkStatus = LinkStatus.UNSUPPORTED;
+                        disableDownloadBtn();
+                        return;
+                    }
+                }
+            }
+        }
+
+        // Other sites
+        mLinkStatus = LinkStatus.SUPPORTED;
+        enableDownloadBtn();
+    }
 
     private void checkWebViewData(WebView view) {
         mBinding.ivBack.setEnabled(view.canGoBack());
         mBinding.ivBack.setAlpha(view.canGoBack() ? 1f : 0.5f);
         mBinding.ivNext.setEnabled(view.canGoForward());
         mBinding.ivNext.setAlpha(view.canGoForward() ? 1f : 0.5f);
+    }
+
+    private void disableDownloadBtn() {
+        mBinding.fab.setBackgroundTintList(ColorStateList.valueOf(ContextCompat.getColor(this, R.color.color_gray_1)));
+    }
+
+    private void enableDownloadBtn() {
+        mBinding.fab.setBackgroundTintList(ColorStateList.valueOf(ContextCompat.getColor(this, R.color.colorAccent)));
+    }
+
+    private void enableDownloadBtnAndShake() {
+        enableDownloadBtn();
+        shakeButton(mBinding.fab);
+    }
+
+    private void shakeButton(View view) {
+        Animation anim = AnimationUtils.loadAnimation(this, R.anim.shake_btn_anim);
+        anim.setDuration(50L);
+        view.startAnimation(anim);
     }
 
     @JavascriptInterface
@@ -222,19 +283,13 @@ public class BrowserActivity extends BaseActivity {
                 if (!TextUtils.isEmpty(url) && url.startsWith("http")) {
                     Video video = new Video(System.currentTimeMillis() + ".mp4", url);
                     DialogUtil.showAlertDialog(BrowserActivity.this,
-                            video.getFileName(), "Do you want to download this video?",
+                            video.getFileName(), getString(R.string.message_download_video),
                             (dialogInterface, i) -> {
                                 showInterstitlaAd();
                                 AppUtil.downloadVideo(BrowserActivity.this, video);
                             });
                     // google analytics
-                    if (mBinding.webview.getUrl().contains("m.facebook.com")) {
-                        trackEvent(getString(R.string.app_name), getString(R.string.event_get_link_facebook), url);
-                    } else if (mBinding.webview.getUrl().contains("instagram.com")) {
-                        trackEvent(getString(R.string.app_name), getString(R.string.event_get_link_instagram), url);
-                    } else if (mBinding.webview.getUrl().contains("mobile.twitter.com")) {
-                        trackEvent(getString(R.string.app_name), getString(R.string.event_get_link_twitter), url);
-                    }
+                    trackEvent(getString(R.string.app_name), getString(R.string.event_get_link_facebook), url);
                 }
             } catch (Exception e) {
                 e.printStackTrace();
@@ -291,13 +346,25 @@ public class BrowserActivity extends BaseActivity {
 
     @OnClick(R.id.fab)
     public void downloadVideo() {
+
+        if (mLinkStatus != null) {
+            if (mLinkStatus == LinkStatus.GENERAL) {
+                DialogUtil.showAlertDialog(this, getString(R.string.error_video_page));
+                return;
+            }
+            if (mLinkStatus == LinkStatus.UNSUPPORTED) {
+                DialogUtil.showAlertDialog(this, getString(R.string.error_unsupported_site));
+                return;
+            }
+        }
+
         String data = mBinding.webview.getUrl();
         if (data == null || data.length() == 0 || !Patterns.WEB_URL.matcher(data).matches()) {
             DialogUtil.showAlertDialog(this, getString(R.string.error_valid_link));
             return;
         }
 
-        if (data.contains("m.facebook.com")) {
+        if (data.contains("facebook.com")) {
             DialogUtil.showAlertDialog(this, getString(R.string.error_facebook));
             return;
         }
@@ -311,7 +378,7 @@ public class BrowserActivity extends BaseActivity {
 
         new DownloadService(this, video -> {
             DialogUtil.showAlertDialog(BrowserActivity.this,
-                    video.getFileName(), "Do you want to download this video?",
+                    video.getFileName(), getString(R.string.message_download_video),
                     (dialogInterface, i) -> {
                         showInterstitlaAd();
                         AppUtil.downloadVideo(BrowserActivity.this, video);

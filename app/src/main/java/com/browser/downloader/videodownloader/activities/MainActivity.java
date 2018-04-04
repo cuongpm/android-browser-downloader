@@ -12,6 +12,8 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import vd.core.common.PreferencesManager;
 import vd.core.util.AdUtil;
+import vd.core.util.AppUtil;
+import vd.core.util.DialogUtil;
 import vd.core.util.IntentUtil;
 import vd.core.util.ViewUtil;
 
@@ -43,39 +45,44 @@ public class MainActivity extends BaseActivity {
         mBinding.layoutItem.getLayoutParams().height = (ViewUtil.getScreenWidth() - ViewUtil.dpToPx(64)) / 3;
     }
 
-    @OnClick(R.id.tv_browser)
+    @OnClick(R.id.btn_browser)
     public void clickBrowser() {
         startActivity(new Intent(this, BrowserActivity.class));
     }
 
-    @OnClick(R.id.tv_video)
+    @OnClick(R.id.btn_video)
     public void clickVideo() {
         startActivity(new Intent(this, VideoActivity.class));
     }
 
-    @OnClick(R.id.tv_rate_us)
-    public void clickRateUs() {
-        PreferencesManager.getInstance(this).setRateApp(true);
-        IntentUtil.openGooglePlay(this, getPackageName());
-        // google analytics
-        trackEvent(getResources().getString(R.string.app_name), getString(R.string.action_rate_us), "");
+    @OnClick(R.id.btn_settings)
+    public void clickSettings() {
+        startActivity(new Intent(this, SettingsActivity.class));
     }
 
     @Override
     public void onBackPressed() {
-        new AlertDialog.Builder(this).setTitle(getString(R.string.app_name))
-                .setMessage(getString(R.string.rate_app))
-                .setPositiveButton("OK", (dialogInterface, i) -> {
-                    dialogInterface.dismiss();
-                    PreferencesManager.getInstance(this).setRateApp(true);
-                    IntentUtil.openGooglePlay(MainActivity.this, getPackageName());
-                    // google analytics
-                    trackEvent(getResources().getString(R.string.app_name), getString(R.string.action_rate_us_exit_app), "");
-                })
-                .setNegativeButton("EXIT", (dialogInterface, i) -> {
-                    dialogInterface.dismiss();
-                    finish();
-                })
-                .show();
+        if (AppUtil.isDownloadVideo) {
+            new AlertDialog.Builder(this).setTitle(getString(R.string.app_name))
+                    .setMessage(getString(R.string.rate_app))
+                    .setPositiveButton("OK", (dialogInterface, i) -> {
+                        dialogInterface.dismiss();
+                        PreferencesManager.getInstance(this).setRateApp(true);
+                        IntentUtil.openGooglePlay(MainActivity.this, getPackageName());
+                        // google analytics
+                        trackEvent(getResources().getString(R.string.app_name), getString(R.string.action_rate_us_exit_app), "");
+                    })
+                    .setNegativeButton("EXIT", (dialogInterface, i) -> {
+                        dialogInterface.dismiss();
+                        finish();
+                    })
+                    .show();
+        } else {
+            DialogUtil.showAlertDialog(this, getString(R.string.app_name), getString(R.string.message_exit),
+                    (dialogInterface, i) -> {
+                        dialogInterface.dismiss();
+                        finish();
+                    });
+        }
     }
 }

@@ -119,12 +119,25 @@
                         android:textSize="@dimen/text_16"
                         android:textStyle="bold" />
 
-                    <android.support.v7.widget.AppCompatTextView
-                        android:id="@+id/tv_facebook"
+                    <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="@string/link_facebook"
-                        android:textColor="@color/black_85" />
+                        android:orientation="vertical">
+
+                        <android.support.v7.widget.AppCompatTextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="Facebook"
+                            android:textColor="@color/black_85"
+                            android:textSize="@dimen/text_16" />
+
+                        <android.support.v7.widget.AppCompatTextView
+                            android:id="@+id/tv_facebook"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="@string/link_facebook"
+                            android:textColor="@color/black_55" />
+                    </LinearLayout>
 
                 </LinearLayout>
 
@@ -155,12 +168,25 @@
                         android:textSize="@dimen/text_16"
                         android:textStyle="bold" />
 
-                    <android.support.v7.widget.AppCompatTextView
-                        android:id="@+id/tv_twitter"
+                    <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="@string/link_twitter"
-                        android:textColor="@color/black_85" />
+                        android:orientation="vertical">
+
+                        <android.support.v7.widget.AppCompatTextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="Twitter"
+                            android:textColor="@color/black_85"
+                            android:textSize="@dimen/text_16" />
+
+                        <android.support.v7.widget.AppCompatTextView
+                            android:id="@+id/tv_twitter"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="@string/link_twitter"
+                            android:textColor="@color/black_55" />
+                    </LinearLayout>
 
                 </LinearLayout>
 
@@ -191,12 +217,25 @@
                         android:textSize="@dimen/text_16"
                         android:textStyle="bold" />
 
-                    <android.support.v7.widget.AppCompatTextView
-                        android:id="@+id/tv_instagram"
+                    <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="@string/link_instagram"
-                        android:textColor="@color/black_85" />
+                        android:orientation="vertical">
+
+                        <android.support.v7.widget.AppCompatTextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="Instagram"
+                            android:textColor="@color/black_85"
+                            android:textSize="@dimen/text_16" />
+
+                        <android.support.v7.widget.AppCompatTextView
+                            android:id="@+id/tv_instagram"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="@string/link_instagram"
+                            android:textColor="@color/black_55" />
+                    </LinearLayout>
 
                 </LinearLayout>
 

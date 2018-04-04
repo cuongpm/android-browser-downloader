@@ -27,20 +27,33 @@
                 android:layout_height="@dimen/size_100"
                 android:orientation="horizontal">
 
-                <android.support.v7.widget.AppCompatTextView
-                    android:id="@+id/tv_browser"
+                <LinearLayout
+                    android:id="@+id/btn_browser"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
                     android:background="@drawable/bg_border_item"
                     android:foreground="?attr/selectableItemBackground"
                     android:gravity="center"
-                    android:text="Browser"
-                    android:textColor="@android:color/white"
-                    android:textSize="@dimen/text_16" />
+                    android:orientation="vertical">
 
-                <android.support.v7.widget.AppCompatTextView
-                    android:id="@+id/tv_video"
+                    <android.support.v7.widget.AppCompatImageView
+                        android:layout_width="@dimen/size_30"
+                        android:layout_height="@dimen/size_30"
+                        app:srcCompat="@drawable/ic_browser" />
+
+                    <android.support.v7.widget.AppCompatTextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/padding_5"
+                        android:text="Browser"
+                        android:textColor="@android:color/white"
+                        android:textSize="@dimen/text_16" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/btn_video"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_marginLeft="@dimen/padding_16"
@@ -48,12 +61,25 @@
                     android:background="@drawable/bg_border_item"
                     android:foreground="?attr/selectableItemBackground"
                     android:gravity="center"
-                    android:text="Video"
-                    android:textColor="@android:color/white"
-                    android:textSize="@dimen/text_16" />
+                    android:orientation="vertical">
 
-                <android.support.v7.widget.AppCompatTextView
-                    android:id="@+id/tv_rate_us"
+                    <android.support.v7.widget.AppCompatImageView
+                        android:layout_width="@dimen/size_30"
+                        android:layout_height="@dimen/size_30"
+                        app:srcCompat="@drawable/ic_video" />
+
+                    <android.support.v7.widget.AppCompatTextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/padding_5"
+                        android:text="Video"
+                        android:textColor="@android:color/white"
+                        android:textSize="@dimen/text_16" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/btn_settings"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_marginLeft="@dimen/padding_16"
@@ -61,9 +87,22 @@
                     android:background="@drawable/bg_border_item"
                     android:foreground="?attr/selectableItemBackground"
                     android:gravity="center"
-                    android:text="Rate us"
-                    android:textColor="@android:color/white"
-                    android:textSize="@dimen/text_16" />
+                    android:orientation="vertical">
+
+                    <android.support.v7.widget.AppCompatImageView
+                        android:layout_width="@dimen/size_30"
+                        android:layout_height="@dimen/size_30"
+                        app:srcCompat="@drawable/ic_settings" />
+
+                    <android.support.v7.widget.AppCompatTextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/padding_5"
+                        android:text="Settings"
+                        android:textColor="@android:color/white"
+                        android:textSize="@dimen/text_16" />
+
+                </LinearLayout>
 
             </LinearLayout>
 

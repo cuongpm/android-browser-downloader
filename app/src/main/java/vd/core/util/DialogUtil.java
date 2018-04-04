@@ -37,7 +37,7 @@ public class DialogUtil {
                 simpleProgressDialog.cancel();
                 simpleProgressDialog = null;
             } catch (Exception e) {
-                // Handle exception: do nothing here
+                e.printStackTrace();
             }
         }
     }

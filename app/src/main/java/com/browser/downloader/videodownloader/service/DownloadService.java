@@ -82,12 +82,7 @@ public class DownloadService extends AsyncTask<String, Integer, Video> {
                 e.printStackTrace();
             }
         } else {
-            if (mUrl.contains("instagram.com") || mUrl.contains("mobile.twitter.com")) {
-                DialogUtil.showAlertDialog(mContext, mContext.getString(R.string.error_social_app));
-                return;
-            }
-
-            DialogUtil.showAlertDialog(mContext, mContext.getString(R.string.error_get_link));
+            DialogUtil.showAlertDialog(mContext, mContext.getString(R.string.error_video_page));
             try {
                 // google analytics
                 String website = mUrl;

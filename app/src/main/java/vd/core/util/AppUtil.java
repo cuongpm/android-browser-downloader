@@ -17,7 +17,10 @@ import vd.core.common.PreferencesManager;
 
 public class AppUtil {
 
+    public static boolean isDownloadVideo = false;
+
     public static void downloadVideo(Context context, Video video) {
+        isDownloadVideo = true;
         DownloadManager.Request request = new DownloadManager.Request(Uri.parse(video.getUrl()));
 
         File localFile = FileUtil.getFolderDir();

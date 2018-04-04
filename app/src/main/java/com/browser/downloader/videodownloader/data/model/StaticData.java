@@ -3,6 +3,8 @@ package com.browser.downloader.videodownloader.data.model;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+import java.util.List;
+
 public class StaticData {
 
     @SerializedName("is_show_ad_home")
@@ -24,6 +26,14 @@ public class StaticData {
     @SerializedName("server_2")
     @Expose
     private String server2;
+
+    @SerializedName("pages_general")
+    @Expose
+    private List<String> pagesGeneral;
+
+    @SerializedName("pages_unsupported")
+    @Expose
+    private List<String> pagesUnsupported;
 
     public boolean isShowAdHome() {
         return isShowAdHome;
@@ -63,5 +73,21 @@ public class StaticData {
 
     public void setServer2(String server2) {
         this.server2 = server2;
+    }
+
+    public List<String> getPagesGeneral() {
+        return pagesGeneral;
+    }
+
+    public void setPagesGeneral(List<String> pagesGeneral) {
+        this.pagesGeneral = pagesGeneral;
+    }
+
+    public List<String> getPagesUnsupported() {
+        return pagesUnsupported;
+    }
+
+    public void setPagesUnsupported(List<String> pagesUnsupported) {
+        this.pagesUnsupported = pagesUnsupported;
     }
 }
