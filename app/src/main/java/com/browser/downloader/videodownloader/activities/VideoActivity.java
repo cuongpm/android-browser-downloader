@@ -3,6 +3,7 @@ package com.browser.downloader.videodownloader.activities;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
+import android.view.View;
 
 import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.InterstitialAd;
@@ -61,8 +62,17 @@ public class VideoActivity extends BaseActivity {
         mBinding.toolbar.setNavigationOnClickListener(view -> onBackPressed());
 
         mBinding.rvVideo.setLayoutManager(new LinearLayoutManager(this));
-        mVideoAdapter = new VideoAdapter(FileUtil.getListFiles(), view -> showInterstitlaAd());
+        mVideoAdapter = new VideoAdapter(FileUtil.getListFiles(), view -> {
+            showInterstitlaAd();
+            if (FileUtil.getListFiles().isEmpty()) {
+                mBinding.tvNoVideo.setVisibility(View.VISIBLE);
+            }
+        });
         mBinding.rvVideo.setAdapter(mVideoAdapter);
+
+        if (FileUtil.getListFiles().isEmpty()) {
+            mBinding.tvNoVideo.setVisibility(View.VISIBLE);
+        }
     }
 
     private void loadInterstitialAd() {

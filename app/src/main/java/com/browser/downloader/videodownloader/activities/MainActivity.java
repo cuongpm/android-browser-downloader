@@ -1,11 +1,11 @@
 package com.browser.downloader.videodownloader.activities;
 
-import android.app.AlertDialog;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 
 import com.browser.downloader.videodownloader.R;
+import com.browser.downloader.videodownloader.data.model.StaticData;
 import com.browser.downloader.videodownloader.databinding.ActivityMainBinding;
 
 import butterknife.ButterKnife;
@@ -14,7 +14,6 @@ import vd.core.common.PreferencesManager;
 import vd.core.util.AdUtil;
 import vd.core.util.AppUtil;
 import vd.core.util.DialogUtil;
-import vd.core.util.IntentUtil;
 import vd.core.util.ViewUtil;
 
 public class MainActivity extends BaseActivity {
@@ -62,21 +61,15 @@ public class MainActivity extends BaseActivity {
 
     @Override
     public void onBackPressed() {
-        if (AppUtil.isDownloadVideo) {
-            new AlertDialog.Builder(this).setTitle(getString(R.string.app_name))
-                    .setMessage(getString(R.string.rate_app))
-                    .setPositiveButton("OK", (dialogInterface, i) -> {
-                        dialogInterface.dismiss();
-                        PreferencesManager.getInstance(this).setRateApp(true);
-                        IntentUtil.openGooglePlay(MainActivity.this, getPackageName());
-                        // google analytics
-                        trackEvent(getResources().getString(R.string.app_name), getString(R.string.action_rate_us_exit_app), "");
-                    })
-                    .setNegativeButton("EXIT", (dialogInterface, i) -> {
-                        dialogInterface.dismiss();
-                        finish();
-                    })
-                    .show();
+        StaticData staticData = PreferencesManager.getInstance(this).getStaticData();
+        if (staticData != null && staticData.isShowRateApp()) {
+            DialogUtil.showRateDialog(this);
+            return;
+        }
+
+        boolean isShowRate = PreferencesManager.getInstance(this).isRateApp();
+        if (!isShowRate && AppUtil.isDownloadVideo) {
+            DialogUtil.showRateDialog(this);
         } else {
             DialogUtil.showAlertDialog(this, getString(R.string.app_name), getString(R.string.message_exit),
                     (dialogInterface, i) -> {

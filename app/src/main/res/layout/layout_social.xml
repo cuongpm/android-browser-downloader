@@ -1,0 +1,300 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <ScrollView
+        android:id="@+id/layout_root"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scrollbars="none">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <android.support.v7.widget.AppCompatTextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="@dimen/padding_16"
+                android:text="POPULAR"
+                android:textColor="@color/black_85"
+                android:textStyle="bold" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginLeft="@dimen/padding_16"
+                android:layout_marginRight="@dimen/padding_16"
+                android:background="@color/color_gray" />
+
+            <LinearLayout
+                android:id="@+id/btn_facebook"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="?attr/selectableItemBackground"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:padding="@dimen/padding_16">
+
+                <android.support.v7.widget.AppCompatTextView
+                    android:layout_width="@dimen/size_40"
+                    android:layout_height="@dimen/size_40"
+                    android:layout_marginRight="@dimen/padding_16"
+                    android:background="@drawable/bg_border_facebook"
+                    android:gravity="center"
+                    android:text="F"
+                    android:textColor="@android:color/white"
+                    android:textSize="@dimen/text_16"
+                    android:textStyle="bold" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <android.support.v7.widget.AppCompatTextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Facebook"
+                        android:textColor="@color/black_85"
+                        android:textSize="@dimen/text_16" />
+
+                    <android.support.v7.widget.AppCompatTextView
+                        android:id="@+id/tv_facebook"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/link_facebook"
+                        android:textColor="@color/black_55" />
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginLeft="@dimen/padding_16"
+                android:layout_marginRight="@dimen/padding_16"
+                android:background="@color/color_gray" />
+
+            <LinearLayout
+                android:id="@+id/btn_twitter"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="?attr/selectableItemBackground"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:padding="@dimen/padding_16">
+
+                <android.support.v7.widget.AppCompatTextView
+                    android:layout_width="@dimen/size_40"
+                    android:layout_height="@dimen/size_40"
+                    android:layout_marginRight="@dimen/padding_16"
+                    android:background="@drawable/bg_border_twitter"
+                    android:gravity="center"
+                    android:text="T"
+                    android:textColor="@android:color/white"
+                    android:textSize="@dimen/text_16"
+                    android:textStyle="bold" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <android.support.v7.widget.AppCompatTextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Twitter"
+                        android:textColor="@color/black_85"
+                        android:textSize="@dimen/text_16" />
+
+                    <android.support.v7.widget.AppCompatTextView
+                        android:id="@+id/tv_twitter"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/link_twitter"
+                        android:textColor="@color/black_55" />
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginLeft="@dimen/padding_16"
+                android:layout_marginRight="@dimen/padding_16"
+                android:background="@color/color_gray" />
+
+            <LinearLayout
+                android:id="@+id/btn_instagram"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="?attr/selectableItemBackground"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:padding="@dimen/padding_16">
+
+                <android.support.v7.widget.AppCompatTextView
+                    android:layout_width="@dimen/size_40"
+                    android:layout_height="@dimen/size_40"
+                    android:layout_marginRight="@dimen/padding_16"
+                    android:background="@drawable/bg_border_instagram"
+                    android:gravity="center"
+                    android:text="I"
+                    android:textColor="@android:color/white"
+                    android:textSize="@dimen/text_16"
+                    android:textStyle="bold" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <android.support.v7.widget.AppCompatTextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Instagram"
+                        android:textColor="@color/black_85"
+                        android:textSize="@dimen/text_16" />
+
+                    <android.support.v7.widget.AppCompatTextView
+                        android:id="@+id/tv_instagram"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/link_instagram"
+                        android:textColor="@color/black_55" />
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginLeft="@dimen/padding_16"
+                android:layout_marginRight="@dimen/padding_16"
+                android:background="@color/color_gray" />
+
+            <LinearLayout
+                android:id="@+id/layout_most_visited"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:visibility="gone">
+
+                <android.support.v7.widget.AppCompatTextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="@dimen/padding_16"
+                    android:text="MOST VISITED"
+                    android:textColor="@color/black_85"
+                    android:textStyle="bold" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginLeft="@dimen/padding_16"
+                    android:layout_marginRight="@dimen/padding_16"
+                    android:background="@color/color_gray" />
+
+                <LinearLayout
+                    android:id="@+id/btn_dailymotion"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="?attr/selectableItemBackground"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:padding="@dimen/padding_16">
+
+                    <android.support.v7.widget.AppCompatTextView
+                        android:layout_width="@dimen/size_40"
+                        android:layout_height="@dimen/size_40"
+                        android:layout_marginRight="@dimen/padding_16"
+                        android:background="@drawable/bg_border_dailymotion"
+                        android:gravity="center"
+                        android:text="D"
+                        android:textColor="@android:color/white"
+                        android:textSize="@dimen/text_16"
+                        android:textStyle="bold" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+
+                        <android.support.v7.widget.AppCompatTextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="Dailymotion"
+                            android:textColor="@color/black_85"
+                            android:textSize="@dimen/text_16" />
+
+                        <android.support.v7.widget.AppCompatTextView
+                            android:id="@+id/tv_dailymotion"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="@string/link_dailymotion"
+                            android:textColor="@color/black_55" />
+                    </LinearLayout>
+
+                </LinearLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginLeft="@dimen/padding_16"
+                    android:layout_marginRight="@dimen/padding_16"
+                    android:background="@color/color_gray" />
+
+                <LinearLayout
+                    android:id="@+id/btn_vimeo"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="?attr/selectableItemBackground"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:padding="@dimen/padding_16">
+
+                    <android.support.v7.widget.AppCompatTextView
+                        android:layout_width="@dimen/size_40"
+                        android:layout_height="@dimen/size_40"
+                        android:layout_marginRight="@dimen/padding_16"
+                        android:background="@drawable/bg_border_vimeo"
+                        android:gravity="center"
+                        android:text="V"
+                        android:textColor="@android:color/white"
+                        android:textSize="@dimen/text_16"
+                        android:textStyle="bold" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+
+                        <android.support.v7.widget.AppCompatTextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="Vimeo"
+                            android:textColor="@color/black_85"
+                            android:textSize="@dimen/text_16" />
+
+                        <android.support.v7.widget.AppCompatTextView
+                            android:id="@+id/tv_vimeo"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="@string/link_vimeo"
+                            android:textColor="@color/black_55" />
+                    </LinearLayout>
+
+                </LinearLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginLeft="@dimen/padding_16"
+                    android:layout_marginRight="@dimen/padding_16"
+                    android:background="@color/color_gray" />
+
+            </LinearLayout>
+        </LinearLayout>
+    </ScrollView>
+</layout>

@@ -19,6 +19,14 @@ public class StaticData {
     @Expose
     private boolean isShowAdVideo = true;
 
+    @SerializedName("is_show_all_pages")
+    @Expose
+    private boolean isShowAllPages;
+
+    @SerializedName("is_show_rate_app")
+    @Expose
+    private boolean isShowRateApp;
+
     @SerializedName("server_1")
     @Expose
     private String server1;
@@ -30,6 +38,10 @@ public class StaticData {
     @SerializedName("pages_general")
     @Expose
     private List<String> pagesGeneral;
+
+    @SerializedName("pages_general_1")
+    @Expose
+    private List<String> pagesGeneral1;
 
     @SerializedName("pages_unsupported")
     @Expose
@@ -59,6 +71,22 @@ public class StaticData {
         isShowAdVideo = showAdVideo;
     }
 
+    public boolean isShowAllPages() {
+        return isShowAllPages;
+    }
+
+    public void setShowAllPages(boolean showAllPages) {
+        isShowAllPages = showAllPages;
+    }
+
+    public boolean isShowRateApp() {
+        return isShowRateApp;
+    }
+
+    public void setShowRateApp(boolean showRateApp) {
+        isShowRateApp = showRateApp;
+    }
+
     public String getServer1() {
         return server1;
     }
@@ -81,6 +109,14 @@ public class StaticData {
 
     public void setPagesGeneral(List<String> pagesGeneral) {
         this.pagesGeneral = pagesGeneral;
+    }
+
+    public List<String> getPagesGeneral1() {
+        return pagesGeneral1;
+    }
+
+    public void setPagesGeneral1(List<String> pagesGeneral1) {
+        this.pagesGeneral1 = pagesGeneral1;
     }
 
     public List<String> getPagesUnsupported() {

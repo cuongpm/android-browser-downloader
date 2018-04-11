@@ -4,8 +4,8 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.text.TextUtils;
 
-import com.google.gson.Gson;
 import com.browser.downloader.videodownloader.data.model.StaticData;
+import com.google.gson.Gson;
 
 public class PreferencesManager {
 
@@ -17,16 +17,10 @@ public class PreferencesManager {
 
     private final SharedPreferences mSharePreferences;
 
-    /**
-     * Constructor
-     */
     private PreferencesManager(Context context) {
         mSharePreferences = context.getSharedPreferences(PRE_KEY, Context.MODE_PRIVATE);
     }
 
-    /**
-     * Get class instance
-     */
     public static PreferencesManager getInstance(Context context) {
         if (instance == null) {
             instance = new PreferencesManager(context);

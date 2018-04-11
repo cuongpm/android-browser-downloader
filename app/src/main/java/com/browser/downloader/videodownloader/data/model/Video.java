@@ -2,6 +2,13 @@ package com.browser.downloader.videodownloader.data.model;
 
 public class Video {
 
+    public Video(String fileName, String url, String thumbnail, long duration) {
+        this.fileName = fileName;
+        this.url = url;
+        this.thumbnail = thumbnail;
+        this.duration = duration;
+    }
+
     public Video(String fileName, String url) {
         this.fileName = fileName;
         this.url = url;
@@ -10,6 +17,10 @@ public class Video {
     private String fileName;
 
     private String url;
+
+    private String thumbnail;
+
+    private long duration;
 
     public String getFileName() {
         return fileName;
@@ -25,5 +36,21 @@ public class Video {
 
     public void setUrl(String url) {
         this.url = url;
+    }
+
+    public String getThumbnail() {
+        return thumbnail;
+    }
+
+    public void setThumbnail(String thumbnail) {
+        this.thumbnail = thumbnail;
+    }
+
+    public long getDuration() {
+        return duration;
+    }
+
+    public void setDuration(long duration) {
+        this.duration = duration;
     }
 }

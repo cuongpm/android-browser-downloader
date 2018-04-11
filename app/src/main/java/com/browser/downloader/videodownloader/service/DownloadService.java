@@ -47,12 +47,21 @@ public class DownloadService extends AsyncTask<String, Integer, Video> {
             InputStream in = new BufferedInputStream(urlConnection.getInputStream());
             JSONObject json = new JSONObject(convertStreamToString(in));
 
-            String downloadURL = json.getJSONObject("info").get("url").toString();
-            String fileName = json.getJSONObject("info").get("title").toString() + "." + json.getJSONObject("info").get("ext").toString();
+            String downloadURL = json.getJSONObject("info").getString("url");
+            String fileName = json.getJSONObject("info").getString("title") + "." + json.getJSONObject("info").getString("ext");
+            String thumbnail = "";
+            long duration = 0;
+
+            try {
+                thumbnail = json.getJSONObject("info").getString("thumbnail");
+                duration = json.getJSONObject("info").getLong("duration");
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
 
             fileName = fileName.replaceAll("[^\\w\\s.-]", "");
 
-            Video video = new Video(fileName, downloadURL);
+            Video video = new Video(fileName, downloadURL, thumbnail, duration);
             return video;
         } catch (Exception e) {
             e.printStackTrace();

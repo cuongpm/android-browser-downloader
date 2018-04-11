@@ -11,6 +11,7 @@
 
     <string name="rate_app">Do you enjoy our app? Please take a second to rate and review it!</string>
     <string name="text_not_support">YOUTUBE IS NOT SUPPORTED DUE TO THEIR TERMS OF SERVICE !!!</string>
+    <string name="text_no_video">You haven\'t download any video yet!</string>
 
     <string name="rename_title">Rename video</string>
     <string name="rename_invalid">Invalid name. Please try again!</string>
@@ -20,19 +21,24 @@
     <string name="screen_browser">Screen Browser</string>
     <string name="screen_video">Screen Video</string>
     <string name="screen_settings">Screen Settings</string>
+    <string name="screen_player">Screen Player</string>
 
     <string name="action_show_ad_home">Action Show Ad - Home</string>
     <string name="action_show_ad_browser">Action Show Ad - Browser</string>
     <string name="action_show_ad_video">Action Show Ad - Video</string>
     <string name="action_rate_us_exit_app">Action Rate Us - Exit App</string>
+    <string name="action_rate_us_video_player">Action Rate Us - Video Player</string>
     <string name="action_rate_us">Action Rate App</string>
     <string name="action_open_folder">Action Open Folder</string>
     <string name="action_share_app">Action Share App</string>
 
     <string name="action_search">Action Search</string>
+    <string name="action_search_suggestion">Action Search - Suggestion</string>
     <string name="action_open_facebook">Action Click - Facebook</string>
     <string name="action_open_twitter">Action Click - Twitter</string>
     <string name="action_open_instagram">Action Click - Instagram</string>
+    <string name="action_open_dailymotion">Action Click - Dailymotion</string>
+    <string name="action_open_vimeo">Action Click - Vimeo</string>
 
     <string name="event_unsupported_site">Event Unsupported Site</string>
     <string name="event_get_link_fail">Event Get Link - Failed</string>
@@ -42,6 +48,8 @@
     <string name="link_facebook">https://facebook.com</string>
     <string name="link_twitter">https://twitter.com</string>
     <string name="link_instagram">https://instagram.com</string>
+    <string name="link_dailymotion">https://www.dailymotion.com</string>
+    <string name="link_vimeo">https://www.vimeo.com</string>
 
     <string name="error_valid_link">Please enter a valid video link!</string>
     <string name="error_facebook">Please click on video to download it!</string>
@@ -51,4 +59,5 @@
     <string name="message_exit">Do you want to exit this application?</string>
     <string name="message_download_video">Do you want to download this video?</string>
     <string name="message_open_folder">You don\'t have any file explorer app installed on your device</string>
+    <string name="message_open_video">You don\'t have any video player app installed on your device</string>
 </resources>

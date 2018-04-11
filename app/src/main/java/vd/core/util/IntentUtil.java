@@ -25,7 +25,12 @@ public class IntentUtil {
         Intent intent = new Intent(Intent.ACTION_SEND);
         intent.setType("video/*");
         intent.putExtra(Intent.EXTRA_STREAM, Uri.parse("file://" + link));
-        context.startActivity(Intent.createChooser(intent, "Share via:"));
+
+        if (intent.resolveActivityInfo(context.getPackageManager(), 0) != null) {
+            context.startActivity(Intent.createChooser(intent, "Share via:"));
+        } else {
+            Toast.makeText(context, context.getString(R.string.message_open_video), Toast.LENGTH_SHORT).show();
+        }
     }
 
     public static void shareLink(Context context, String url) {
@@ -44,6 +49,5 @@ public class IntentUtil {
         } else {
             Toast.makeText(context, context.getString(R.string.message_open_folder), Toast.LENGTH_SHORT).show();
         }
-
     }
 }

@@ -16,5 +16,12 @@
     <color name="color_facebook">#3b5998</color>
     <color name="color_twitter">#00aced</color>
     <color name="color_instagram">#bc2a8d</color>
+    <color name="color_dailymotion">#00aaff</color>
+    <color name="color_vimeo">#1ab7ea</color>
+
+    <color name="transparent_gray">#80000000</color>
+    <color name="transparent_white">#dcfafafa</color>
+    <color name="video_progress_color">#b4fe2e2e</color>
+    <color name="grey400transparent">#80bdbdbd</color>
 
 </resources>

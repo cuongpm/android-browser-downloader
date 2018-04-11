@@ -4,9 +4,7 @@ import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.graphics.Bitmap;
 import android.media.ThumbnailUtils;
-import android.net.Uri;
 import android.provider.MediaStore;
-import android.support.v4.content.FileProvider;
 import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -14,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.browser.downloader.videodownloader.R;
+import com.browser.downloader.videodownloader.activities.VideoPlayerActivity;
 import com.browser.downloader.videodownloader.databinding.ItemVideoBinding;
 
 import java.io.File;
@@ -59,12 +58,8 @@ public class VideoAdapter
         holder.mBinding.ivMore.setOnClickListener(view -> showPopupMenu(view, file));
 
         holder.mBinding.getRoot().setOnClickListener(view -> {
-            Intent intent = new Intent(Intent.ACTION_VIEW);
-            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
-            Uri uri = FileProvider.getUriForFile(view.getContext(),
-                    view.getContext().getApplicationContext().getPackageName() + ".provider", file);
-            intent.setDataAndType(uri, "video/*");
-            intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+            Intent intent = new Intent(view.getContext(), VideoPlayerActivity.class);
+            intent.putExtra(VideoPlayerActivity.VIDEO_PATH, file.getPath());
             view.getContext().startActivity(intent);
 
             mOnClickListener.onClick(view);
