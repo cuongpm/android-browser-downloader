@@ -27,13 +27,9 @@ public class StaticData {
     @Expose
     private boolean isShowRateApp;
 
-    @SerializedName("server_1")
+    @SerializedName("parser_server")
     @Expose
-    private String server1;
-
-    @SerializedName("server_2")
-    @Expose
-    private String server2;
+    private String parserServer;
 
     @SerializedName("pages_general")
     @Expose
@@ -87,20 +83,12 @@ public class StaticData {
         isShowRateApp = showRateApp;
     }
 
-    public String getServer1() {
-        return server1;
+    public String getParserServer() {
+        return parserServer;
     }
 
-    public void setServer1(String server1) {
-        this.server1 = server1;
-    }
-
-    public String getServer2() {
-        return server2;
-    }
-
-    public void setServer2(String server2) {
-        this.server2 = server2;
+    public void setParserServer(String parserServer) {
+        this.parserServer = parserServer;
     }
 
     public List<String> getPagesGeneral() {
