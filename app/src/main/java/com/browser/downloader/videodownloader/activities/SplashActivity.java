@@ -8,8 +8,8 @@ import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.InterstitialAd;
 import com.google.android.gms.ads.MobileAds;
 import com.browser.downloader.videodownloader.R;
-import com.browser.downloader.videodownloader.data.model.StaticData;
-import com.browser.downloader.videodownloader.data.remote.DataService;
+import com.browser.downloader.videodownloader.data.ConfigData;
+import com.browser.downloader.videodownloader.service.DataService;
 import com.browser.downloader.videodownloader.databinding.ActivitySplashBinding;
 
 import butterknife.ButterKnife;
@@ -35,7 +35,7 @@ public class SplashActivity extends BaseActivity {
         initUI();
 
         // Load static data
-        loadStaticData();
+//        loadconfigData();
 
         // Init Admob
         MobileAds.initialize(this, Constant.AD_APP_ID);
@@ -46,8 +46,8 @@ public class SplashActivity extends BaseActivity {
 
     private void loadInterstitialAd() {
         // Check show ad
-        StaticData staticData = PreferencesManager.getInstance(this).getStaticData();
-        boolean isShowAd = staticData == null ? true : staticData.isShowAdHome();
+        ConfigData configData = PreferencesManager.getInstance(this).getConfigData();
+        boolean isShowAd = configData == null ? true : configData.isShowAdHome();
         if (isShowAd) {
             mInterstitialAd = new InterstitialAd(this);
             AdUtil.showInterstitialAd(mInterstitialAd, new AdListener() {
@@ -84,13 +84,13 @@ public class SplashActivity extends BaseActivity {
         finish();
     }
 
-    private void loadStaticData() {
-        DataService.Factory.getInstance().getStaticData()
+    private void loadconfigData() {
+        DataService.Factory.getInstance().getconfigData()
                 .doOnSubscribe(() -> runOnUiThread(() -> DialogUtil.showSimpleProgressDialog(this)))
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(staticData -> runOnUiThread(() -> {
-                    PreferencesManager.getInstance(this).setStaticData(staticData);
+                .subscribe(configData -> runOnUiThread(() -> {
+                    PreferencesManager.getInstance(this).setConfigData(configData);
                     // Load ad interstitial
                     loadInterstitialAd();
                 }), throwable -> runOnUiThread(() -> {

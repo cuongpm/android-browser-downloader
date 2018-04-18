@@ -5,8 +5,8 @@ import android.content.Context;
 import android.net.Uri;
 import android.text.TextUtils;
 
-import com.browser.downloader.videodownloader.data.model.StaticData;
-import com.browser.downloader.videodownloader.data.model.Video;
+import com.browser.downloader.videodownloader.data.ConfigData;
+import com.browser.downloader.videodownloader.data.Video;
 
 import java.io.File;
 
@@ -32,8 +32,8 @@ public class AppUtil {
     }
 
     public static String buildUrl(Context context, String data) {
-        StaticData staticData = PreferencesManager.getInstance(context).getStaticData();
-        String server = staticData != null && !TextUtils.isEmpty(staticData.getParserServer()) ? staticData.getParserServer() : Constant.PARSER_SERVER;
+        ConfigData configData = PreferencesManager.getInstance(context).getConfigData();
+        String server = configData != null && !TextUtils.isEmpty(configData.getParserServer()) ? configData.getParserServer() : Constant.PARSER_SERVER;
         return String.format(server, data);
     }
 

@@ -1,11 +1,11 @@
-package com.browser.downloader.videodownloader.data.model;
+package com.browser.downloader.videodownloader.data;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
 
-public class StaticData {
+public class ConfigData {
 
     @SerializedName("is_show_ad_home")
     @Expose
@@ -22,10 +22,6 @@ public class StaticData {
     @SerializedName("is_show_all_pages")
     @Expose
     private boolean isShowAllPages;
-
-    @SerializedName("is_show_rate_app")
-    @Expose
-    private boolean isShowRateApp;
 
     @SerializedName("parser_server")
     @Expose
@@ -73,14 +69,6 @@ public class StaticData {
 
     public void setShowAllPages(boolean showAllPages) {
         isShowAllPages = showAllPages;
-    }
-
-    public boolean isShowRateApp() {
-        return isShowRateApp;
-    }
-
-    public void setShowRateApp(boolean showRateApp) {
-        isShowRateApp = showRateApp;
     }
 
     public String getParserServer() {

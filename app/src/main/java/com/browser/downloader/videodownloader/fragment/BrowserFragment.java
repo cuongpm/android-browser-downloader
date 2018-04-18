@@ -1,4 +1,4 @@
-package com.browser.downloader.videodownloader.activities;
+package com.browser.downloader.videodownloader.fragment;
 
 import android.Manifest;
 import android.content.Context;
@@ -15,8 +15,10 @@ import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.Patterns;
+import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.view.inputmethod.InputMethodManager;
@@ -26,16 +28,16 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.Toast;
 
-import com.google.android.gms.ads.AdListener;
-import com.google.android.gms.ads.InterstitialAd;
 import com.browser.downloader.videodownloader.R;
 import com.browser.downloader.videodownloader.adapter.SuggestionAdapter;
-import com.browser.downloader.videodownloader.data.model.StaticData;
-import com.browser.downloader.videodownloader.data.model.Video;
-import com.browser.downloader.videodownloader.databinding.ActivityBrowserBinding;
+import com.browser.downloader.videodownloader.data.ConfigData;
+import com.browser.downloader.videodownloader.data.Video;
+import com.browser.downloader.videodownloader.databinding.FragmentBrowserBinding;
 import com.browser.downloader.videodownloader.databinding.LayoutVideoDataBinding;
 import com.browser.downloader.videodownloader.service.DownloadService;
 import com.browser.downloader.videodownloader.service.SearchService;
+import com.google.android.gms.ads.AdListener;
+import com.google.android.gms.ads.InterstitialAd;
 
 import java.net.URLDecoder;
 import java.util.List;
@@ -45,16 +47,15 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import rx.subjects.PublishSubject;
 import vd.core.common.Constant;
-import vd.core.common.PreferencesManager;
 import vd.core.util.AdUtil;
 import vd.core.util.AppUtil;
 import vd.core.util.DialogUtil;
 import vd.core.util.ScriptUtil;
 import vd.core.util.TimeUtil;
 
-public class BrowserActivity extends BaseActivity {
+public class BrowserFragment extends BaseFragment {
 
-    ActivityBrowserBinding mBinding;
+    FragmentBrowserBinding mBinding;
 
     private InterstitialAd mInterstitialAd;
 
@@ -66,38 +67,48 @@ public class BrowserActivity extends BaseActivity {
 
     private boolean isAdShowed = false;
 
-    private boolean isShowRate = false;
-
     private LinkStatus mLinkStatus;
 
     private enum LinkStatus {
         SUPPORTED, GENERAL, UNSUPPORTED
     }
 
+    public static BrowserFragment getInstance() {
+        return new BrowserFragment();
+    }
+
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mBinding = DataBindingUtil.setContentView(this, R.layout.activity_browser);
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        super.onCreateView(inflater, container, savedInstanceState);
+        mBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_browser, container, false);
         ButterKnife.bind(this, mBinding.getRoot());
+
         initUI();
 
         // google analytics
         trackEvent(getResources().getString(R.string.app_name), getString(R.string.screen_browser), "");
 
-        // Show ad banner
-        AdUtil.showBanner(this, mBinding.layoutBanner);
+//        // Show ad banner
+//        AdUtil.showBanner(this, mBinding.layoutBanner);
 
         // Load ad interstitial
         loadInterstitialAd();
+
+        return mBinding.getRoot();
     }
 
     private void loadInterstitialAd() {
         // Check show ad
-        StaticData staticData = PreferencesManager.getInstance(this).getStaticData();
-        boolean isShowAd = staticData == null ? true : staticData.isShowAdBrowser();
+        ConfigData configData = mPreferenceManager.getConfigData();
+        boolean isShowAd = configData == null ? true : configData.isShowAdBrowser();
         if (isShowAd) {
-            DialogUtil.showSimpleProgressDialog(this);
-            mInterstitialAd = new InterstitialAd(this);
+            DialogUtil.showSimpleProgressDialog(getContext());
+            mInterstitialAd = new InterstitialAd(getContext());
             AdUtil.showInterstitialAd(mInterstitialAd, new AdListener() {
                 @Override
                 public void onAdLoaded() {
@@ -129,30 +140,24 @@ public class BrowserActivity extends BaseActivity {
         super.onResume();
     }
 
-    @Override
-    public void onBackPressed() {
-        showInterstitlaAd();
-        finish();
-    }
+//    @Override
+//    public void onBackPressed() {
+//        showInterstitlaAd();
+//        finish();
+//    }
 
     private void initUI() {
         // Grant permission
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 0);
+        if (ContextCompat.checkSelfPermission(getContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 0);
         }
 
-        mInputMethodManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+        mInputMethodManager = (InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
 
-        StaticData staticData = PreferencesManager.getInstance(this).getStaticData();
-        mBinding.layoutSocial.layoutMostVisited.setVisibility(staticData != null && staticData.isShowAllPages() ? View.VISIBLE : View.GONE);
+        ConfigData configData = mPreferenceManager.getConfigData();
+        mBinding.layoutSocial.layoutMostVisited.setVisibility(configData != null && configData.isShowAllPages() ? View.VISIBLE : View.GONE);
 
-        if (staticData != null && staticData.isShowRateApp()) {
-            isShowRate = true;
-        } else {
-            isShowRate = false;
-        }
-
-        mBinding.toolbar.setNavigationOnClickListener(view -> onBackPressed());
+//        mBinding.toolbar.setNavigationOnClickListener(view -> onBackPressed());
 
         mBinding.webview.getSettings().setJavaScriptEnabled(true);
         mBinding.webview.addJavascriptInterface(this, "browser");
@@ -210,7 +215,7 @@ public class BrowserActivity extends BaseActivity {
         mPublishSubject = PublishSubject.create();
         mPublishSubject.debounce(300, TimeUnit.MILLISECONDS).subscribe(searchValue -> {
             if (searchValue.length() > 0 && !searchValue.startsWith("http://") && !searchValue.startsWith("https://")) {
-                runOnUiThread(() -> {
+                getActivity().runOnUiThread(() -> {
                     new SearchService(suggestions -> {
                         showSuggestion(suggestions);
                     }).execute(String.format(Constant.SUGGESTION_URL, searchValue));
@@ -220,7 +225,7 @@ public class BrowserActivity extends BaseActivity {
     }
 
     private void showSuggestion(List<String> suggestions) {
-        mSuggestionAdapter = new SuggestionAdapter(this, R.layout.item_suggestion, suggestions);
+        mSuggestionAdapter = new SuggestionAdapter(getContext(), R.layout.item_suggestion, suggestions);
         mBinding.etSearch.setAdapter(mSuggestionAdapter);
         mBinding.etSearch.showDropDown();
         mBinding.etSearch.setOnItemClickListener((parent, view, position, id) -> {
@@ -244,7 +249,7 @@ public class BrowserActivity extends BaseActivity {
     WebViewClient webViewClient = new WebViewClient() {
         @Override
         public void onPageStarted(WebView view, String url, Bitmap favicon) {
-            if (!isShowRate && (url.toLowerCase().startsWith("https://youtu.be/") || url.toLowerCase().contains("youtube.com"))) {
+            if (url.toLowerCase().startsWith("https://youtu.be/") || url.toLowerCase().contains("youtube.com")) {
                 mBinding.webview.setVisibility(View.GONE);
                 mBinding.tvNotSupport.setVisibility(View.VISIBLE);
                 mBinding.layoutSocial.layoutRoot.setVisibility(View.GONE);
@@ -293,7 +298,7 @@ public class BrowserActivity extends BaseActivity {
     };
 
     private void showVideoDataDialog(Video video) {
-        BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(this);
+        BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(getContext());
         LayoutVideoDataBinding binding = DataBindingUtil.inflate(getLayoutInflater(), R.layout.layout_video_data, null, false);
 
         binding.ivThumbnail.setImageURI(Uri.parse(video.getThumbnail()));
@@ -309,7 +314,7 @@ public class BrowserActivity extends BaseActivity {
 
         binding.tvOk.setOnClickListener(view -> {
             bottomSheetDialog.dismiss();
-            AppUtil.downloadVideo(BrowserActivity.this, video);
+            AppUtil.downloadVideo(getContext(), video);
             showInterstitlaAd();
         });
 
@@ -318,11 +323,11 @@ public class BrowserActivity extends BaseActivity {
     }
 
     private void checkLinkStatus(String url) {
-        StaticData staticData = PreferencesManager.getInstance(this).getStaticData();
-        if (staticData != null) {
+        ConfigData configData = mPreferenceManager.getConfigData();
+        if (configData != null) {
             // General sites
-            if (staticData.getPagesGeneral() != null) {
-                for (String link : staticData.getPagesGeneral()) {
+            if (configData.getPagesGeneral() != null) {
+                for (String link : configData.getPagesGeneral()) {
                     if (url.startsWith(link) || url.equals(link)) {
                         mLinkStatus = LinkStatus.GENERAL;
                         disableDownloadBtn();
@@ -331,8 +336,8 @@ public class BrowserActivity extends BaseActivity {
                 }
             }
             // General sites with specific link
-            if (staticData.getPagesGeneral1() != null) {
-                for (String link : staticData.getPagesGeneral1()) {
+            if (configData.getPagesGeneral1() != null) {
+                for (String link : configData.getPagesGeneral1()) {
                     if (url.equals(link)) {
                         mLinkStatus = LinkStatus.GENERAL;
                         disableDownloadBtn();
@@ -341,8 +346,8 @@ public class BrowserActivity extends BaseActivity {
                 }
             }
             // Unsupported sites
-            if (staticData.getPagesUnsupported() != null) {
-                for (String link : staticData.getPagesUnsupported()) {
+            if (configData.getPagesUnsupported() != null) {
+                for (String link : configData.getPagesUnsupported()) {
                     if (url.startsWith(link)) {
                         mLinkStatus = LinkStatus.UNSUPPORTED;
                         disableDownloadBtn();
@@ -365,11 +370,11 @@ public class BrowserActivity extends BaseActivity {
     }
 
     private void disableDownloadBtn() {
-        mBinding.fab.setBackgroundTintList(ColorStateList.valueOf(ContextCompat.getColor(this, R.color.color_gray_1)));
+        mBinding.fab.setBackgroundTintList(ColorStateList.valueOf(ContextCompat.getColor(getContext(), R.color.color_gray_1)));
     }
 
     private void enableDownloadBtn() {
-        mBinding.fab.setBackgroundTintList(ColorStateList.valueOf(ContextCompat.getColor(this, R.color.colorAccent)));
+        mBinding.fab.setBackgroundTintList(ColorStateList.valueOf(ContextCompat.getColor(getContext(), R.color.colorAccent)));
     }
 
     private void enableDownloadBtnAndShake() {
@@ -378,23 +383,22 @@ public class BrowserActivity extends BaseActivity {
     }
 
     private void shakeButton(View view) {
-        Animation anim = AnimationUtils.loadAnimation(this, R.anim.shake_btn_anim);
+        Animation anim = AnimationUtils.loadAnimation(getContext(), R.anim.shake_btn_anim);
         anim.setDuration(50L);
         view.startAnimation(anim);
     }
 
     @JavascriptInterface
     public void getVideoData(String link) {
-        runOnUiThread(() -> {
+        getActivity().runOnUiThread(() -> {
             try {
                 String url = URLDecoder.decode(link, "UTF-8");
                 if (!TextUtils.isEmpty(url) && url.startsWith("http")) {
                     Video video = new Video(System.currentTimeMillis() + ".mp4", url);
-                    DialogUtil.showAlertDialog(BrowserActivity.this,
-                            video.getFileName(), getString(R.string.message_download_video),
+                    DialogUtil.showAlertDialog(getContext(), video.getFileName(), getString(R.string.message_download_video),
                             (dialogInterface, i) -> {
                                 showInterstitlaAd();
-                                AppUtil.downloadVideo(BrowserActivity.this, video);
+                                AppUtil.downloadVideo(getContext(), video);
                             });
                     // google analytics
                     trackEvent(getString(R.string.app_name), getString(R.string.event_get_link_facebook), url);
@@ -473,33 +477,33 @@ public class BrowserActivity extends BaseActivity {
 
         if (mLinkStatus != null) {
             if (mLinkStatus == LinkStatus.GENERAL) {
-                DialogUtil.showAlertDialog(this, getString(R.string.error_video_page));
+                DialogUtil.showAlertDialog(getContext(), getString(R.string.error_video_page));
                 return;
             }
             if (mLinkStatus == LinkStatus.UNSUPPORTED) {
-                DialogUtil.showAlertDialog(this, getString(R.string.error_unsupported_site));
+                DialogUtil.showAlertDialog(getContext(), getString(R.string.error_unsupported_site));
                 return;
             }
         }
 
         String data = mBinding.webview.getUrl();
         if (data == null || data.length() == 0 || !Patterns.WEB_URL.matcher(data).matches()) {
-            DialogUtil.showAlertDialog(this, getString(R.string.error_valid_link));
+            DialogUtil.showAlertDialog(getContext(), getString(R.string.error_valid_link));
             return;
         }
 
         if (data.contains("facebook.com")) {
-            DialogUtil.showAlertDialog(this, getString(R.string.error_facebook));
+            DialogUtil.showAlertDialog(getContext(), getString(R.string.error_facebook));
             return;
         }
 
-        if (!isShowRate && (data.toLowerCase().startsWith("https://youtu.be/") || data.toLowerCase().contains("youtube.com"))) {
-            Toast.makeText(this, "Unsupported site!", Toast.LENGTH_LONG).show();
+        if (data.toLowerCase().startsWith("https://youtu.be/") || data.toLowerCase().contains("youtube.com")) {
+            Toast.makeText(getContext(), "Unsupported site!", Toast.LENGTH_LONG).show();
             // google analytics
             trackEvent(getString(R.string.app_name), getString(R.string.event_unsupported_site), data);
             return;
         }
 
-        new DownloadService(this, video -> showVideoDataDialog(video)).execute(data);
+        new DownloadService(getContext(), video -> showVideoDataDialog(video)).execute(data);
     }
 }

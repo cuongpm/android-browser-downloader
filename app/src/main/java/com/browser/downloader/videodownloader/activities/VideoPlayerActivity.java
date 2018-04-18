@@ -13,7 +13,7 @@ import android.view.WindowManager;
 import android.widget.SeekBar;
 
 import com.browser.downloader.videodownloader.R;
-import com.browser.downloader.videodownloader.data.model.VideoState;
+import com.browser.downloader.videodownloader.data.VideoState;
 import com.browser.downloader.videodownloader.databinding.ActivityVideoPlayerBinding;
 
 import java.io.File;

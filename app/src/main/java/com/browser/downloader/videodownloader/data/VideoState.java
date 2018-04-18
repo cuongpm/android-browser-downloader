@@ -1,4 +1,4 @@
-package com.browser.downloader.videodownloader.data.model;
+package com.browser.downloader.videodownloader.data;
 
 public class VideoState {
 

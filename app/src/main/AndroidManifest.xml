@@ -27,15 +27,6 @@
             android:name=".activities.MainActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".activities.BrowserActivity"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".activities.VideoActivity"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".activities.SettingsActivity"
-            android:screenOrientation="portrait" />
-        <activity
             android:name=".activities.VideoPlayerActivity"
             android:screenOrientation="portrait" />
 

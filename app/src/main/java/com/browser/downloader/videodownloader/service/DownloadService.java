@@ -5,7 +5,7 @@ import android.os.AsyncTask;
 
 import com.browser.downloader.videodownloader.R;
 import com.browser.downloader.videodownloader.activities.BaseActivity;
-import com.browser.downloader.videodownloader.data.model.Video;
+import com.browser.downloader.videodownloader.data.Video;
 
 import org.json.JSONObject;
 

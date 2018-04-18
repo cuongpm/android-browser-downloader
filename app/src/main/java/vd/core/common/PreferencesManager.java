@@ -4,13 +4,13 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.text.TextUtils;
 
-import com.browser.downloader.videodownloader.data.model.StaticData;
+import com.browser.downloader.videodownloader.data.ConfigData;
 import com.google.gson.Gson;
 
 public class PreferencesManager {
 
     private static final String PRE_KEY = "PRE_KEY";
-    private static final String PRE_STATIC_DATA = "PRE_STATIC_DATA";
+    private static final String PRE_CONFIG_DATA = "PRE_CONFIG_DATA";
     private static final String PRE_RATE_APP = "PRE_RATE_APP";
 
     private static PreferencesManager instance = null;
@@ -28,19 +28,19 @@ public class PreferencesManager {
         return instance;
     }
 
-    public StaticData getStaticData() {
+    public ConfigData getConfigData() {
         try {
-            String data = mSharePreferences.getString(PRE_STATIC_DATA, "");
-            return TextUtils.isEmpty(data) ? null : new Gson().fromJson(data, StaticData.class);
+            String data = mSharePreferences.getString(PRE_CONFIG_DATA, "");
+            return TextUtils.isEmpty(data) ? null : new Gson().fromJson(data, ConfigData.class);
         } catch (Exception e) {
             e.printStackTrace();
             return null;
         }
     }
 
-    public void setStaticData(StaticData staticData) {
-        if (staticData != null)
-            mSharePreferences.edit().putString(PRE_STATIC_DATA, new Gson().toJson(staticData)).apply();
+    public void setConfigData(ConfigData configData) {
+        if (configData != null)
+            mSharePreferences.edit().putString(PRE_CONFIG_DATA, new Gson().toJson(configData)).apply();
     }
 
     public boolean isRateApp() {

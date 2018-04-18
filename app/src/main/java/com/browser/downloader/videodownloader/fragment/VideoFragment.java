@@ -1,28 +1,29 @@
-package com.browser.downloader.videodownloader.activities;
+package com.browser.downloader.videodownloader.fragment;
 
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 
-import com.google.android.gms.ads.AdListener;
-import com.google.android.gms.ads.InterstitialAd;
 import com.browser.downloader.videodownloader.R;
 import com.browser.downloader.videodownloader.adapter.VideoAdapter;
-import com.browser.downloader.videodownloader.data.model.StaticData;
-import com.browser.downloader.videodownloader.databinding.ActivityVideoBinding;
+import com.browser.downloader.videodownloader.data.ConfigData;
+import com.browser.downloader.videodownloader.databinding.FragmentVideoBinding;
+import com.google.android.gms.ads.AdListener;
+import com.google.android.gms.ads.InterstitialAd;
 
 import java.io.File;
 import java.util.ArrayList;
 
-import vd.core.common.PreferencesManager;
 import vd.core.util.AdUtil;
 import vd.core.util.DialogUtil;
 import vd.core.util.FileUtil;
 
-public class VideoActivity extends BaseActivity {
+public class VideoFragment extends BaseFragment {
 
-    ActivityVideoBinding mBinding;
+    FragmentVideoBinding mBinding;
 
     VideoAdapter mVideoAdapter;
 
@@ -30,38 +31,50 @@ public class VideoActivity extends BaseActivity {
 
     private boolean isAdShowed = false;
 
+    public static VideoFragment getInstance() {
+        return new VideoFragment();
+    }
+
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mBinding = DataBindingUtil.setContentView(this, R.layout.activity_video);
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        super.onCreateView(inflater, container, savedInstanceState);
+        mBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_video, container, false);
         initUI();
 
         // google analytics
         trackEvent(getResources().getString(R.string.app_name), getString(R.string.screen_video), "");
 
-        // Show ad banner
-        AdUtil.showBanner(this, mBinding.layoutBanner);
+//        // Show ad banner
+//        AdUtil.showBanner(this, mBinding.layoutBanner);
 
         // Load ad interstitial
         loadInterstitialAd();
+
+        return mBinding.getRoot();
     }
 
-    @Override
-    public void onResume() {
-        trackView(getString(R.string.screen_video));
-        super.onResume();
-    }
 
-    @Override
-    public void onBackPressed() {
-        showInterstitlaAd();
-        finish();
-    }
+//    @Override
+//    public void onResume() {
+//        trackView(getString(R.string.screen_video));
+//        super.onResume();
+//    }
+
+//    @Override
+//    public void onBackPressed() {
+//        showInterstitlaAd();
+//        finish();
+//    }
 
     private void initUI() {
-        mBinding.toolbar.setNavigationOnClickListener(view -> onBackPressed());
+//        mBinding.toolbar.setNavigationOnClickListener(view -> onBackPressed());
 
-        mBinding.rvVideo.setLayoutManager(new LinearLayoutManager(this));
+        mBinding.rvVideo.setLayoutManager(new LinearLayoutManager(getContext()));
         mVideoAdapter = new VideoAdapter(FileUtil.getListFiles(), view -> {
             showInterstitlaAd();
             if (FileUtil.getListFiles().isEmpty()) {
@@ -83,11 +96,11 @@ public class VideoActivity extends BaseActivity {
         }
 
         // Check show ad
-        StaticData staticData = PreferencesManager.getInstance(this).getStaticData();
-        boolean isShowAd = staticData == null ? true : staticData.isShowAdVideo();
+        ConfigData configData = mPreferenceManager.getConfigData();
+        boolean isShowAd = configData == null ? true : configData.isShowAdVideo();
         if (isShowAd) {
-            DialogUtil.showSimpleProgressDialog(this);
-            mInterstitialAd = new InterstitialAd(this);
+            DialogUtil.showSimpleProgressDialog(getContext());
+            mInterstitialAd = new InterstitialAd(getContext());
             AdUtil.showInterstitialAd(mInterstitialAd, new AdListener() {
                 @Override
                 public void onAdLoaded() {

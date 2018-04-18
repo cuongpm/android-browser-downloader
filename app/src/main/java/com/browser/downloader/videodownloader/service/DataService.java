@@ -1,6 +1,6 @@
-package com.browser.downloader.videodownloader.data.remote;
+package com.browser.downloader.videodownloader.service;
 
-import com.browser.downloader.videodownloader.data.model.StaticData;
+import com.browser.downloader.videodownloader.data.ConfigData;
 
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
@@ -12,7 +12,7 @@ import vd.core.common.Constant;
 public interface DataService {
 
     @GET("config.json")
-    Observable<StaticData> getStaticData();
+    Observable<ConfigData> getconfigData();
 
     class Factory {
 

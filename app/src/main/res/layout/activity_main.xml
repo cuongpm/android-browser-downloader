@@ -14,142 +14,34 @@
             app:title="@string/app_name"
             app:titleTextColor="@android:color/white" />
 
-        <LinearLayout
+
+        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="1"
-            android:orientation="vertical"
-            android:padding="@dimen/padding_16">
+            android:layout_weight="1">
 
-            <LinearLayout
-                android:id="@+id/layout_item"
+            <android.support.v4.view.ViewPager
+                android:id="@+id/view_pager"
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/size_100"
-                android:orientation="horizontal">
-
-                <LinearLayout
-                    android:id="@+id/btn_browser"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:background="@drawable/bg_border_item"
-                    android:foreground="?attr/selectableItemBackground"
-                    android:gravity="center"
-                    android:orientation="vertical">
-
-                    <android.support.v7.widget.AppCompatImageView
-                        android:layout_width="@dimen/size_30"
-                        android:layout_height="@dimen/size_30"
-                        app:srcCompat="@drawable/ic_browser" />
-
-                    <android.support.v7.widget.AppCompatTextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/padding_5"
-                        android:text="Browser"
-                        android:textColor="@android:color/white"
-                        android:textSize="@dimen/text_16" />
-
-                </LinearLayout>
-
-                <LinearLayout
-                    android:id="@+id/btn_video"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_marginLeft="@dimen/padding_16"
-                    android:layout_weight="1"
-                    android:background="@drawable/bg_border_item"
-                    android:foreground="?attr/selectableItemBackground"
-                    android:gravity="center"
-                    android:orientation="vertical">
-
-                    <android.support.v7.widget.AppCompatImageView
-                        android:layout_width="@dimen/size_30"
-                        android:layout_height="@dimen/size_30"
-                        app:srcCompat="@drawable/ic_video" />
-
-                    <android.support.v7.widget.AppCompatTextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/padding_5"
-                        android:text="Video"
-                        android:textColor="@android:color/white"
-                        android:textSize="@dimen/text_16" />
-
-                </LinearLayout>
-
-                <LinearLayout
-                    android:id="@+id/btn_settings"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_marginLeft="@dimen/padding_16"
-                    android:layout_weight="1"
-                    android:background="@drawable/bg_border_item"
-                    android:foreground="?attr/selectableItemBackground"
-                    android:gravity="center"
-                    android:orientation="vertical">
-
-                    <android.support.v7.widget.AppCompatImageView
-                        android:layout_width="@dimen/size_30"
-                        android:layout_height="@dimen/size_30"
-                        app:srcCompat="@drawable/ic_settings" />
-
-                    <android.support.v7.widget.AppCompatTextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/padding_5"
-                        android:text="Settings"
-                        android:textColor="@android:color/white"
-                        android:textSize="@dimen/text_16" />
-
-                </LinearLayout>
-
-            </LinearLayout>
+                android:layout_height="match_parent" />
 
             <LinearLayout
+                android:id="@+id/layout_banner"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/padding_16"
-                android:background="@drawable/bg_border_guide"
-                android:orientation="vertical"
-                android:padding="@dimen/padding_16">
+                android:layout_alignParentBottom="true"
+                android:background="@android:color/transparent"
+                android:gravity="center"
+                android:orientation="vertical" />
+        </RelativeLayout>
 
-                <android.support.v7.widget.AppCompatTextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="@dimen/padding_16"
-                    android:text="How to download video:"
-                    android:textAllCaps="true"
-                    android:textColor="@color/black_85"
-                    android:textSize="@dimen/text_14"
-                    android:textStyle="bold" />
-
-                <android.support.v7.widget.AppCompatTextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="@string/download_video_guild"
-                    android:textColor="@color/black_85"
-                    android:textSize="@dimen/text_14" />
-
-                <android.support.v7.widget.AppCompatTextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/padding_16"
-                    android:text="@string/text_not_support"
-                    android:textAllCaps="true"
-                    android:textColor="@android:color/holo_red_dark"
-                    android:textSize="@dimen/text_14"
-                    android:textStyle="bold" />
-            </LinearLayout>
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/layout_banner"
+        <android.support.design.widget.TabLayout
+            android:id="@+id/tab_layout"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@android:color/transparent"
-            android:gravity="center"
-            android:orientation="vertical" />
+            android:layout_height="@dimen/size_55"
+            android:scaleY="-1"
+            app:tabIndicatorColor="#19B5FE"
+            app:tabIndicatorHeight="2dp" />
 
     </LinearLayout>
 </layout>
