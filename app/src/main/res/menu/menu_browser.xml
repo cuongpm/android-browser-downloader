@@ -9,6 +9,10 @@
         app:showAsAction="always">
         <menu>
             <item
+                android:id="@+id/menu_history"
+                android:icon="@drawable/ic_history_gray_24dp"
+                android:title="History" />
+            <item
                 android:id="@+id/menu_bookmark"
                 android:icon="@drawable/ic_bookmark_gray_24dp"
                 android:title="Bookmarks" />

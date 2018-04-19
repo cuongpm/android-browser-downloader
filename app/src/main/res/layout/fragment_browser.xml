@@ -91,9 +91,11 @@
 
                     <ProgressBar
                         android:id="@+id/progressBar"
-                        style="@android:style/Widget.ProgressBar.Horizontal"
+                        style="?android:attr/progressBarStyleHorizontal"
                         android:layout_width="match_parent"
-                        android:layout_height="@dimen/size_4"
+                        android:layout_height="@dimen/size_2"
+                        android:background="@android:color/transparent"
+                        android:progressDrawable="@drawable/progress_load_data"
                         android:visibility="gone" />
 
                     <include
