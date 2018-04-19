@@ -26,29 +26,31 @@
                     android:gravity="center"
                     android:orientation="horizontal">
 
-                    <android.support.v7.widget.AppCompatAutoCompleteTextView
-                        android:id="@+id/et_search"
+                    <android.support.v7.widget.CardView
                         android:layout_width="0dp"
-                        android:layout_height="@dimen/size_35"
+                        android:layout_height="@dimen/size_45"
                         android:layout_weight="1"
-                        android:background="@drawable/bg_border_search"
-                        android:drawablePadding="@dimen/padding_8"
-                        android:drawableRight="@drawable/ic_close_gray_24dp"
-                        android:hint="Search or enter url"
-                        android:lines="1"
-                        android:paddingLeft="@dimen/padding_8"
-                        android:paddingRight="@dimen/padding_8"
-                        android:singleLine="true"
-                        android:textSize="@dimen/text_14" />
+                        android:background="@android:color/transparent"
+                        app:cardCornerRadius="3dp"
+                        app:cardElevation="3dp"
+                        app:cardUseCompatPadding="true">
 
-                    <android.support.v7.widget.AppCompatImageView
-                        android:id="@+id/iv_search"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:background="?attr/selectableItemBackground"
-                        android:padding="@dimen/padding_10"
-                        app:srcCompat="@drawable/ic_search_white"
-                        tools:ignore="VectorDrawableCompat" />
+                        <android.support.v7.widget.AppCompatAutoCompleteTextView
+                            android:id="@+id/et_search"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:background="@android:color/white"
+                            android:drawablePadding="@dimen/padding_8"
+                            android:drawableRight="@drawable/ic_close_gray_24dp"
+                            android:hint="Search or enter url"
+                            android:lines="1"
+                            android:paddingLeft="@dimen/padding_8"
+                            android:paddingRight="@dimen/padding_8"
+                            android:singleLine="true"
+                            android:textSize="@dimen/text_14" />
+
+                    </android.support.v7.widget.CardView>
+
                 </LinearLayout>
             </android.support.v7.widget.Toolbar>
 

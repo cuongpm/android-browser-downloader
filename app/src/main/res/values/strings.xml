@@ -17,6 +17,7 @@
 
     <string name="screen_home">Screen Home</string>
     <string name="screen_browser">Screen Browser</string>
+    <string name="screen_progress">Screen Progress</string>
     <string name="screen_video">Screen Video</string>
     <string name="screen_settings">Screen Settings</string>
     <string name="screen_player">Screen Player</string>

@@ -2,6 +2,7 @@ package com.browser.downloader.videodownloader.activities;
 
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
+import android.support.v4.view.ViewPager;
 
 import com.browser.downloader.videodownloader.R;
 import com.browser.downloader.videodownloader.adapter.HomeAdapter;
@@ -16,6 +17,8 @@ import vd.core.util.DialogUtil;
 public class MainActivity extends BaseActivity {
 
     ActivityMainBinding mBinding;
+
+    private int mPagePosition = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,11 +43,32 @@ public class MainActivity extends BaseActivity {
     private void initUI() {
         HomeAdapter adapter = new HomeAdapter(getSupportFragmentManager());
         mBinding.viewPager.setAdapter(adapter);
-        mBinding.tabLayout.setupWithViewPager(mBinding.viewPager);
 
-        for (int i = 0; i < mBinding.tabLayout.getTabCount(); i++) {
-            mBinding.tabLayout.getTabAt(i).setCustomView(adapter.getTabViewAt(this, i));
-        }
+        mBinding.viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+                mPagePosition = position;
+                mBinding.bottomBar.setDefaultTabPosition(position);
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+            }
+        });
+
+        mBinding.bottomBar.setOnTabSelectListener(tabId -> {
+            if (tabId == R.id.tab_browser) {
+                mBinding.viewPager.setCurrentItem(0, true);
+            } else if (tabId == R.id.tab_progress) {
+                mBinding.viewPager.setCurrentItem(1, true);
+            } else {
+                mBinding.viewPager.setCurrentItem(2, true);
+            }
+        });
     }
 
 //    @OnClick(R.id.btn_browser)
@@ -64,6 +88,11 @@ public class MainActivity extends BaseActivity {
 
     @Override
     public void onBackPressed() {
+        if (mPagePosition != 0) {
+            mBinding.viewPager.setCurrentItem(0, true);
+            return;
+        }
+
         boolean isShowRate = PreferencesManager.getInstance(this).isRateApp();
         if (!isShowRate && AppUtil.isDownloadVideo) {
             DialogUtil.showRateDialog(this);

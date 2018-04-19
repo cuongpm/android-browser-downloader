@@ -15,7 +15,11 @@ import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.Patterns;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -87,6 +91,8 @@ public class BrowserFragment extends BaseFragment {
         super.onCreateView(inflater, container, savedInstanceState);
         mBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_browser, container, false);
         ButterKnife.bind(this, mBinding.getRoot());
+        setSupportActionBar(mBinding.toolbar);
+        setHasOptionsMenu(true);
 
         initUI();
 
@@ -146,6 +152,37 @@ public class BrowserFragment extends BaseFragment {
 //        finish();
 //    }
 
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+        inflater.inflate(R.menu.menu_browser, menu);
+//        AlertConfiguration configuration = AlertPresenter.getAlertConfiguration();
+//        try {
+//            menu.getItem(0).getSubMenu().getItem(0).setIcon(configuration.isShowExtMessage() ? R.drawable.ic_check_green : 0);
+//            menu.getItem(0).getSubMenu().getItem(1).setIcon(configuration.isShowHiddenAlert() ? R.drawable.ic_check_green : 0);
+//        } catch (Exception e) {
+//            Timber.e(e);
+//        }
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+//        AlertConfiguration configuration = AlertPresenter.getAlertConfiguration();
+//        if (item.getItemId() == R.id.menu_display_ext_content) {
+//            configuration.setShowExtMessage(!configuration.isShowExtMessage());
+//            AlertPresenter.saveAlertConfiguration(configuration);
+//            item.setIcon(configuration.isShowExtMessage() ? R.drawable.ic_check_green : 0);
+//            getPresenter().getAlerts(0);
+//        } else if (item.getItemId() == R.id.menu_show_hidden_alert) {
+//            configuration.setShowHiddenAlert(!configuration.isShowHiddenAlert());
+//            AlertPresenter.saveAlertConfiguration(configuration);
+//            item.setIcon(configuration.isShowHiddenAlert() ? R.drawable.ic_check_green : 0);
+//            getPresenter().getAlerts(0);
+//        }
+        return super.onOptionsItemSelected(item);
+    }
+
+
     private void initUI() {
         // Grant permission
         if (ContextCompat.checkSelfPermission(getContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
@@ -178,6 +215,18 @@ public class BrowserFragment extends BaseFragment {
                 showInterstitlaAd();
             }
         });
+
+        mBinding.etSearch.setOnKeyListener((v, keyCode, event) -> {
+                    if (keyCode == KeyEvent.KEYCODE_ENTER) {
+                        loadWebView();
+                        // google analytics
+                        String content = mBinding.etSearch.getText().toString().trim();
+                        trackEvent(getString(R.string.app_name), getString(R.string.action_search), content);
+                        return true;
+                    }
+                    return false;
+                }
+        );
 
         mBinding.etSearch.setOnTouchListener((v, event) -> {
             if (event.getAction() == MotionEvent.ACTION_UP) {
@@ -422,14 +471,6 @@ public class BrowserFragment extends BaseFragment {
                 mBinding.etSearch.setText(String.format(Constant.SEARCH_URL, content));
             }
         }
-    }
-
-    @OnClick(R.id.iv_search)
-    public void clickSearch() {
-        loadWebView();
-        // google analytics
-        String content = mBinding.etSearch.getText().toString().trim();
-        trackEvent(getString(R.string.app_name), getString(R.string.action_search), content);
     }
 
     @OnClick(R.id.btn_facebook)

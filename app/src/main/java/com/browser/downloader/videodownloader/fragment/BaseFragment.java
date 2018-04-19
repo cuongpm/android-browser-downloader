@@ -2,6 +2,8 @@ package com.browser.downloader.videodownloader.fragment;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -44,6 +46,10 @@ public abstract class BaseFragment extends Fragment {
                 .setAction(action)
                 .setLabel(label)
                 .build());
+    }
+
+    protected void setSupportActionBar(Toolbar toolbar) {
+        ((AppCompatActivity) this.getActivity()).setSupportActionBar(toolbar);
     }
 
 }

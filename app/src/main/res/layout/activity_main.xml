@@ -27,13 +27,18 @@
                 android:orientation="vertical" />
         </RelativeLayout>
 
-        <android.support.design.widget.TabLayout
-            android:id="@+id/tab_layout"
+        <com.roughike.bottombar.BottomBar
+            android:id="@+id/bottom_bar"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/size_55"
-            android:scaleY="-1"
-            app:tabIndicatorColor="#19B5FE"
-            app:tabIndicatorHeight="2dp" />
+            android:layout_height="@dimen/size_60"
+            android:layout_alignParentBottom="true"
+            app:bb_activeTabAlpha="1"
+            app:bb_activeTabColor="@android:color/white"
+            app:bb_behavior="shifting"
+            app:bb_inActiveTabAlpha="0.6"
+            app:bb_inActiveTabColor="@android:color/white"
+            app:bb_showShadow="true"
+            app:bb_tabXmlResource="@xml/bottom_bar_tabs" />
 
     </LinearLayout>
 </layout>

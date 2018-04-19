@@ -53,7 +53,7 @@
             android:layout_gravity="center"
             android:background="?attr/selectableItemBackground"
             android:padding="@dimen/padding_10"
-            app:srcCompat="@drawable/ic_more_vert_24dp"
+            app:srcCompat="@drawable/ic_more_gray_24dp"
             tools:ignore="VectorDrawableCompat" />
 
     </LinearLayout>
