@@ -22,6 +22,8 @@ public class Video {
 
     private long duration;
 
+    private boolean isDownloadCompleted;
+
     public String getFileName() {
         return fileName;
     }
@@ -52,5 +54,13 @@ public class Video {
 
     public void setDuration(long duration) {
         this.duration = duration;
+    }
+
+    public boolean isDownloadCompleted() {
+        return isDownloadCompleted;
+    }
+
+    public void setDownloadCompleted(boolean downloadCompleted) {
+        isDownloadCompleted = downloadCompleted;
     }
 }

@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.browser.downloader.videodownloader.activities.BaseActivity;
 import com.google.android.gms.analytics.GoogleAnalytics;
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
@@ -21,9 +22,13 @@ public abstract class BaseFragment extends Fragment {
 
     protected Tracker mTracker;
 
+    protected BaseActivity mActivity;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        mActivity = (BaseActivity) getActivity();
 
         mPreferenceManager = PreferencesManager.getInstance(getContext());
 

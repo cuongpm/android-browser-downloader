@@ -21,6 +21,8 @@
     <string name="screen_video">Screen Video</string>
     <string name="screen_settings">Screen Settings</string>
     <string name="screen_player">Screen Player</string>
+    <string name="screen_bookmark">Screen Bookmark</string>
+    <string name="screen_history">Screen History</string>
 
     <string name="action_show_ad_home">Action Show Ad - Home</string>
     <string name="action_show_ad_browser">Action Show Ad - Browser</string>

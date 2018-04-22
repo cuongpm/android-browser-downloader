@@ -23,8 +23,6 @@ public class HomeAdapter extends FragmentPagerAdapter {
             return ProgressFragment.getInstance();
         } else if (position == 2) {
             return VideoFragment.getInstance();
-        } else if (position == 3) {
-            return SettingsFragment.getInstance();
         } else {
             return SettingsFragment.getInstance();
         }
@@ -32,7 +30,7 @@ public class HomeAdapter extends FragmentPagerAdapter {
 
     @Override
     public int getCount() {
-        return 5;
+        return 4;
     }
 
 }

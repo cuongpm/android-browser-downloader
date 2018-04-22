@@ -1,7 +1,6 @@
 package com.browser.downloader.videodownloader.fragment;
 
 import android.Manifest;
-import android.content.Context;
 import android.content.pm.PackageManager;
 import android.content.res.ColorStateList;
 import android.databinding.DataBindingUtil;
@@ -20,12 +19,10 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
-import android.view.inputmethod.InputMethodManager;
 import android.webkit.JavascriptInterface;
 import android.webkit.WebChromeClient;
 import android.webkit.WebView;
@@ -43,6 +40,8 @@ import com.browser.downloader.videodownloader.service.SearchService;
 import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.InterstitialAd;
 
+import org.greenrobot.eventbus.EventBus;
+
 import java.net.URLDecoder;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -56,6 +55,7 @@ import vd.core.util.AppUtil;
 import vd.core.util.DialogUtil;
 import vd.core.util.ScriptUtil;
 import vd.core.util.TimeUtil;
+import vd.core.util.ViewUtil;
 
 public class BrowserFragment extends BaseFragment {
 
@@ -65,11 +65,11 @@ public class BrowserFragment extends BaseFragment {
 
     private PublishSubject<String> mPublishSubject;
 
-    private InputMethodManager mInputMethodManager;
-
     private SuggestionAdapter mSuggestionAdapter;
 
     private boolean isAdShowed = false;
+
+    private boolean isHasFocus = false;
 
     private LinkStatus mLinkStatus;
 
@@ -146,12 +146,6 @@ public class BrowserFragment extends BaseFragment {
         super.onResume();
     }
 
-//    @Override
-//    public void onBackPressed() {
-//        showInterstitlaAd();
-//        finish();
-//    }
-
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
@@ -167,18 +161,21 @@ public class BrowserFragment extends BaseFragment {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-//        AlertConfiguration configuration = AlertPresenter.getAlertConfiguration();
-//        if (item.getItemId() == R.id.menu_display_ext_content) {
-//            configuration.setShowExtMessage(!configuration.isShowExtMessage());
-//            AlertPresenter.saveAlertConfiguration(configuration);
-//            item.setIcon(configuration.isShowExtMessage() ? R.drawable.ic_check_green : 0);
-//            getPresenter().getAlerts(0);
-//        } else if (item.getItemId() == R.id.menu_show_hidden_alert) {
-//            configuration.setShowHiddenAlert(!configuration.isShowHiddenAlert());
-//            AlertPresenter.saveAlertConfiguration(configuration);
-//            item.setIcon(configuration.isShowHiddenAlert() ? R.drawable.ic_check_green : 0);
-//            getPresenter().getAlerts(0);
-//        }
+        if (item.getItemId() == R.id.menu_bookmark) {
+            getFragmentManager().beginTransaction()
+                    .setCustomAnimations(R.anim.enter_from_right, 0, 0, R.anim.exit_to_right)
+                    .add(android.R.id.content, BookmarkFragment.getInstance())
+                    .addToBackStack(null)
+                    .commit();
+        } else if (item.getItemId() == R.id.menu_history) {
+            getFragmentManager().beginTransaction()
+                    .setCustomAnimations(R.anim.enter_from_right, 0, 0, R.anim.exit_to_right)
+                    .add(android.R.id.content, HistoryFragment.getInstance())
+                    .addToBackStack(null)
+                    .commit();
+        } else if (item.getItemId() == R.id.menu_share) {
+        } else if (item.getItemId() == R.id.menu_copy_link) {
+        }
         return super.onOptionsItemSelected(item);
     }
 
@@ -189,12 +186,8 @@ public class BrowserFragment extends BaseFragment {
             ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 0);
         }
 
-        mInputMethodManager = (InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
-
         ConfigData configData = mPreferenceManager.getConfigData();
         mBinding.layoutSocial.layoutMostVisited.setVisibility(configData != null && configData.isShowAllPages() ? View.VISIBLE : View.GONE);
-
-//        mBinding.toolbar.setNavigationOnClickListener(view -> onBackPressed());
 
         mBinding.webview.getSettings().setJavaScriptEnabled(true);
         mBinding.webview.addJavascriptInterface(this, "browser");
@@ -218,6 +211,9 @@ public class BrowserFragment extends BaseFragment {
 
         mBinding.etSearch.setOnKeyListener((v, keyCode, event) -> {
                     if (keyCode == KeyEvent.KEYCODE_ENTER) {
+                        // clear focus & hide keyboard
+                        focusSearchView(false);
+                        // load data
                         loadWebView();
                         // google analytics
                         String content = mBinding.etSearch.getText().toString().trim();
@@ -228,22 +224,21 @@ public class BrowserFragment extends BaseFragment {
                 }
         );
 
-        mBinding.etSearch.setOnTouchListener((v, event) -> {
-            if (event.getAction() == MotionEvent.ACTION_UP) {
-                if (event.getX() >= (mBinding.etSearch.getRight()
-                        - mBinding.etSearch.getCompoundDrawables()[2].getBounds().width())) {
-                    if (mBinding.etSearch.getText().toString().trim().length() > 0) {
-                        mBinding.etSearch.setText("");
-                        mBinding.tvNotSupport.setVisibility(View.GONE);
-                        mBinding.webview.setVisibility(View.GONE);
-                        mBinding.layoutBottom.setVisibility(View.GONE);
-                        mBinding.layoutSocial.layoutRoot.setVisibility(View.VISIBLE);
-                        showInterstitlaAd();
-                        return true;
-                    }
-                }
+        mBinding.etSearch.setOnClickListener(view -> focusSearchView(true));
+
+        mBinding.etSearch.setOnFocusChangeListener((view, isHasFocus) -> {
+            this.isHasFocus = isHasFocus;
+            if (isHasFocus) {
+                mBinding.ivCloseRefresh.setImageResource(R.drawable.ic_close_gray_24dp);
+            } else {
+                mBinding.ivCloseRefresh.setImageResource(R.drawable.ic_refresh_gray_24dp);
+//                String data = mBinding.webview.getUrl();
+//                if (data != null && data.length() > 0) {
+//                    mBinding.etSearch.setText(data);
+//                } else {
+//                    mBinding.etSearch.setText("");
+//                }
             }
-            return false;
         });
 
         mBinding.etSearch.addTextChangedListener(new TextWatcher() {
@@ -273,12 +268,23 @@ public class BrowserFragment extends BaseFragment {
         });
     }
 
+    private void focusSearchView(boolean isFocus) {
+        mBinding.etSearch.setFocusable(isFocus);
+        mBinding.etSearch.setFocusableInTouchMode(isFocus);
+        if (isFocus) {
+            ViewUtil.showSoftKeyboard(getContext(), mBinding.etSearch);
+        } else {
+            ViewUtil.hideSoftKeyboard(getContext(), mBinding.etSearch);
+        }
+    }
+
     private void showSuggestion(List<String> suggestions) {
         mSuggestionAdapter = new SuggestionAdapter(getContext(), R.layout.item_suggestion, suggestions);
         mBinding.etSearch.setAdapter(mSuggestionAdapter);
         mBinding.etSearch.showDropDown();
         mBinding.etSearch.setOnItemClickListener((parent, view, position, id) -> {
-            mInputMethodManager.hideSoftInputFromWindow(mBinding.etSearch.getWindowToken(), 0);
+            // clear focus & hide keyboard
+            focusSearchView(false);
             // Search keyword
             loadWebView();
             // google analytics
@@ -363,7 +369,8 @@ public class BrowserFragment extends BaseFragment {
 
         binding.tvOk.setOnClickListener(view -> {
             bottomSheetDialog.dismiss();
-            AppUtil.downloadVideo(getContext(), video);
+//            AppUtil.downloadVideo(getContext(), video);
+            EventBus.getDefault().post(video);
             showInterstitlaAd();
         });
 
@@ -511,6 +518,22 @@ public class BrowserFragment extends BaseFragment {
         loadWebView();
         // google analytics
         trackEvent(getString(R.string.app_name), getString(R.string.action_open_vimeo), "");
+    }
+
+    @OnClick(R.id.iv_close_refresh)
+    public void clickCloseOrRefresh() {
+        if (mBinding.etSearch.getText().toString().trim().length() > 0) {
+            if (isHasFocus) {
+                mBinding.etSearch.setText("");
+                mBinding.tvNotSupport.setVisibility(View.GONE);
+                mBinding.webview.setVisibility(View.GONE);
+                mBinding.layoutBottom.setVisibility(View.GONE);
+                mBinding.layoutSocial.layoutRoot.setVisibility(View.VISIBLE);
+                showInterstitlaAd();
+            } else {
+                mBinding.webview.reload();
+            }
+        }
     }
 
     @OnClick(R.id.fab)

@@ -12,6 +12,7 @@ public class PreferencesManager {
     private static final String PRE_KEY = "PRE_KEY";
     private static final String PRE_CONFIG_DATA = "PRE_CONFIG_DATA";
     private static final String PRE_RATE_APP = "PRE_RATE_APP";
+    private static final String PRE_TAB_BADGE = "PRE_TAB_BADGE";
 
     private static PreferencesManager instance = null;
 
@@ -49,6 +50,14 @@ public class PreferencesManager {
 
     public void setRateApp(boolean isRateApp) {
         mSharePreferences.edit().putBoolean(PRE_RATE_APP, isRateApp).apply();
+    }
+
+    public int getTabBadge(int tabId) {
+        return mSharePreferences.getInt(PRE_TAB_BADGE + tabId, 0);
+    }
+
+    public void setTabBadge(int tabId, int badge) {
+        mSharePreferences.edit().putInt(PRE_TAB_BADGE + tabId, badge).apply();
     }
 
 }

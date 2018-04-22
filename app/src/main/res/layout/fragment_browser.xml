@@ -9,6 +9,7 @@
         android:orientation="vertical">
 
         <android.support.design.widget.AppBarLayout
+            android:id="@+id/app_bar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="?attr/colorPrimary">
@@ -35,19 +36,36 @@
                         app:cardElevation="3dp"
                         app:cardUseCompatPadding="true">
 
-                        <android.support.v7.widget.AppCompatAutoCompleteTextView
-                            android:id="@+id/et_search"
+                        <RelativeLayout
                             android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:background="@android:color/white"
-                            android:drawablePadding="@dimen/padding_8"
-                            android:drawableRight="@drawable/ic_close_gray_24dp"
-                            android:hint="Search or enter url"
-                            android:lines="1"
-                            android:paddingLeft="@dimen/padding_8"
-                            android:paddingRight="@dimen/padding_8"
-                            android:singleLine="true"
-                            android:textSize="@dimen/text_14" />
+                            android:layout_height="wrap_content">
+
+                            <android.support.v7.widget.AppCompatAutoCompleteTextView
+                                android:id="@+id/et_search"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:background="@android:color/white"
+                                android:focusable="false"
+                                android:focusableInTouchMode="false"
+                                android:hint="Search or enter url"
+                                android:inputType="textNoSuggestions"
+                                android:lines="1"
+                                android:paddingLeft="@dimen/padding_8"
+                                android:paddingRight="@dimen/padding_40"
+                                android:singleLine="true"
+                                android:textSize="@dimen/text_14" />
+
+                            <android.support.v7.widget.AppCompatImageView
+                                android:id="@+id/iv_close_refresh"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_alignParentRight="true"
+                                android:layout_centerVertical="true"
+                                android:layout_marginRight="@dimen/padding_8"
+                                app:srcCompat="@drawable/ic_refresh_gray_24dp"
+                                tools:ignore="VectorDrawableCompat" />
+
+                        </RelativeLayout>
 
                     </android.support.v7.widget.CardView>
 
@@ -56,106 +74,109 @@
 
         </android.support.design.widget.AppBarLayout>
 
-        <android.support.v4.widget.NestedScrollView
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:orientation="vertical"
             app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-            <LinearLayout
+            <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="vertical">
+                android:layout_height="match_parent">
+
+                <com.browser.downloader.videodownloader.customview.NestedScrollWebView
+                    android:id="@+id/webview"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:visibility="gone" />
+
+                <android.support.v7.widget.AppCompatTextView
+                    android:id="@+id/tv_not_support"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:gravity="center"
+                    android:padding="@dimen/padding_40"
+                    android:text="@string/text_not_support"
+                    android:textColor="@color/black_85"
+                    android:textSize="@dimen/text_14"
+                    android:textStyle="bold"
+                    android:visibility="gone" />
+
+                <ProgressBar
+                    android:id="@+id/progressBar"
+                    style="?android:attr/progressBarStyleHorizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/size_2"
+                    android:background="@android:color/transparent"
+                    android:progressDrawable="@drawable/progress_load_data"
+                    android:visibility="gone" />
+
+                <include
+                    android:id="@+id/layout_social"
+                    layout="@layout/layout_social" />
 
                 <RelativeLayout
+                    android:id="@+id/layout_bottom"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent">
-
-                    <WebView
-                        android:id="@+id/webview"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:visibility="gone" />
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentBottom="true"
+                    android:background="@drawable/bg_gradient"
+                    android:padding="@dimen/padding_10"
+                    android:visibility="gone">
 
                     <android.support.v7.widget.AppCompatTextView
-                        android:id="@+id/tv_not_support"
+                        android:id="@+id/text"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_centerInParent="true"
-                        android:gravity="center"
-                        android:padding="@dimen/padding_40"
-                        android:text="@string/text_not_support"
-                        android:textColor="@color/black_85"
-                        android:textSize="@dimen/text_14"
-                        android:textStyle="bold"
+                        android:background="@color/colorPrimary"
+                        android:text="aaa"
+                        android:textColor="@android:color/white"
                         android:visibility="gone" />
 
-                    <ProgressBar
-                        android:id="@+id/progressBar"
-                        style="?android:attr/progressBarStyleHorizontal"
-                        android:layout_width="match_parent"
-                        android:layout_height="@dimen/size_2"
-                        android:background="@android:color/transparent"
-                        android:progressDrawable="@drawable/progress_load_data"
-                        android:visibility="gone" />
+                    <android.support.v7.widget.AppCompatImageView
+                        android:id="@+id/iv_back"
+                        android:layout_width="@dimen/size_25"
+                        android:layout_height="@dimen/size_25"
+                        android:layout_centerVertical="true"
+                        android:background="@drawable/bg_border_arrow"
+                        android:padding="@dimen/padding_4"
+                        app:srcCompat="@drawable/ic_arrow_back_white_24dp"
+                        tools:ignore="VectorDrawableCompat" />
 
-                    <include
-                        android:id="@+id/layout_social"
-                        layout="@layout/layout_social" />
+                    <android.support.v7.widget.AppCompatImageView
+                        android:id="@+id/iv_next"
+                        android:layout_width="@dimen/size_25"
+                        android:layout_height="@dimen/size_25"
+                        android:layout_centerVertical="true"
+                        android:layout_marginLeft="@dimen/padding_16"
+                        android:layout_toRightOf="@+id/iv_back"
+                        android:background="@drawable/bg_border_arrow"
+                        android:padding="@dimen/padding_4"
+                        android:rotation="180"
+                        app:srcCompat="@drawable/ic_arrow_back_white_24dp"
+                        tools:ignore="VectorDrawableCompat" />
 
-                    <RelativeLayout
-                        android:id="@+id/layout_bottom"
-                        android:layout_width="match_parent"
+                    <android.support.design.widget.FloatingActionButton
+                        android:id="@+id/fabb"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_alignParentBottom="true"
-                        android:background="@drawable/bg_gradient"
-                        android:padding="@dimen/padding_10"
-                        android:visibility="gone">
-
-                        <android.support.v7.widget.AppCompatTextView
-                            android:id="@+id/text"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:background="@color/colorPrimary"
-                            android:text="aaa"
-                            android:textColor="@android:color/white"
-                            android:visibility="gone" />
-
-                        <android.support.v7.widget.AppCompatImageView
-                            android:id="@+id/iv_back"
-                            android:layout_width="@dimen/size_25"
-                            android:layout_height="@dimen/size_25"
-                            android:layout_centerVertical="true"
-                            android:background="@drawable/bg_border_arrow"
-                            android:padding="@dimen/padding_4"
-                            app:srcCompat="@drawable/ic_arrow_back_white_24dp"
-                            tools:ignore="VectorDrawableCompat" />
-
-                        <android.support.v7.widget.AppCompatImageView
-                            android:id="@+id/iv_next"
-                            android:layout_width="@dimen/size_25"
-                            android:layout_height="@dimen/size_25"
-                            android:layout_centerVertical="true"
-                            android:layout_marginLeft="@dimen/padding_16"
-                            android:layout_toRightOf="@+id/iv_back"
-                            android:background="@drawable/bg_border_arrow"
-                            android:padding="@dimen/padding_4"
-                            android:rotation="180"
-                            app:srcCompat="@drawable/ic_arrow_back_white_24dp"
-                            tools:ignore="VectorDrawableCompat" />
-
-                        <android.support.design.widget.FloatingActionButton
-                            android:id="@+id/fab"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_alignParentRight="true"
-                            android:layout_centerVertical="true"
-                            android:src="@drawable/ic_download_white_24dp" />
-                    </RelativeLayout>
-
+                        android:layout_alignParentRight="true"
+                        android:layout_centerVertical="true"
+                        android:src="@drawable/ic_download_white_24dp" />
                 </RelativeLayout>
 
-            </LinearLayout>
-        </android.support.v4.widget.NestedScrollView>
+            </RelativeLayout>
+
+        </LinearLayout>
+
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/fab"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|right"
+            android:layout_margin="@dimen/padding_32"
+            android:src="@drawable/ic_download_white_24dp" />
     </android.support.design.widget.CoordinatorLayout>
 
 </layout>

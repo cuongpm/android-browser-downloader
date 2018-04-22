@@ -10,9 +10,13 @@ import android.view.ViewGroup;
 import com.browser.downloader.videodownloader.R;
 import com.browser.downloader.videodownloader.adapter.VideoAdapter;
 import com.browser.downloader.videodownloader.data.ConfigData;
+import com.browser.downloader.videodownloader.data.Video;
 import com.browser.downloader.videodownloader.databinding.FragmentVideoBinding;
 import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.InterstitialAd;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -27,6 +31,8 @@ public class VideoFragment extends BaseFragment {
 
     VideoAdapter mVideoAdapter;
 
+    private ArrayList<File> mListFiles;
+
     private InterstitialAd mInterstitialAd;
 
     private boolean isAdShowed = false;
@@ -38,6 +44,13 @@ public class VideoFragment extends BaseFragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        EventBus.getDefault().register(this);
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        EventBus.getDefault().unregister(this);
     }
 
     @Override
@@ -65,17 +78,22 @@ public class VideoFragment extends BaseFragment {
 //        super.onResume();
 //    }
 
-//    @Override
-//    public void onBackPressed() {
-//        showInterstitlaAd();
-//        finish();
-//    }
+    @Subscribe
+    public void onDownloadVideo(Video video) {
+        try {
+            if (video.isDownloadCompleted()) {
+                mListFiles.clear();
+                mListFiles.addAll(FileUtil.getListFiles());
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 
     private void initUI() {
-//        mBinding.toolbar.setNavigationOnClickListener(view -> onBackPressed());
-
+        mListFiles = FileUtil.getListFiles();
         mBinding.rvVideo.setLayoutManager(new LinearLayoutManager(getContext()));
-        mVideoAdapter = new VideoAdapter(FileUtil.getListFiles(), view -> {
+        mVideoAdapter = new VideoAdapter(mListFiles, view -> {
             showInterstitlaAd();
             if (FileUtil.getListFiles().isEmpty()) {
                 mBinding.tvNoVideo.setVisibility(View.VISIBLE);
