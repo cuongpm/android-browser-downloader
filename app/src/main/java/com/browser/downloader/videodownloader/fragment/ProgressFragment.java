@@ -60,15 +60,7 @@ public class ProgressFragment extends BaseFragment {
     }
 
     private void initUI() {
-        // google analytics
-        trackEvent(getResources().getString(R.string.app_name), getString(R.string.screen_progress), "");
     }
-
-//    @Override
-//    public void onResume() {
-//        trackView(getString(R.string.screen_progress));
-//        super.onResume();
-//    }
 
     @Subscribe
     public void onDownloadVideo(Video video) {

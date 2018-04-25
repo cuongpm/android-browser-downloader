@@ -51,7 +51,7 @@ public class VideoPlayerActivity extends BaseActivity implements SeekBar.OnSeekB
         initUI();
 
         // google analytics
-        trackEvent(getResources().getString(R.string.app_name), getString(R.string.screen_player), "");
+        trackEvent(getString(R.string.app_name), getString(R.string.screen_player), "");
     }
 
     private void initUI() {

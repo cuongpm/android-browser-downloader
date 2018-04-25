@@ -115,9 +115,6 @@ public class BrowserFragment extends BaseFragment {
 
         initUI();
 
-        // google analytics
-        trackEvent(getResources().getString(R.string.app_name), getString(R.string.screen_browser), "");
-
 //        // Show ad banner
 //        AdUtil.showBanner(this, mBinding.layoutBanner);
 
@@ -155,14 +152,8 @@ public class BrowserFragment extends BaseFragment {
             isAdShowed = true;
             mInterstitialAd.show();
             // google analytics
-            trackEvent(getResources().getString(R.string.app_name), getString(R.string.action_show_ad_browser), "");
+            trackEvent(getString(R.string.app_name), getString(R.string.action_show_ad_browser), "");
         }
-    }
-
-    @Override
-    public void onResume() {
-        trackView(getString(R.string.screen_browser));
-        super.onResume();
     }
 
     @Override

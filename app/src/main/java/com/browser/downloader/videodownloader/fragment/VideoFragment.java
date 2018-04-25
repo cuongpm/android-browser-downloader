@@ -59,9 +59,6 @@ public class VideoFragment extends BaseFragment {
         mBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_video, container, false);
         initUI();
 
-        // google analytics
-        trackEvent(getResources().getString(R.string.app_name), getString(R.string.screen_video), "");
-
 //        // Show ad banner
 //        AdUtil.showBanner(this, mBinding.layoutBanner);
 
@@ -70,13 +67,6 @@ public class VideoFragment extends BaseFragment {
 
         return mBinding.getRoot();
     }
-
-
-//    @Override
-//    public void onResume() {
-//        trackView(getString(R.string.screen_video));
-//        super.onResume();
-//    }
 
     @Subscribe
     public void onDownloadVideo(Video video) {
@@ -140,7 +130,7 @@ public class VideoFragment extends BaseFragment {
             isAdShowed = true;
             mInterstitialAd.show();
             // google analytics
-            trackEvent(getResources().getString(R.string.app_name), getString(R.string.action_show_ad_video), "");
+            trackEvent(getString(R.string.app_name), getString(R.string.action_show_ad_video), "");
         }
     }
 }

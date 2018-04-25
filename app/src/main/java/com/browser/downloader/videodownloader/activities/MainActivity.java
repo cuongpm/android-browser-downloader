@@ -35,20 +35,11 @@ public class MainActivity extends BaseActivity {
         ButterKnife.bind(this);
         initUI();
 
-        // google analytics
-        trackEvent(getResources().getString(R.string.app_name), getString(R.string.screen_home), "");
-
         // Init Admob
         MobileAds.initialize(this, Constant.AD_APP_ID);
 
         // Show ad banner
         AdUtil.showBanner(this, mBinding.layoutBanner);
-    }
-
-    @Override
-    public void onResume() {
-        trackView(getString(R.string.screen_home));
-        super.onResume();
     }
 
     @Override
@@ -71,6 +62,12 @@ public class MainActivity extends BaseActivity {
             public void onPageSelected(int position) {
                 mPagePosition = position;
                 mBinding.bottomBar.setDefaultTabPosition(position);
+                // google analytics
+                trackEvent(getString(R.string.app_name), getString(position == 0
+                        ? R.string.screen_browser : position == 1 ? R.string.screen_progress : position == 2
+                        ? R.string.screen_video : R.string.screen_settings), "");
+                trackView(getString(position == 0 ? R.string.screen_browser : position == 1
+                        ? R.string.screen_progress : position == 2 ? R.string.screen_video : R.string.screen_settings));
             }
 
             @Override
@@ -91,6 +88,10 @@ public class MainActivity extends BaseActivity {
                 mBinding.viewPager.setCurrentItem(3, true);
             }
         });
+
+        // google analytics
+        trackEvent(getString(R.string.app_name), getString(R.string.screen_browser), "");
+        trackView(getString(R.string.screen_browser));
     }
 
     @Subscribe

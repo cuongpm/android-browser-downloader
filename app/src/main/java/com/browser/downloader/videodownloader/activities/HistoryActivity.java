@@ -40,7 +40,7 @@ public class HistoryActivity extends BaseActivity {
         mBinding.rvHistory.setAdapter(historyAdapter);
 
         // google analytics
-        trackEvent(getResources().getString(R.string.app_name), getString(R.string.screen_history), "");
+        trackEvent(getString(R.string.app_name), getString(R.string.screen_history), "");
 
 //        // Show ad banner
 //        AdUtil.showBanner(this, mBinding.layoutBanner);

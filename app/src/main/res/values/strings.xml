@@ -9,7 +9,6 @@
     <string name="rename_invalid">Invalid name. Please try again!</string>
     <string name="rename_exist">Video name already exists!</string>
 
-    <string name="screen_home">Screen Home</string>
     <string name="screen_browser">Screen Browser</string>
     <string name="screen_progress">Screen Progress</string>
     <string name="screen_video">Screen Video</string>
@@ -18,7 +17,6 @@
     <string name="screen_bookmark">Screen Bookmark</string>
     <string name="screen_history">Screen History</string>
 
-    <string name="action_show_ad_home">Action Show Ad - Home</string>
     <string name="action_show_ad_browser">Action Show Ad - Browser</string>
     <string name="action_show_ad_video">Action Show Ad - Video</string>
     <string name="action_rate_us_exit_app">Action Rate Us - Exit App</string>

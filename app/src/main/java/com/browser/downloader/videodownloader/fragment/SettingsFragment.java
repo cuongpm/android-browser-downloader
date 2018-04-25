@@ -35,9 +35,6 @@ public class SettingsFragment extends BaseFragment {
         ButterKnife.bind(this, mBinding.getRoot());
         initUI();
 
-        // google analytics
-        trackEvent(getString(R.string.app_name), getString(R.string.screen_browser), "");
-
 ////        // Show ad banner
 ////        AdUtil.showBanner(this, mBinding.layoutBanner);
 //
@@ -49,15 +46,6 @@ public class SettingsFragment extends BaseFragment {
 
     private void initUI() {
         mBinding.tvFolder.setText(FileUtil.getFolderDir().getPath());
-
-        // google analytics
-        trackEvent(getString(R.string.app_name), getString(R.string.screen_settings), "");
-    }
-
-    @Override
-    public void onResume() {
-        trackView(getString(R.string.screen_settings));
-        super.onResume();
     }
 
 
