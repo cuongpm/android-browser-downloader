@@ -44,14 +44,4 @@ public class BaseActivity extends AppCompatActivity {
                 .setLabel(label)
                 .build());
     }
-
-    @Override
-    public void onBackPressed() {
-        int count = getFragmentManager().getBackStackEntryCount();
-        if (count > 0) {
-            getFragmentManager().popBackStack();
-        } else {
-            super.onBackPressed();
-        }
-    }
 }

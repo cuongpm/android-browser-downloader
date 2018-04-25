@@ -1,6 +1,8 @@
 package com.browser.downloader.videodownloader.fragment;
 
 import android.Manifest;
+import android.app.Activity;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.res.ColorStateList;
 import android.databinding.DataBindingUtil;
@@ -30,9 +32,12 @@ import android.webkit.WebViewClient;
 import android.widget.Toast;
 
 import com.browser.downloader.videodownloader.R;
+import com.browser.downloader.videodownloader.activities.BookmarkActivity;
+import com.browser.downloader.videodownloader.activities.HistoryActivity;
 import com.browser.downloader.videodownloader.adapter.SuggestionAdapter;
 import com.browser.downloader.videodownloader.data.ConfigData;
 import com.browser.downloader.videodownloader.data.Video;
+import com.browser.downloader.videodownloader.data.WebViewData;
 import com.browser.downloader.videodownloader.databinding.FragmentBrowserBinding;
 import com.browser.downloader.videodownloader.databinding.LayoutVideoDataBinding;
 import com.browser.downloader.videodownloader.service.DownloadService;
@@ -43,6 +48,7 @@ import com.google.android.gms.ads.InterstitialAd;
 import org.greenrobot.eventbus.EventBus;
 
 import java.net.URLDecoder;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -53,6 +59,7 @@ import vd.core.common.Constant;
 import vd.core.util.AdUtil;
 import vd.core.util.AppUtil;
 import vd.core.util.DialogUtil;
+import vd.core.util.IntentUtil;
 import vd.core.util.ScriptUtil;
 import vd.core.util.TimeUtil;
 import vd.core.util.ViewUtil;
@@ -67,9 +74,21 @@ public class BrowserFragment extends BaseFragment {
 
     private SuggestionAdapter mSuggestionAdapter;
 
+    private ArrayList<WebViewData> mHistoryData;
+
+    private ArrayList<WebViewData> mBookmarData;
+
+    private Menu mMenu;
+
     private boolean isAdShowed = false;
 
     private boolean isHasFocus = false;
+
+    private final static int ACTIVITY_HISTORY = 0;
+
+    private final static int ACTIVITY_BOOKMARK = 1;
+
+    public final static String RESULT_URL = "RESULT_URL";
 
     private LinkStatus mLinkStatus;
 
@@ -150,35 +169,65 @@ public class BrowserFragment extends BaseFragment {
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
         inflater.inflate(R.menu.menu_browser, menu);
-//        AlertConfiguration configuration = AlertPresenter.getAlertConfiguration();
-//        try {
-//            menu.getItem(0).getSubMenu().getItem(0).setIcon(configuration.isShowExtMessage() ? R.drawable.ic_check_green : 0);
-//            menu.getItem(0).getSubMenu().getItem(1).setIcon(configuration.isShowHiddenAlert() ? R.drawable.ic_check_green : 0);
-//        } catch (Exception e) {
-//            Timber.e(e);
-//        }
+        mMenu = menu;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == R.id.menu_bookmark) {
-            getFragmentManager().beginTransaction()
-                    .setCustomAnimations(R.anim.enter_from_right, 0, 0, R.anim.exit_to_right)
-                    .add(android.R.id.content, BookmarkFragment.getInstance())
-                    .addToBackStack(null)
-                    .commit();
+        if (item.getItemId() == R.id.menu_add_bookmark) {
+            if (mBinding.webview != null) {
+                if (isBookmarkLink(mBinding.webview)) {
+                    removeBookmark(mBinding.webview);
+                } else {
+                    saveWebViewBookmark(mBinding.webview);
+                }
+                updateBookmarkMenu(mBinding.webview);
+            }
+
+        } else if (item.getItemId() == R.id.menu_bookmark) {
+            startActivityForResult(new Intent(getContext(), BookmarkActivity.class), ACTIVITY_BOOKMARK);
+            getActivity().overridePendingTransition(R.anim.enter_from_right, 0);
+
         } else if (item.getItemId() == R.id.menu_history) {
-            getFragmentManager().beginTransaction()
-                    .setCustomAnimations(R.anim.enter_from_right, 0, 0, R.anim.exit_to_right)
-                    .add(android.R.id.content, HistoryFragment.getInstance())
-                    .addToBackStack(null)
-                    .commit();
+            startActivityForResult(new Intent(getContext(), HistoryActivity.class), ACTIVITY_HISTORY);
+            getActivity().overridePendingTransition(R.anim.enter_from_right, 0);
+
         } else if (item.getItemId() == R.id.menu_share) {
+            if (mBinding.webview != null && !TextUtils.isEmpty(mBinding.webview.getUrl())) {
+                IntentUtil.shareLink(getContext(), mBinding.webview.getUrl());
+                // google analytics
+                trackEvent(getString(R.string.app_name), getString(R.string.action_share_link), "");
+            }
+
         } else if (item.getItemId() == R.id.menu_copy_link) {
+            if (mBinding.webview != null && !TextUtils.isEmpty(mBinding.webview.getUrl())) {
+                AppUtil.copyClipboard(getContext(), mBinding.webview.getUrl());
+                Toast.makeText(getContext(), "Copied link", Toast.LENGTH_SHORT).show();
+                // google analytics
+                trackEvent(getString(R.string.app_name), getString(R.string.action_copy_link), "");
+            }
         }
         return super.onOptionsItemSelected(item);
     }
 
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        switch (requestCode) {
+            case ACTIVITY_HISTORY:
+                if (resultCode == Activity.RESULT_OK) {
+                    String url = data.getStringExtra(RESULT_URL);
+                    mBinding.webview.loadUrl(url);
+                }
+                break;
+            case ACTIVITY_BOOKMARK:
+                if (resultCode == Activity.RESULT_OK) {
+                    String url = data.getStringExtra(RESULT_URL);
+                    mBinding.webview.loadUrl(url);
+                }
+                break;
+        }
+    }
 
     private void initUI() {
         // Grant permission
@@ -193,19 +242,13 @@ public class BrowserFragment extends BaseFragment {
         mBinding.webview.addJavascriptInterface(this, "browser");
         mBinding.webview.setWebViewClient(webViewClient);
         mBinding.webview.setWebChromeClient(webChromeClient);
-        checkWebViewData(mBinding.webview);
 
-        mBinding.ivNext.setOnClickListener(view -> {
-            if (mBinding.webview.canGoForward()) {
-                mBinding.webview.goForward();
-                showInterstitlaAd();
-            }
-        });
-
-        mBinding.ivBack.setOnClickListener(view -> {
+        mActivity.setIOnBackPressed(() -> {
             if (mBinding.webview.canGoBack()) {
                 mBinding.webview.goBack();
-                showInterstitlaAd();
+                return true;
+            } else {
+                return false;
             }
         });
 
@@ -314,11 +357,12 @@ public class BrowserFragment extends BaseFragment {
             mBinding.webview.setVisibility(View.VISIBLE);
             mBinding.tvNotSupport.setVisibility(View.GONE);
             mBinding.etSearch.setText(url);
+            mBinding.fab.setVisibility(View.VISIBLE);
             mBinding.progressBar.setVisibility(View.VISIBLE);
-            mBinding.layoutBottom.setVisibility(View.VISIBLE);
             mBinding.layoutSocial.layoutRoot.setVisibility(View.GONE);
 
             checkLinkStatus(url);
+            updateBookmarkMenu(view);
             super.onPageStarted(view, url, favicon);
         }
 
@@ -346,11 +390,93 @@ public class BrowserFragment extends BaseFragment {
         public void onPageFinished(WebView view, String url) {
             mBinding.etSearch.setText(url);
             mBinding.progressBar.setVisibility(View.GONE);
-            checkWebViewData(view);
             checkLinkStatus(url);
+            saveWebViewHistory(view);
+            updateBookmarkMenu(view);
             super.onPageFinished(view, url);
         }
     };
+
+    private void saveWebViewHistory(WebView webView) {
+        WebViewData webViewData = new WebViewData();
+        String url = webView.getUrl();
+        if (!TextUtils.isEmpty(url)) {
+            webViewData.setUrl(url);
+            String title = webView.getTitle();
+            if (TextUtils.isEmpty(title)) {
+                try {
+                    title = url.split("/")[2];
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    title = url;
+                }
+            }
+            webViewData.setTitle(title);
+            getWebViewHistory().add(0, webViewData);
+            mPreferenceManager.setHistory(getWebViewHistory());
+        }
+    }
+
+    private ArrayList<WebViewData> getWebViewHistory() {
+        if (mHistoryData == null) {
+            mHistoryData = mPreferenceManager.getHistory();
+        }
+        return mHistoryData;
+    }
+
+    private void saveWebViewBookmark(WebView webView) {
+        WebViewData webViewData = new WebViewData();
+        String url = webView.getUrl();
+        if (!TextUtils.isEmpty(url)) {
+            webViewData.setUrl(url);
+            String title = webView.getTitle();
+            if (TextUtils.isEmpty(title)) {
+                try {
+                    title = url.split("/")[2];
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    title = url;
+                }
+            }
+            webViewData.setTitle(title);
+            getWebViewBookmark().add(0, webViewData);
+            mPreferenceManager.setBookmark(getWebViewBookmark());
+        }
+    }
+
+    private ArrayList<WebViewData> getWebViewBookmark() {
+        if (mBookmarData == null) {
+            mBookmarData = mPreferenceManager.getBookmark();
+        }
+        return mBookmarData;
+    }
+
+    private boolean isBookmarkLink(WebView webView) {
+        for (WebViewData webViewData : getWebViewBookmark()) {
+            if (webViewData.getUrl().equals(webView.getUrl())) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    private void removeBookmark(WebView webView) {
+        for (WebViewData webViewData : getWebViewBookmark()) {
+            if (webViewData.getUrl().equals(webView.getUrl())) {
+                getWebViewBookmark().remove(webViewData);
+                mPreferenceManager.setBookmark(getWebViewBookmark());
+                return;
+            }
+        }
+    }
+
+    private void updateBookmarkMenu(WebView webView) {
+        mMenu.getItem(0).getSubMenu().getItem(0).setIcon(isBookmarkLink(webView)
+                ? R.drawable.ic_star_yellow_24dp : R.drawable.ic_star_border_gray_24dp);
+        mMenu.getItem(0).getSubMenu().getItem(0).setTitle(isBookmarkLink(webView)
+                ? "Remove bookmark" : "Add bookmark");
+    }
 
     private void showVideoDataDialog(Video video) {
         BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(getContext());
@@ -416,13 +542,6 @@ public class BrowserFragment extends BaseFragment {
         // Other sites
         mLinkStatus = LinkStatus.SUPPORTED;
         enableDownloadBtn();
-    }
-
-    private void checkWebViewData(WebView view) {
-        mBinding.ivBack.setEnabled(view.canGoBack());
-        mBinding.ivBack.setAlpha(view.canGoBack() ? 1f : 0.5f);
-        mBinding.ivNext.setEnabled(view.canGoForward());
-        mBinding.ivNext.setAlpha(view.canGoForward() ? 1f : 0.5f);
     }
 
     private void disableDownloadBtn() {
@@ -527,7 +646,7 @@ public class BrowserFragment extends BaseFragment {
                 mBinding.etSearch.setText("");
                 mBinding.tvNotSupport.setVisibility(View.GONE);
                 mBinding.webview.setVisibility(View.GONE);
-                mBinding.layoutBottom.setVisibility(View.GONE);
+                mBinding.fab.setVisibility(View.GONE);
                 mBinding.layoutSocial.layoutRoot.setVisibility(View.VISIBLE);
                 showInterstitlaAd();
             } else {

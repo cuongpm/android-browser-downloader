@@ -36,7 +36,7 @@ public class SettingsFragment extends BaseFragment {
         initUI();
 
         // google analytics
-        trackEvent(getResources().getString(R.string.app_name), getString(R.string.screen_browser), "");
+        trackEvent(getString(R.string.app_name), getString(R.string.screen_browser), "");
 
 ////        // Show ad banner
 ////        AdUtil.showBanner(this, mBinding.layoutBanner);
@@ -48,11 +48,10 @@ public class SettingsFragment extends BaseFragment {
     }
 
     private void initUI() {
-//        mBinding.toolbar.setNavigationOnClickListener(view -> onBackPressed());
         mBinding.tvFolder.setText(FileUtil.getFolderDir().getPath());
 
         // google analytics
-        trackEvent(getResources().getString(R.string.app_name), getString(R.string.screen_settings), "");
+        trackEvent(getString(R.string.app_name), getString(R.string.screen_settings), "");
     }
 
     @Override

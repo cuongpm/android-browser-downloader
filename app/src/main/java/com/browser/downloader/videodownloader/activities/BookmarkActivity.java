@@ -1,0 +1,60 @@
+package com.browser.downloader.videodownloader.activities;
+
+import android.app.Activity;
+import android.content.Intent;
+import android.databinding.DataBindingUtil;
+import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
+
+import com.browser.downloader.videodownloader.R;
+import com.browser.downloader.videodownloader.adapter.BookmarkAdapter;
+import com.browser.downloader.videodownloader.databinding.ActivityBookmarkBinding;
+import com.browser.downloader.videodownloader.fragment.BrowserFragment;
+
+import butterknife.ButterKnife;
+
+public class BookmarkActivity extends BaseActivity {
+
+    ActivityBookmarkBinding mBinding;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        mBinding = DataBindingUtil.setContentView(this, R.layout.activity_bookmark);
+        ButterKnife.bind(this);
+        initUI();
+    }
+
+    private void initUI() {
+        mBinding.toolbar.setNavigationOnClickListener(view -> onBackPressed());
+
+        mBinding.rvBookmark.setLayoutManager(new LinearLayoutManager(this));
+        BookmarkAdapter bookmarkAdapter = new BookmarkAdapter(mPreferenceManager.getBookmark(),
+                bookmark -> {
+                    Intent resultIntent = new Intent();
+                    resultIntent.putExtra(BrowserFragment.RESULT_URL, bookmark.getUrl());
+                    setResult(Activity.RESULT_OK, resultIntent);
+                    finish();
+                    overridePendingTransition(0, R.anim.exit_to_right);
+                });
+        mBinding.rvBookmark.setAdapter(bookmarkAdapter);
+
+        // google analytics
+        trackEvent(getString(R.string.app_name), getString(R.string.screen_bookmark), "");
+
+//        // Show ad banner
+//        AdUtil.showBanner(this, mBinding.layoutBanner);
+    }
+
+    @Override
+    public void onResume() {
+        trackView(getString(R.string.screen_bookmark));
+        super.onResume();
+    }
+
+    @Override
+    public void onBackPressed() {
+        finish();
+        overridePendingTransition(0, R.anim.exit_to_right);
+    }
+}

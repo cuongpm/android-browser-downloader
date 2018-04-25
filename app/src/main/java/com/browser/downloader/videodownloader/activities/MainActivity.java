@@ -8,11 +8,13 @@ import com.browser.downloader.videodownloader.R;
 import com.browser.downloader.videodownloader.adapter.HomeAdapter;
 import com.browser.downloader.videodownloader.data.Video;
 import com.browser.downloader.videodownloader.databinding.ActivityMainBinding;
+import com.google.android.gms.ads.MobileAds;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
 import butterknife.ButterKnife;
+import vd.core.common.Constant;
 import vd.core.util.AdUtil;
 import vd.core.util.AppUtil;
 import vd.core.util.DialogUtil;
@@ -22,6 +24,8 @@ public class MainActivity extends BaseActivity {
     ActivityMainBinding mBinding;
 
     private int mPagePosition = 0;
+
+    private IOnBackPressed mIOnBackPressed;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,6 +37,9 @@ public class MainActivity extends BaseActivity {
 
         // google analytics
         trackEvent(getResources().getString(R.string.app_name), getString(R.string.screen_home), "");
+
+        // Init Admob
+        MobileAds.initialize(this, Constant.AD_APP_ID);
 
         // Show ad banner
         AdUtil.showBanner(this, mBinding.layoutBanner);
@@ -108,36 +115,35 @@ public class MainActivity extends BaseActivity {
         }
     }
 
-//    @OnClick(R.id.btn_browser)
-//    public void clickBrowser() {
-//        startActivity(new Intent(this, BrowserFragment.class));
-//    }
-//
-//    @OnClick(R.id.btn_video)
-//    public void clickVideo() {
-//        startActivity(new Intent(this, VideoFragment.class));
-//    }
-//
-//    @OnClick(R.id.btn_settings)
-//    public void clickSettings() {
-//        startActivity(new Intent(this, SettingsFragment.class));
-//    }
-
     @Override
     public void onBackPressed() {
-        if (mPagePosition != 0) {
-            mBinding.viewPager.setCurrentItem(0, true);
-            return;
-        }
+        if (mIOnBackPressed == null || !mIOnBackPressed.onBackPressed()) {
+            if (mPagePosition != 0) {
+                mBinding.viewPager.setCurrentItem(0, true);
+                return;
+            }
 
-        if (!mPreferenceManager.isRateApp() && AppUtil.isDownloadVideo) {
-            DialogUtil.showRateDialog(this);
-        } else {
-            DialogUtil.showAlertDialog(this, getString(R.string.app_name), getString(R.string.message_exit),
-                    (dialogInterface, i) -> {
-                        dialogInterface.dismiss();
-                        finish();
-                    });
+            if (!mPreferenceManager.isRateApp() && AppUtil.isDownloadVideo) {
+                DialogUtil.showRateDialog(this);
+            } else {
+                DialogUtil.showAlertDialog(this, getString(R.string.app_name), getString(R.string.message_exit),
+                        (dialogInterface, i) -> {
+                            dialogInterface.dismiss();
+                            finish();
+                        });
+            }
         }
+    }
+
+    public IOnBackPressed getIOnBackPressed() {
+        return mIOnBackPressed;
+    }
+
+    public void setIOnBackPressed(IOnBackPressed mIOnBackPressed) {
+        this.mIOnBackPressed = mIOnBackPressed;
+    }
+
+    public interface IOnBackPressed {
+        boolean onBackPressed();
     }
 }

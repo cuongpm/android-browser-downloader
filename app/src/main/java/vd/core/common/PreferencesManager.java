@@ -5,7 +5,11 @@ import android.content.SharedPreferences;
 import android.text.TextUtils;
 
 import com.browser.downloader.videodownloader.data.ConfigData;
+import com.browser.downloader.videodownloader.data.WebViewData;
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+
+import java.util.ArrayList;
 
 public class PreferencesManager {
 
@@ -13,6 +17,8 @@ public class PreferencesManager {
     private static final String PRE_CONFIG_DATA = "PRE_CONFIG_DATA";
     private static final String PRE_RATE_APP = "PRE_RATE_APP";
     private static final String PRE_TAB_BADGE = "PRE_TAB_BADGE";
+    private static final String PRE_HISTORY = "PRE_HISTORY";
+    private static final String PRE_BOOKMARK = "PRE_BOOKMARK";
 
     private static PreferencesManager instance = null;
 
@@ -60,4 +66,31 @@ public class PreferencesManager {
         mSharePreferences.edit().putInt(PRE_TAB_BADGE + tabId, badge).apply();
     }
 
+    public void setHistory(ArrayList<WebViewData> listHistory) {
+        mSharePreferences.edit().putString(PRE_HISTORY, new Gson().toJson(listHistory)).apply();
+    }
+
+    public ArrayList<WebViewData> getHistory() {
+        String listHistory = mSharePreferences.getString(PRE_HISTORY, "");
+        if (listHistory.length() > 0) {
+            return new Gson().fromJson(listHistory, new TypeToken<ArrayList<WebViewData>>() {
+            }.getType());
+        } else {
+            return new ArrayList<>();
+        }
+    }
+
+    public void setBookmark(ArrayList<WebViewData> listBookmark) {
+        mSharePreferences.edit().putString(PRE_BOOKMARK, new Gson().toJson(listBookmark)).apply();
+    }
+
+    public ArrayList<WebViewData> getBookmark() {
+        String listBookmark = mSharePreferences.getString(PRE_BOOKMARK, "");
+        if (listBookmark.length() > 0) {
+            return new Gson().fromJson(listBookmark, new TypeToken<ArrayList<WebViewData>>() {
+            }.getType());
+        } else {
+            return new ArrayList<>();
+        }
+    }
 }

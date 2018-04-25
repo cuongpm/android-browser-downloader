@@ -12,7 +12,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@color/colorPrimary"
-            app:navigationIcon="@drawable/ic_arrow_back_white_24dp"
             app:title="Settings"
             app:titleTextColor="@android:color/white" />
 

@@ -1,6 +1,8 @@
 package vd.core.util;
 
 import android.app.DownloadManager;
+import android.content.ClipData;
+import android.content.ClipboardManager;
 import android.content.Context;
 import android.net.Uri;
 import android.text.TextUtils;
@@ -35,6 +37,12 @@ public class AppUtil {
         ConfigData configData = PreferencesManager.getInstance(context).getConfigData();
         String server = configData != null && !TextUtils.isEmpty(configData.getParserServer()) ? configData.getParserServer() : Constant.PARSER_SERVER;
         return String.format(server, data);
+    }
+
+    public static void copyClipboard(Context context, String text) {
+        ClipboardManager clipboard = (ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE);
+        ClipData clip = ClipData.newPlainText("Copied link", text);
+        clipboard.setPrimaryClip(clip);
     }
 
 }

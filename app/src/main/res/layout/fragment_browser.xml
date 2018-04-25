@@ -116,56 +116,6 @@
                     android:id="@+id/layout_social"
                     layout="@layout/layout_social" />
 
-                <RelativeLayout
-                    android:id="@+id/layout_bottom"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentBottom="true"
-                    android:background="@drawable/bg_gradient"
-                    android:padding="@dimen/padding_10"
-                    android:visibility="gone">
-
-                    <android.support.v7.widget.AppCompatTextView
-                        android:id="@+id/text"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:background="@color/colorPrimary"
-                        android:text="aaa"
-                        android:textColor="@android:color/white"
-                        android:visibility="gone" />
-
-                    <android.support.v7.widget.AppCompatImageView
-                        android:id="@+id/iv_back"
-                        android:layout_width="@dimen/size_25"
-                        android:layout_height="@dimen/size_25"
-                        android:layout_centerVertical="true"
-                        android:background="@drawable/bg_border_arrow"
-                        android:padding="@dimen/padding_4"
-                        app:srcCompat="@drawable/ic_arrow_back_white_24dp"
-                        tools:ignore="VectorDrawableCompat" />
-
-                    <android.support.v7.widget.AppCompatImageView
-                        android:id="@+id/iv_next"
-                        android:layout_width="@dimen/size_25"
-                        android:layout_height="@dimen/size_25"
-                        android:layout_centerVertical="true"
-                        android:layout_marginLeft="@dimen/padding_16"
-                        android:layout_toRightOf="@+id/iv_back"
-                        android:background="@drawable/bg_border_arrow"
-                        android:padding="@dimen/padding_4"
-                        android:rotation="180"
-                        app:srcCompat="@drawable/ic_arrow_back_white_24dp"
-                        tools:ignore="VectorDrawableCompat" />
-
-                    <android.support.design.widget.FloatingActionButton
-                        android:id="@+id/fabb"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentRight="true"
-                        android:layout_centerVertical="true"
-                        android:src="@drawable/ic_download_white_24dp" />
-                </RelativeLayout>
-
             </RelativeLayout>
 
         </LinearLayout>
@@ -176,7 +126,9 @@
             android:layout_height="wrap_content"
             android:layout_gravity="bottom|right"
             android:layout_margin="@dimen/padding_32"
-            android:src="@drawable/ic_download_white_24dp" />
+            android:src="@drawable/ic_download_white_24dp"
+            android:visibility="gone"
+            tools:visibility="visible" />
     </android.support.design.widget.CoordinatorLayout>
 
 </layout>

@@ -1,12 +1,6 @@
 <resources>
     <string name="app_name">Video Downloader</string>
 
-    <string name="splash_text_1">Welcome to Video Downloader!</string>
-    <string name="splash_text_2">What\'s Video Downloader?</string>
-    <string name="splash_text_3">Video Downloader allows you to download your favorite videos from Facebook, Instagram, Twitter and any other websites.</string>
-    <string name="splash_text_4">Wow that\'s awesome</string>
-    <string name="splash_text_5">Just give it a try and download your favorite videos now!</string>
-
     <string name="rate_app">Do you enjoy our app? Please take a second to rate and review it!</string>
     <string name="text_not_support">YOUTUBE IS NOT SUPPORTED DUE TO THEIR TERMS OF SERVICE !!!</string>
     <string name="text_no_video">You haven\'t download any video yet!</string>
@@ -32,6 +26,8 @@
     <string name="action_rate_us">Action Rate App</string>
     <string name="action_open_folder">Action Open Folder</string>
     <string name="action_share_app">Action Share App</string>
+    <string name="action_share_link">Action Share Link</string>
+    <string name="action_copy_link">Action Copy Link</string>
 
     <string name="action_search">Action Search</string>
     <string name="action_search_suggestion">Action Search - Suggestion</string>
