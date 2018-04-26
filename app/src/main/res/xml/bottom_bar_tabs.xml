@@ -1,21 +1,17 @@
 <tabs>
     <tab
-        barColorWhenSelected="@color/colorPrimary"
         icon="@drawable/ic_browser"
         id="@+id/tab_browser"
         title="Browser" />
     <tab
-        barColorWhenSelected="#7B1FA2"
         icon="@drawable/ic_progress"
         id="@+id/tab_progress"
         title="Progress" />
     <tab
-        barColorWhenSelected="#5D4037"
         icon="@drawable/ic_video"
         id="@+id/tab_video"
         title="Player" />
     <tab
-        barColorWhenSelected="#7a7a7a"
         icon="@drawable/ic_settings"
         id="@+id/tab_settings"
         title="Settings" />

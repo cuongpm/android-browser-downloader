@@ -6,12 +6,15 @@ import android.database.Cursor;
 import android.databinding.DataBindingUtil;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.browser.downloader.videodownloader.R;
+import com.browser.downloader.videodownloader.adapter.ProgressAdapter;
+import com.browser.downloader.videodownloader.data.ProgressInfo;
 import com.browser.downloader.videodownloader.data.Video;
 import com.browser.downloader.videodownloader.databinding.FragmentProgressBinding;
 
@@ -19,6 +22,7 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
 import java.io.File;
+import java.util.ArrayList;
 
 import butterknife.ButterKnife;
 import vd.core.util.FileUtil;
@@ -26,6 +30,12 @@ import vd.core.util.FileUtil;
 public class ProgressFragment extends BaseFragment {
 
     FragmentProgressBinding mBinding;
+
+    private ProgressAdapter mProgressAdapter;
+
+    private ArrayList<ProgressInfo> mProgressInfos;
+
+    private DownloadManager mDownloadManager;
 
     public static ProgressFragment getInstance() {
         return new ProgressFragment();
@@ -60,6 +70,15 @@ public class ProgressFragment extends BaseFragment {
     }
 
     private void initUI() {
+        // Check saved videos
+        mDownloadManager = (DownloadManager) getContext().getSystemService(Context.DOWNLOAD_SERVICE);
+        for (ProgressInfo progressInfo : getProgressInfos()) {
+            checkDownloadProgress(progressInfo, mDownloadManager);
+        }
+
+        mBinding.rvProgress.setLayoutManager(new LinearLayoutManager(getContext()));
+        mProgressAdapter = new ProgressAdapter(getProgressInfos());
+        mBinding.rvProgress.setAdapter(mProgressAdapter);
     }
 
     @Subscribe
@@ -78,8 +97,22 @@ public class ProgressFragment extends BaseFragment {
         request.setDestinationInExternalPublicDir(FileUtil.FOLDER_NAME, video.getFileName());
         request.allowScanningByMediaScanner();
         request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED);
-        DownloadManager dm = (DownloadManager) getContext().getSystemService(Context.DOWNLOAD_SERVICE);
-        long downloadId = dm.enqueue(request);
+        long downloadId = mDownloadManager.enqueue(request);
+
+
+        // Save progress info
+        ProgressInfo progressInfo = new ProgressInfo();
+        progressInfo.setDownloadId(downloadId);
+        progressInfo.setVideo(video);
+        getProgressInfos().add(progressInfo);
+        mProgressAdapter.notifyDataSetChanged();
+        mPreferenceManager.setProgress(getProgressInfos());
+
+        // Check progress info
+        checkDownloadProgress(progressInfo, mDownloadManager);
+    }
+
+    private void checkDownloadProgress(ProgressInfo progressInfo, DownloadManager dm) {
 
         new Thread(() -> {
 
@@ -88,7 +121,7 @@ public class ProgressFragment extends BaseFragment {
             while (downloading) {
 
                 DownloadManager.Query q = new DownloadManager.Query();
-                q.setFilterById(downloadId);
+                q.setFilterById(progressInfo.getDownloadId());
 
                 Cursor cursor = dm.query(q);
                 cursor.moveToFirst();
@@ -99,16 +132,23 @@ public class ProgressFragment extends BaseFragment {
                 if (cursor.getInt(cursor.getColumnIndex(DownloadManager.COLUMN_STATUS)) == DownloadManager.STATUS_SUCCESSFUL) {
                     downloading = false;
                     mActivity.runOnUiThread(() -> {
-                        video.setDownloadCompleted(true);
-                        EventBus.getDefault().post(video);
+                        // Update badges & videos screen
+                        progressInfo.getVideo().setDownloadCompleted(true);
+                        EventBus.getDefault().post(progressInfo.getVideo());
+                        // Update progress screen
+                        progressInfo.setDownloaded(true);
+                        mProgressAdapter.notifyDataSetChanged();
+                        mPreferenceManager.setProgress(getProgressInfos());
                     });
                 }
 
                 double dl_progress = (bytes_downloaded * 100f / bytes_total);
 
                 mActivity.runOnUiThread(() -> {
-                    mBinding.tvProgress.setText(FileUtil.getFileSize(bytes_downloaded) + "/" + FileUtil.getFileSize(bytes_total));
-                    mBinding.progressBar.setProgress((int) dl_progress);
+                    progressInfo.setProgress((int) dl_progress);
+                    progressInfo.setProgressSize(FileUtil.getFileSize(bytes_downloaded) + "/" + FileUtil.getFileSize(bytes_total));
+                    mProgressAdapter.notifyDataSetChanged();
+                    mPreferenceManager.setProgress(getProgressInfos());
                 });
 
                 Log.d("test", statusMessage(cursor));
@@ -148,6 +188,13 @@ public class ProgressFragment extends BaseFragment {
         }
 
         return (msg);
+    }
+
+    private ArrayList<ProgressInfo> getProgressInfos() {
+        if (mProgressInfos == null) {
+            mProgressInfos = mPreferenceManager.getProgress();
+        }
+        return mProgressInfos;
     }
 
 }

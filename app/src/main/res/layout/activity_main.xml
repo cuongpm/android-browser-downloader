@@ -32,11 +32,10 @@
             android:layout_width="match_parent"
             android:layout_height="@dimen/size_60"
             android:layout_alignParentBottom="true"
-            app:bb_activeTabAlpha="1"
-            app:bb_activeTabColor="@android:color/white"
+            android:background="@android:color/white"
+            app:bb_activeTabColor="@color/colorPrimary"
             app:bb_behavior="shifting"
-            app:bb_inActiveTabAlpha="0.6"
-            app:bb_inActiveTabColor="@android:color/white"
+            app:bb_inActiveTabColor="@color/color_gray_3"
             app:bb_showShadow="true"
             app:bb_tabXmlResource="@xml/bottom_bar_tabs" />
 
