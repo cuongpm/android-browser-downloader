@@ -17,7 +17,7 @@ public class PreferencesManager {
     private static final String PRE_KEY = "PRE_KEY";
     private static final String PRE_CONFIG_DATA = "PRE_CONFIG_DATA";
     private static final String PRE_RATE_APP = "PRE_RATE_APP";
-    private static final String PRE_TAB_BADGE = "PRE_TAB_BADGE";
+    private static final String PRE_TAB_VIDEO_BADGE = "PRE_TAB_VIDEO_BADGE";
     private static final String PRE_HISTORY = "PRE_HISTORY";
     private static final String PRE_BOOKMARK = "PRE_BOOKMARK";
     private static final String PRE_PROGRESS = "PRE_PROGRESS";
@@ -60,12 +60,12 @@ public class PreferencesManager {
         mSharePreferences.edit().putBoolean(PRE_RATE_APP, isRateApp).apply();
     }
 
-    public int getTabBadge(int tabId) {
-        return mSharePreferences.getInt(PRE_TAB_BADGE + tabId, 0);
+    public int getTabVideoBadge() {
+        return mSharePreferences.getInt(PRE_TAB_VIDEO_BADGE, 0);
     }
 
-    public void setTabBadge(int tabId, int badge) {
-        mSharePreferences.edit().putInt(PRE_TAB_BADGE + tabId, badge).apply();
+    public void setTabVideoBadge(int badge) {
+        mSharePreferences.edit().putInt(PRE_TAB_VIDEO_BADGE, badge).apply();
     }
 
     public void setHistory(ArrayList<WebViewData> listHistory) {

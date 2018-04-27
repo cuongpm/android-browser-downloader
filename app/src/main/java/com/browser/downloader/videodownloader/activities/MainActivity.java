@@ -2,6 +2,7 @@ package com.browser.downloader.videodownloader.activities;
 
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.view.ViewPager;
 
 import com.browser.downloader.videodownloader.R;
@@ -51,7 +52,7 @@ public class MainActivity extends BaseActivity {
     private void initUI() {
         HomeAdapter adapter = new HomeAdapter(getSupportFragmentManager());
         mBinding.viewPager.setAdapter(adapter);
-        mBinding.viewPager.setOffscreenPageLimit(5);
+        mBinding.viewPager.setOffscreenPageLimit(4);
 
         mBinding.viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
@@ -82,12 +83,15 @@ public class MainActivity extends BaseActivity {
                 mBinding.viewPager.setCurrentItem(1, true);
             } else if (tabId == R.id.tab_video) {
                 mBinding.viewPager.setCurrentItem(2, true);
-                mPreferenceManager.setTabBadge(tabId, 0);
+                mPreferenceManager.setTabVideoBadge(0);
                 mBinding.bottomBar.getTabWithId(tabId).removeBadge();
             } else {
                 mBinding.viewPager.setCurrentItem(3, true);
             }
         });
+
+        // show badge in progress tab
+        showProgressBadge();
 
         // google analytics
         trackEvent(getString(R.string.app_name), getString(R.string.screen_browser), "");
@@ -96,24 +100,25 @@ public class MainActivity extends BaseActivity {
 
     @Subscribe
     public void onDownloadVideo(Video video) {
+        // show badge in progress tab
+        showProgressBadge();
+
+        // show badge in video tab
         if (video.isDownloadCompleted()) {
-            // hide badge in progress tab
-            int progressBadge = mPreferenceManager.getTabBadge(R.id.tab_progress) - 1;
+            mPreferenceManager.setTabVideoBadge(mPreferenceManager.getTabVideoBadge() + 1);
+            mBinding.bottomBar.getTabWithId(R.id.tab_video).setBadgeCount(mPreferenceManager.getTabVideoBadge());
+        }
+    }
+
+    private void showProgressBadge() {
+        new Handler().postDelayed(() -> {
+            int progressBadge = mPreferenceManager.getProgress().size();
             if (progressBadge > 0) {
-                mPreferenceManager.setTabBadge(R.id.tab_progress, progressBadge);
                 mBinding.bottomBar.getTabWithId(R.id.tab_progress).setBadgeCount(progressBadge);
             } else {
-                mPreferenceManager.setTabBadge(R.id.tab_progress, 0);
                 mBinding.bottomBar.getTabWithId(R.id.tab_progress).removeBadge();
             }
-            // show badge in video tab
-            mPreferenceManager.setTabBadge(R.id.tab_video, mPreferenceManager.getTabBadge(R.id.tab_video) + 1);
-            mBinding.bottomBar.getTabWithId(R.id.tab_video).setBadgeCount(mPreferenceManager.getTabBadge(R.id.tab_video));
-        } else {
-            // show badge in progress tab
-            mPreferenceManager.setTabBadge(R.id.tab_progress, mPreferenceManager.getTabBadge(R.id.tab_progress) + 1);
-            mBinding.bottomBar.getTabWithId(R.id.tab_progress).setBadgeCount(mPreferenceManager.getTabBadge(R.id.tab_progress));
-        }
+        }, 1000);
     }
 
     @Override
