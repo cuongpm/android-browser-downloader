@@ -7,7 +7,6 @@ import android.databinding.DataBindingUtil;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -112,82 +111,57 @@ public class ProgressFragment extends BaseFragment {
         checkDownloadProgress(progressInfo, mDownloadManager);
     }
 
-    private void checkDownloadProgress(ProgressInfo progressInfo, DownloadManager dm) {
+    private void checkDownloadProgress(ProgressInfo progressInfo, DownloadManager downloadManager) {
 
         new Thread(() -> {
 
-            boolean downloading = true;
+            boolean isDownloading = true;
 
-            while (downloading) {
+            while (isDownloading) {
 
-                DownloadManager.Query q = new DownloadManager.Query();
-                q.setFilterById(progressInfo.getDownloadId());
+                DownloadManager.Query query = new DownloadManager.Query();
+                query.setFilterById(progressInfo.getDownloadId());
 
-                Cursor cursor = dm.query(q);
+                Cursor cursor = downloadManager.query(query);
                 cursor.moveToFirst();
-                int bytes_downloaded = cursor.getInt(cursor
-                        .getColumnIndex(DownloadManager.COLUMN_BYTES_DOWNLOADED_SO_FAR));
-                int bytes_total = cursor.getInt(cursor.getColumnIndex(DownloadManager.COLUMN_TOTAL_SIZE_BYTES));
 
                 if (cursor.getInt(cursor.getColumnIndex(DownloadManager.COLUMN_STATUS)) == DownloadManager.STATUS_SUCCESSFUL) {
-                    downloading = false;
+                    isDownloading = false;
                     mActivity.runOnUiThread(() -> {
                         // Update badges & videos screen
                         progressInfo.getVideo().setDownloadCompleted(true);
                         EventBus.getDefault().post(progressInfo.getVideo());
                         // Update progress screen
-                        progressInfo.setDownloaded(true);
+                        getProgressInfos().remove(progressInfo);
+                        mProgressAdapter.notifyDataSetChanged();
+                        mPreferenceManager.setProgress(getProgressInfos());
+                    });
+                } else if (cursor.getInt(cursor.getColumnIndex(DownloadManager.COLUMN_STATUS)) == DownloadManager.STATUS_FAILED) {
+                    isDownloading = false;
+                    mActivity.runOnUiThread(() -> {
+                        // Update progress screen
+                        getProgressInfos().remove(progressInfo);
+                        mProgressAdapter.notifyDataSetChanged();
+                        mPreferenceManager.setProgress(getProgressInfos());
+                    });
+                } else if (cursor.getInt(cursor.getColumnIndex(DownloadManager.COLUMN_STATUS)) == DownloadManager.STATUS_RUNNING) {
+                    int bytesDownloaded = cursor.getInt(cursor
+                            .getColumnIndex(DownloadManager.COLUMN_BYTES_DOWNLOADED_SO_FAR));
+                    int bytesTotal = cursor.getInt(cursor.getColumnIndex(DownloadManager.COLUMN_TOTAL_SIZE_BYTES));
+                    double dlProgress = (bytesDownloaded * 100f / bytesTotal);
+
+                    mActivity.runOnUiThread(() -> {
+                        progressInfo.setProgress((int) dlProgress);
+                        progressInfo.setProgressSize(FileUtil.getFileSize(bytesDownloaded) + "/" + FileUtil.getFileSize(bytesTotal));
                         mProgressAdapter.notifyDataSetChanged();
                         mPreferenceManager.setProgress(getProgressInfos());
                     });
                 }
 
-                double dl_progress = (bytes_downloaded * 100f / bytes_total);
-
-                mActivity.runOnUiThread(() -> {
-                    progressInfo.setProgress((int) dl_progress);
-                    progressInfo.setProgressSize(FileUtil.getFileSize(bytes_downloaded) + "/" + FileUtil.getFileSize(bytes_total));
-                    mProgressAdapter.notifyDataSetChanged();
-                    mPreferenceManager.setProgress(getProgressInfos());
-                });
-
-                Log.d("test", statusMessage(cursor));
                 cursor.close();
+
             }
-
         }).start();
-    }
-
-    private String statusMessage(Cursor c) {
-        String msg = "???";
-
-        switch (c.getInt(c.getColumnIndex(DownloadManager.COLUMN_STATUS))) {
-            case DownloadManager.STATUS_FAILED:
-                msg = "Download failed!";
-                break;
-
-            case DownloadManager.STATUS_PAUSED:
-                msg = "Download paused!";
-                break;
-
-            case DownloadManager.STATUS_PENDING:
-                msg = "Download pending!";
-                break;
-
-            case DownloadManager.STATUS_RUNNING:
-                msg = "Download in progress!";
-                break;
-
-            case DownloadManager.STATUS_SUCCESSFUL:
-                msg = "Download complete!";
-                break;
-
-            default:
-                msg = "Download is nowhere in sight";
-                break;
-        }
-
-        return (msg);
     }
 
     private ArrayList<ProgressInfo> getProgressInfos() {

@@ -10,8 +10,6 @@ public class ProgressInfo {
 
     private String progressSize;
 
-    private boolean isDownloaded;
-
     public long getDownloadId() {
         return downloadId;
     }
@@ -44,11 +42,4 @@ public class ProgressInfo {
         this.progressSize = progressSize;
     }
 
-    public boolean isDownloaded() {
-        return isDownloaded;
-    }
-
-    public void setDownloaded(boolean downloaded) {
-        isDownloaded = downloaded;
-    }
 }

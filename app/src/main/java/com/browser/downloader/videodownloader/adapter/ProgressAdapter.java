@@ -31,8 +31,10 @@ public class ProgressAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         ProgressInfo progressInfo = mProgressInfos.get(position);
         ItemProgressBinding binding = ((ProgressViewHolder) holder).binding;
 
-        binding.progressBar.setProgress(progressInfo.isDownloaded() ? 100 : progressInfo.getProgress());
-        binding.tvProgress.setText(progressInfo.isDownloaded() ? "Done" : progressInfo.getProgressSize());
+        binding.tvTitle.setText(progressInfo.getVideo().getFileName());
+        binding.progressBar.setProgress(progressInfo.getProgress());
+        binding.tvProgress.setText(progressInfo.getProgressSize());
+        binding.ivThumbnail.setImageURI(progressInfo.getVideo().getThumbnail());
     }
 
     @Override
