@@ -18,10 +18,25 @@
             app:title="History"
             app:titleTextColor="@android:color/white" />
 
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/rv_history"
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="match_parent">
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/rv_history"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+
+            <android.support.v7.widget.AppCompatTextView
+                android:id="@+id/tv_no_history"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:text="@string/text_no_history"
+                android:textColor="@color/black_85"
+                android:visibility="gone" />
+
+        </RelativeLayout>
 
     </LinearLayout>
 

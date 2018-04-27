@@ -3,7 +3,10 @@
 
     <string name="rate_app">Do you enjoy our app? Please take a second to rate and review it!</string>
     <string name="text_not_support">YOUTUBE IS NOT SUPPORTED DUE TO THEIR TERMS OF SERVICE !!!</string>
-    <string name="text_no_video">You haven\'t download any video yet!</string>
+    <string name="text_no_video">You haven not downloaded any video yet.</string>
+    <string name="text_no_progress">You are not downloading any video.</string>
+    <string name="text_no_bookmark">No bookmark</string>
+    <string name="text_no_history">No history</string>
 
     <string name="rename_title">Rename video</string>
     <string name="rename_invalid">Invalid name. Please try again!</string>
@@ -26,6 +29,9 @@
     <string name="action_share_app">Action Share App</string>
     <string name="action_share_link">Action Share Link</string>
     <string name="action_copy_link">Action Copy Link</string>
+    <string name="action_clear_history">Action Clear History</string>
+    <string name="action_clear_bookmark">Action Clear Bookmark</string>
+    <string name="action_clear_cookie">Action Clear Cookie</string>
 
     <string name="action_search">Action Search</string>
     <string name="action_search_suggestion">Action Search - Suggestion</string>

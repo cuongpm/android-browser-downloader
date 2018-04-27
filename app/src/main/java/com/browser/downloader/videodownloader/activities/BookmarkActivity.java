@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
+import android.view.View;
 
 import com.browser.downloader.videodownloader.R;
 import com.browser.downloader.videodownloader.adapter.BookmarkAdapter;
@@ -38,6 +39,10 @@ public class BookmarkActivity extends BaseActivity {
                     overridePendingTransition(0, R.anim.exit_to_right);
                 });
         mBinding.rvBookmark.setAdapter(bookmarkAdapter);
+
+        if (mPreferenceManager.getBookmark().isEmpty()) {
+            mBinding.tvNoBookmark.setVisibility(View.VISIBLE);
+        }
 
         // google analytics
         trackEvent(getString(R.string.app_name), getString(R.string.screen_bookmark), "");

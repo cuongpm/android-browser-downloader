@@ -86,14 +86,17 @@ public class VideoFragment extends BaseFragment {
         mBinding.rvVideo.setLayoutManager(new LinearLayoutManager(getContext()));
         mVideoAdapter = new VideoAdapter(mListFiles, view -> {
             showInterstitlaAd();
-            if (FileUtil.getListFiles().isEmpty()) {
-                mBinding.tvNoVideo.setVisibility(View.VISIBLE);
-            }
+            showEmptyData();
         });
         mBinding.rvVideo.setAdapter(mVideoAdapter);
+        showEmptyData();
+    }
 
+    private void showEmptyData() {
         if (FileUtil.getListFiles().isEmpty()) {
             mBinding.tvNoVideo.setVisibility(View.VISIBLE);
+        } else {
+            mBinding.tvNoVideo.setVisibility(View.GONE);
         }
     }
 

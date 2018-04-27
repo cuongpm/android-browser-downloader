@@ -5,7 +5,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/color_gray_2"
+        android:background="@android:color/white"
         android:orientation="vertical">
 
         <android.support.v7.widget.Toolbar
@@ -16,9 +16,20 @@
             app:title="SETTINGS"
             app:titleTextColor="@color/black_85" />
 
+        <android.support.v7.widget.AppCompatTextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingBottom="@dimen/padding_10"
+            android:paddingLeft="@dimen/padding_16"
+            android:paddingRight="@dimen/padding_16"
+            android:paddingTop="@dimen/padding_10"
+            android:text="GENERAL"
+            android:textColor="@color/black_85"
+            android:textStyle="bold" />
+
         <View
             android:layout_width="match_parent"
-            android:layout_height="@dimen/size_35"
+            android:layout_height="@dimen/size_2"
             android:background="@color/color_gray_2" />
 
         <LinearLayout
@@ -27,7 +38,8 @@
             android:layout_height="wrap_content"
             android:background="?attr/selectableItemBackground"
             android:gravity="center_vertical"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:paddingLeft="@dimen/padding_4">
 
             <android.support.v7.widget.AppCompatImageView
                 android:layout_width="@dimen/size_50"
@@ -42,7 +54,7 @@
                 android:gravity="center_vertical"
                 android:orientation="vertical">
 
-                <TextView
+                <android.support.v7.widget.AppCompatTextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="center_vertical"
@@ -51,7 +63,7 @@
                     android:textColor="@color/black_85"
                     android:textSize="@dimen/text_16" />
 
-                <TextView
+                <android.support.v7.widget.AppCompatTextView
                     android:id="@+id/tv_folder"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -65,7 +77,7 @@
 
         <View
             android:layout_width="match_parent"
-            android:layout_height="35dp"
+            android:layout_height="@dimen/size_2"
             android:background="@color/color_gray_2" />
 
         <LinearLayout
@@ -74,7 +86,8 @@
             android:layout_height="wrap_content"
             android:background="?attr/selectableItemBackground"
             android:gravity="center_vertical"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:paddingLeft="@dimen/padding_4">
 
             <android.support.v7.widget.AppCompatImageView
                 android:layout_width="@dimen/size_50"
@@ -83,7 +96,7 @@
                 android:src="@drawable/ic_review"
                 android:tint="@color/color_gray_3" />
 
-            <TextView
+            <android.support.v7.widget.AppCompatTextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center_vertical"
@@ -96,8 +109,7 @@
 
         <View
             android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_marginLeft="@dimen/padding_50"
+            android:layout_height="@dimen/size_2"
             android:background="@color/color_gray_2" />
 
         <LinearLayout
@@ -106,7 +118,8 @@
             android:layout_height="wrap_content"
             android:background="?attr/selectableItemBackground"
             android:gravity="center_vertical"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:paddingLeft="@dimen/padding_4">
 
             <android.support.v7.widget.AppCompatImageView
                 android:layout_width="@dimen/size_50"
@@ -115,7 +128,7 @@
                 android:src="@drawable/ic_share"
                 android:tint="@color/color_gray_3" />
 
-            <TextView
+            <android.support.v7.widget.AppCompatTextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center_vertical"
@@ -129,7 +142,118 @@
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:layout_marginLeft="@dimen/padding_50"
+            android:background="@color/color_gray_2" />
+
+        <android.support.v7.widget.AppCompatTextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingBottom="@dimen/padding_10"
+            android:paddingLeft="@dimen/padding_16"
+            android:paddingRight="@dimen/padding_16"
+            android:paddingTop="@dimen/padding_10"
+            android:text="PRIVACY"
+            android:textColor="@color/black_85"
+            android:textStyle="bold" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/size_2"
+            android:background="@color/color_gray_2" />
+
+        <LinearLayout
+            android:id="@+id/layout_clear_history"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="?attr/selectableItemBackground"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:paddingLeft="@dimen/padding_4">
+
+            <android.support.v7.widget.AppCompatImageView
+                android:layout_width="@dimen/size_50"
+                android:layout_height="@dimen/size_50"
+                android:padding="@dimen/padding_8"
+                android:src="@drawable/ic_delete"
+                android:tint="@color/color_gray_3" />
+
+            <android.support.v7.widget.AppCompatTextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:paddingLeft="8dp"
+                android:text="Clear browser history"
+                android:textColor="@color/black_85"
+                android:textSize="@dimen/text_16" />
+
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/size_2"
+            android:background="@color/color_gray_2" />
+
+        <LinearLayout
+            android:id="@+id/layout_clear_bookmark"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="?attr/selectableItemBackground"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:paddingLeft="@dimen/padding_4">
+
+            <android.support.v7.widget.AppCompatImageView
+                android:layout_width="@dimen/size_50"
+                android:layout_height="@dimen/size_50"
+                android:padding="@dimen/padding_8"
+                android:src="@drawable/ic_delete"
+                android:tint="@color/color_gray_3" />
+
+            <android.support.v7.widget.AppCompatTextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:paddingLeft="8dp"
+                android:text="Clear browser bookmark"
+                android:textColor="@color/black_85"
+                android:textSize="@dimen/text_16" />
+
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/size_2"
+            android:background="@color/color_gray_2" />
+
+        <LinearLayout
+            android:id="@+id/layout_clear_cookie"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="?attr/selectableItemBackground"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:paddingLeft="@dimen/padding_4">
+
+            <android.support.v7.widget.AppCompatImageView
+                android:layout_width="@dimen/size_50"
+                android:layout_height="@dimen/size_50"
+                android:padding="@dimen/padding_8"
+                android:src="@drawable/ic_delete"
+                android:tint="@color/color_gray_3" />
+
+            <android.support.v7.widget.AppCompatTextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:paddingLeft="8dp"
+                android:text="Clear browser cookies"
+                android:textColor="@color/black_85"
+                android:textSize="@dimen/text_16" />
+
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
             android:background="@color/color_gray_2" />
     </LinearLayout>
 
