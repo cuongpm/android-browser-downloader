@@ -245,8 +245,6 @@ public class BrowserFragment extends BaseFragment {
 
         mBinding.etSearch.setOnKeyListener((v, keyCode, event) -> {
                     if (keyCode == KeyEvent.KEYCODE_ENTER) {
-                        // clear focus & hide keyboard
-                        focusSearchView(false);
                         // load data
                         loadWebView();
                         // google analytics
@@ -317,8 +315,6 @@ public class BrowserFragment extends BaseFragment {
         mBinding.etSearch.setAdapter(mSuggestionAdapter);
         mBinding.etSearch.showDropDown();
         mBinding.etSearch.setOnItemClickListener((parent, view, position, id) -> {
-            // clear focus & hide keyboard
-            focusSearchView(false);
             // Search keyword
             loadWebView();
             // google analytics
@@ -576,6 +572,9 @@ public class BrowserFragment extends BaseFragment {
     }
 
     private void loadWebView() {
+        // clear focus & hide keyboard
+        focusSearchView(false);
+
         String content = mBinding.etSearch.getText().toString().trim();
         if (content.length() > 0) {
             if (content.startsWith("http://") || content.startsWith("https://")) {
