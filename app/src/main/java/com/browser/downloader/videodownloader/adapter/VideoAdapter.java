@@ -2,9 +2,6 @@ package com.browser.downloader.videodownloader.adapter;
 
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
-import android.graphics.Bitmap;
-import android.media.ThumbnailUtils;
-import android.provider.MediaStore;
 import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -42,30 +39,37 @@ public class VideoAdapter
 
     @Override
     public int getItemCount() {
-        return mFiles.size();
+//        return mFiles.size();
+        return 4;
     }
 
     @Override
     public void onBindViewHolder(final VideoAdapter.FileViewHolder holder, int position) {
 
-        File file = mFiles.get(position);
-        holder.mBinding.tvName.setText(file.getName());
-        holder.mBinding.tvSize.setText(FileUtil.getFileSize(file));
+//        File file = mFiles.get(position);
+//        holder.mBinding.tvName.setText(file.getName());
+//        holder.mBinding.tvSize.setText(FileUtil.getFileSize(file));
+//
+//        Bitmap thumbnail = ThumbnailUtils.createVideoThumbnail(file.getPath(), MediaStore.Video.Thumbnails.MINI_KIND);
+//        holder.mBinding.ivThumbnail.setImageBitmap(thumbnail);
 
-        Bitmap thumbnail = ThumbnailUtils.createVideoThumbnail(file.getPath(), MediaStore.Video.Thumbnails.MINI_KIND);
-        holder.mBinding.ivThumbnail.setImageBitmap(thumbnail);
+        holder.mBinding.ivMore.setOnClickListener(view -> showPopupMenu(view, null));
+//
+//        holder.mBinding.getRoot().setOnClickListener(view -> {
+//            Intent intent = new Intent(view.getContext(), VideoPlayerActivity.class);
+//            intent.putExtra(VideoPlayerActivity.VIDEO_PATH, file.getPath());
+//            view.getContext().startActivity(intent);
+//
+//            mOnClickListener.onClick(view);
+//        });
 
-        holder.mBinding.ivMore.setOnClickListener(view -> showPopupMenu(view, file));
-
-        holder.mBinding.getRoot().setOnClickListener(view -> {
-            Intent intent = new Intent(view.getContext(), VideoPlayerActivity.class);
-            intent.putExtra(VideoPlayerActivity.VIDEO_PATH, file.getPath());
-            view.getContext().startActivity(intent);
-
-            mOnClickListener.onClick(view);
-        });
-
-
+        // show test data
+        holder.mBinding.tvName.setText(position == 0 ? "my favorite video.mp4" : position == 1 ? "viral video.mp4" : position == 2 ? "breaking news.mp4" : "myvideo.mp4");
+        holder.mBinding.tvSize.setText(position == 0 ? "11.5 MB" : position == 1 ? "22.6 MB" : position == 2 ? "100.4 MB" : "90.8 MB");
+        holder.mBinding.ivThumbnail.setImageURI(position == 0 ? "https://i2.wp.com/handluggageonly.co.uk/wp-content/uploads/2015/08/IMG_2537.jpg?w=256&h=256&crop=1&ssl=1"
+                : position == 1 ? "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQGL26Dg_00N107n7-gf7e99l78gB4a4v0nwL6RxIm6ygKqgXP6"
+                : position == 2 ? "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRC4IygFLuilywBNQ72U7fsNMT-O94UJoe41cpRa2CugPqMli00"
+                : "https://www.lebanoninapicture.com/Prv/Images/Pages/Page_96260/the-usual-haig-adventures-shot-on-a-38m-natural-2-28-2017-10-44-47-am-t.jpg");
     }
 
     public class FileViewHolder extends RecyclerView.ViewHolder {

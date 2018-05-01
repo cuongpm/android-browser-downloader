@@ -93,6 +93,10 @@ public class MainActivity extends BaseActivity {
         // show badge in progress tab
         showProgressBadge();
 
+        // show test data
+        mBinding.bottomBar.getTabWithId(R.id.tab_progress).setBadgeCount(3);
+        mBinding.bottomBar.getTabWithId(R.id.tab_video).setBadgeCount(4);
+
         // google analytics
         trackEvent(getString(R.string.app_name), getString(R.string.screen_browser), "");
         trackView(getString(R.string.screen_browser));

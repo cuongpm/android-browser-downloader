@@ -79,7 +79,7 @@ public class ProgressFragment extends BaseFragment {
         mProgressAdapter = new ProgressAdapter(getProgressInfos());
         mBinding.rvProgress.setAdapter(mProgressAdapter);
 
-        showEmptyData();
+//        showEmptyData();
     }
 
     private void showEmptyData() {

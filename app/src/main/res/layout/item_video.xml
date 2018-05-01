@@ -16,7 +16,7 @@
         android:paddingLeft="@dimen/padding_10"
         android:paddingTop="@dimen/padding_10">
 
-        <android.support.v7.widget.AppCompatImageView
+        <com.facebook.drawee.view.SimpleDraweeView
             android:id="@+id/iv_thumbnail"
             android:layout_width="@dimen/size_80"
             android:layout_height="@dimen/size_80"

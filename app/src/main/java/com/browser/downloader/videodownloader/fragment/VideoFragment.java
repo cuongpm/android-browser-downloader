@@ -89,7 +89,7 @@ public class VideoFragment extends BaseFragment {
             showEmptyData();
         });
         mBinding.rvVideo.setAdapter(mVideoAdapter);
-        showEmptyData();
+//        showEmptyData();
     }
 
     private void showEmptyData() {
