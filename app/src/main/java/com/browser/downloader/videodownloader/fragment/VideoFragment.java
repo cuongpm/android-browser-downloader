@@ -9,11 +9,8 @@ import android.view.ViewGroup;
 
 import com.browser.downloader.videodownloader.R;
 import com.browser.downloader.videodownloader.adapter.VideoAdapter;
-import com.browser.downloader.videodownloader.data.ConfigData;
 import com.browser.downloader.videodownloader.data.Video;
 import com.browser.downloader.videodownloader.databinding.FragmentVideoBinding;
-import com.google.android.gms.ads.AdListener;
-import com.google.android.gms.ads.InterstitialAd;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -21,8 +18,6 @@ import org.greenrobot.eventbus.Subscribe;
 import java.io.File;
 import java.util.ArrayList;
 
-import vd.core.util.AdUtil;
-import vd.core.util.DialogUtil;
 import vd.core.util.FileUtil;
 
 public class VideoFragment extends BaseFragment {
@@ -32,10 +27,6 @@ public class VideoFragment extends BaseFragment {
     VideoAdapter mVideoAdapter;
 
     private ArrayList<File> mListFiles;
-
-    private InterstitialAd mInterstitialAd;
-
-    private boolean isAdShowed = false;
 
     public static VideoFragment getInstance() {
         return new VideoFragment();
@@ -58,13 +49,6 @@ public class VideoFragment extends BaseFragment {
         super.onCreateView(inflater, container, savedInstanceState);
         mBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_video, container, false);
         initUI();
-
-//        // Show ad banner
-//        AdUtil.showBanner(this, mBinding.layoutBanner);
-
-        // Load ad interstitial
-        loadInterstitialAd();
-
         return mBinding.getRoot();
     }
 
@@ -85,7 +69,7 @@ public class VideoFragment extends BaseFragment {
         mListFiles = FileUtil.getListFiles();
         mBinding.rvVideo.setLayoutManager(new LinearLayoutManager(getContext()));
         mVideoAdapter = new VideoAdapter(mListFiles, view -> {
-            showInterstitlaAd();
+            mActivity.showInterstitlaAd();
             showEmptyData();
         });
         mBinding.rvVideo.setAdapter(mVideoAdapter);
@@ -97,44 +81,6 @@ public class VideoFragment extends BaseFragment {
             mBinding.tvNoVideo.setVisibility(View.VISIBLE);
         } else {
             mBinding.tvNoVideo.setVisibility(View.GONE);
-        }
-    }
-
-    private void loadInterstitialAd() {
-        // Empty data
-        ArrayList<File> files = FileUtil.getListFiles();
-        if (files == null || files.size() == 0) {
-            return;
-        }
-
-        // Check show ad
-        ConfigData configData = mPreferenceManager.getConfigData();
-        boolean isShowAd = configData == null ? true : configData.isShowAdVideo();
-        if (isShowAd) {
-            DialogUtil.showSimpleProgressDialog(getContext());
-            mInterstitialAd = new InterstitialAd(getContext());
-            AdUtil.showInterstitialAd(mInterstitialAd, new AdListener() {
-                @Override
-                public void onAdLoaded() {
-                    DialogUtil.closeProgressDialog();
-                    super.onAdLoaded();
-                }
-
-                @Override
-                public void onAdFailedToLoad(int i) {
-                    DialogUtil.closeProgressDialog();
-                    super.onAdFailedToLoad(i);
-                }
-            });
-        }
-    }
-
-    private void showInterstitlaAd() {
-        if (!isAdShowed && mInterstitialAd != null && mInterstitialAd.isLoaded()) {
-            isAdShowed = true;
-            mInterstitialAd.show();
-            // google analytics
-            trackEvent(getString(R.string.app_name), getString(R.string.action_show_ad_video), "");
         }
     }
 }

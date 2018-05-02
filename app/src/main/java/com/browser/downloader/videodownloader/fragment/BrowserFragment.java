@@ -42,7 +42,6 @@ import com.browser.downloader.videodownloader.databinding.FragmentBrowserBinding
 import com.browser.downloader.videodownloader.databinding.LayoutVideoDataBinding;
 import com.browser.downloader.videodownloader.service.DownloadService;
 import com.browser.downloader.videodownloader.service.SearchService;
-import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.InterstitialAd;
 
 import org.greenrobot.eventbus.EventBus;
@@ -115,9 +114,6 @@ public class BrowserFragment extends BaseFragment {
 
         initUI();
 
-//        // Show ad banner
-//        AdUtil.showBanner(this, mBinding.layoutBanner);
-
         // Load ad interstitial
         loadInterstitialAd();
 
@@ -129,21 +125,8 @@ public class BrowserFragment extends BaseFragment {
         ConfigData configData = mPreferenceManager.getConfigData();
         boolean isShowAd = configData == null ? true : configData.isShowAdBrowser();
         if (isShowAd) {
-            DialogUtil.showSimpleProgressDialog(getContext());
             mInterstitialAd = new InterstitialAd(getContext());
-            AdUtil.showInterstitialAd(mInterstitialAd, new AdListener() {
-                @Override
-                public void onAdLoaded() {
-                    DialogUtil.closeProgressDialog();
-                    super.onAdLoaded();
-                }
-
-                @Override
-                public void onAdFailedToLoad(int i) {
-                    DialogUtil.closeProgressDialog();
-                    super.onAdFailedToLoad(i);
-                }
-            });
+            AdUtil.showInterstitialAd(mInterstitialAd, null);
         }
     }
 
@@ -178,10 +161,16 @@ public class BrowserFragment extends BaseFragment {
         } else if (item.getItemId() == R.id.menu_bookmark) {
             startActivityForResult(new Intent(getContext(), BookmarkActivity.class), ACTIVITY_BOOKMARK);
             getActivity().overridePendingTransition(R.anim.enter_from_right, 0);
+            if (!mPreferenceManager.getBookmark().isEmpty()) {
+                showInterstitlaAd();
+            }
 
         } else if (item.getItemId() == R.id.menu_history) {
             startActivityForResult(new Intent(getContext(), HistoryActivity.class), ACTIVITY_HISTORY);
             getActivity().overridePendingTransition(R.anim.enter_from_right, 0);
+            if (!mPreferenceManager.getHistory().isEmpty()) {
+                showInterstitlaAd();
+            }
 
         } else if (item.getItemId() == R.id.menu_share) {
             if (mBinding.webview != null && !TextUtils.isEmpty(mBinding.webview.getUrl())) {
@@ -593,6 +582,7 @@ public class BrowserFragment extends BaseFragment {
     public void clickFacebook() {
         mBinding.etSearch.setText(mBinding.layoutSocial.tvFacebook.getText().toString());
         loadWebView();
+        showInterstitlaAd();
         // google analytics
         trackEvent(getString(R.string.app_name), getString(R.string.action_open_facebook), "");
     }
@@ -601,6 +591,7 @@ public class BrowserFragment extends BaseFragment {
     public void clickTwitter() {
         mBinding.etSearch.setText(mBinding.layoutSocial.tvTwitter.getText().toString());
         loadWebView();
+        showInterstitlaAd();
         // google analytics
         trackEvent(getString(R.string.app_name), getString(R.string.action_open_twitter), "");
     }
@@ -609,6 +600,7 @@ public class BrowserFragment extends BaseFragment {
     public void clickInstagram() {
         mBinding.etSearch.setText(mBinding.layoutSocial.tvInstagram.getText().toString());
         loadWebView();
+        showInterstitlaAd();
         // google analytics
         trackEvent(getString(R.string.app_name), getString(R.string.action_open_instagram), "");
     }
@@ -617,6 +609,7 @@ public class BrowserFragment extends BaseFragment {
     public void clickDailymotion() {
         mBinding.etSearch.setText(mBinding.layoutSocial.tvDailymotion.getText().toString());
         loadWebView();
+        showInterstitlaAd();
         // google analytics
         trackEvent(getString(R.string.app_name), getString(R.string.action_open_dailymotion), "");
     }
@@ -625,6 +618,7 @@ public class BrowserFragment extends BaseFragment {
     public void clickVimeo() {
         mBinding.etSearch.setText(mBinding.layoutSocial.tvVimeo.getText().toString());
         loadWebView();
+        showInterstitlaAd();
         // google analytics
         trackEvent(getString(R.string.app_name), getString(R.string.action_open_vimeo), "");
     }
@@ -638,7 +632,6 @@ public class BrowserFragment extends BaseFragment {
                 mBinding.webview.setVisibility(View.GONE);
                 mBinding.fab.setVisibility(View.GONE);
                 mBinding.layoutSocial.layoutRoot.setVisibility(View.VISIBLE);
-                showInterstitlaAd();
             } else {
                 mBinding.webview.reload();
             }

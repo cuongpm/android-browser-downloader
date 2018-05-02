@@ -18,8 +18,7 @@ public class AdUtil {
         final AdView adView = new AdView(context);
         adView.setAdSize(AdSize.BANNER);
         adView.setAdUnitId(Constant.AD_BANNER_ID);
-        AdRequest adRequest =
-                new AdRequest.Builder().addTestDevice("9B52FAA26A296F8A9D559226B0DB9F2E").build();
+        AdRequest adRequest = new AdRequest.Builder().build();
         adView.loadAd(adRequest);
         layoutBanner.addView(adView);
         adView.setAdListener(new AdListener() {
@@ -33,8 +32,7 @@ public class AdUtil {
 
     public static void showInterstitialAd(InterstitialAd interstitialAd, AdListener adListener) {
         interstitialAd.setAdUnitId(Constant.AD_INTERSTITIAL_ID);
-        AdRequest adRequest =
-                new AdRequest.Builder().addTestDevice("9B52FAA26A296F8A9D559226B0DB9F2E").build();
+        AdRequest adRequest = new AdRequest.Builder().build();
         interstitialAd.loadAd(adRequest);
         interstitialAd.setAdListener(adListener);
     }

@@ -7,21 +7,21 @@ import java.util.List;
 
 public class ConfigData {
 
-    @SerializedName("is_show_ad_home")
-    @Expose
-    private boolean isShowAdHome = true;
-
     @SerializedName("is_show_ad_browser")
     @Expose
     private boolean isShowAdBrowser = true;
 
-    @SerializedName("is_show_ad_video")
+    @SerializedName("is_show_ad_app")
     @Expose
-    private boolean isShowAdVideo = true;
+    private boolean isShowAdApp = true;
 
     @SerializedName("is_show_all_pages")
     @Expose
     private boolean isShowAllPages;
+
+    @SerializedName("total_action_show_ad")
+    @Expose
+    private int totalActionShowAd;
 
     @SerializedName("parser_server")
     @Expose
@@ -39,14 +39,6 @@ public class ConfigData {
     @Expose
     private List<String> pagesUnsupported;
 
-    public boolean isShowAdHome() {
-        return isShowAdHome;
-    }
-
-    public void setShowAdHome(boolean showAdHome) {
-        isShowAdHome = showAdHome;
-    }
-
     public boolean isShowAdBrowser() {
         return isShowAdBrowser;
     }
@@ -55,12 +47,12 @@ public class ConfigData {
         isShowAdBrowser = showAdBrowser;
     }
 
-    public boolean isShowAdVideo() {
-        return isShowAdVideo;
+    public boolean isShowAdApp() {
+        return isShowAdApp;
     }
 
-    public void setShowAdVideo(boolean showAdVideo) {
-        isShowAdVideo = showAdVideo;
+    public void setShowAdApp(boolean showAdApp) {
+        isShowAdApp = showAdApp;
     }
 
     public boolean isShowAllPages() {
@@ -69,6 +61,14 @@ public class ConfigData {
 
     public void setShowAllPages(boolean showAllPages) {
         isShowAllPages = showAllPages;
+    }
+
+    public int getTotalActionShowAd() {
+        return totalActionShowAd;
+    }
+
+    public void setTotalActionShowAd(int totalActionShowAd) {
+        this.totalActionShowAd = totalActionShowAd;
     }
 
     public String getParserServer() {

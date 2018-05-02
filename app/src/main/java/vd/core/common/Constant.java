@@ -3,7 +3,7 @@ package vd.core.common;
 public class Constant {
 
     // App data
-    public final static String SEARCH_URL = "https://www.google.com/search?q=%s";
+    public final static String SEARCH_URL = "https://www.google.com/search?q=%s -youtube";
 
     // Google Play link
     public final static String GOOGLE_PLAY_LINK = "https://play.google.com/store/apps/details?id=%s";

@@ -59,9 +59,6 @@ public class ProgressFragment extends BaseFragment {
         ButterKnife.bind(this, mBinding.getRoot());
         initUI();
 
-////        // Show ad banner
-////        AdUtil.showBanner(this, mBinding.layoutBanner);
-//
 //        // Load ad interstitial
 //        loadInterstitialAd();
 

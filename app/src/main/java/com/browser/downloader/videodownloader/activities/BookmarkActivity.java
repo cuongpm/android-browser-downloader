@@ -46,9 +46,6 @@ public class BookmarkActivity extends BaseActivity {
 
         // google analytics
         trackEvent(getString(R.string.app_name), getString(R.string.screen_bookmark), "");
-
-//        // Show ad banner
-//        AdUtil.showBanner(this, mBinding.layoutBanner);
     }
 
     @Override

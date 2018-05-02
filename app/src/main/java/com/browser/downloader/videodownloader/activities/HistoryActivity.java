@@ -46,9 +46,6 @@ public class HistoryActivity extends BaseActivity {
 
         // google analytics
         trackEvent(getString(R.string.app_name), getString(R.string.screen_history), "");
-
-//        // Show ad banner
-//        AdUtil.showBanner(this, mBinding.layoutBanner);
     }
 
     @Override

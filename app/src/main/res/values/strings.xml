@@ -21,7 +21,7 @@
     <string name="screen_history">Screen History</string>
 
     <string name="action_show_ad_browser">Action Show Ad - Browser</string>
-    <string name="action_show_ad_video">Action Show Ad - Video</string>
+    <string name="action_show_ad_app">Action Show Ad - App</string>
     <string name="action_rate_us_exit_app">Action Rate Us - Exit App</string>
     <string name="action_rate_us_video_player">Action Rate Us - Video Player</string>
     <string name="action_rate_us">Action Rate App</string>

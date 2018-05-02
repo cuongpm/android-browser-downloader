@@ -7,8 +7,10 @@ import android.support.v4.view.ViewPager;
 
 import com.browser.downloader.videodownloader.R;
 import com.browser.downloader.videodownloader.adapter.HomeAdapter;
+import com.browser.downloader.videodownloader.data.ConfigData;
 import com.browser.downloader.videodownloader.data.Video;
 import com.browser.downloader.videodownloader.databinding.ActivityMainBinding;
+import com.google.android.gms.ads.InterstitialAd;
 import com.google.android.gms.ads.MobileAds;
 
 import org.greenrobot.eventbus.EventBus;
@@ -28,6 +30,14 @@ public class MainActivity extends BaseActivity {
 
     private IOnBackPressed mIOnBackPressed;
 
+    private InterstitialAd mInterstitialAd;
+
+    private boolean isAdShowed = false;
+
+    private int numberActionShowAd = 0;
+
+    private int totalActionShowAd = 5;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -41,6 +51,9 @@ public class MainActivity extends BaseActivity {
 
         // Show ad banner
         AdUtil.showBanner(this, mBinding.layoutBanner);
+
+        // Load ad interstitial
+        loadInterstitialAd();
     }
 
     @Override
@@ -61,6 +74,7 @@ public class MainActivity extends BaseActivity {
 
             @Override
             public void onPageSelected(int position) {
+                showInterstitlaAd();
                 mPagePosition = position;
                 mBinding.bottomBar.setDefaultTabPosition(position);
                 // google analytics
@@ -151,5 +165,26 @@ public class MainActivity extends BaseActivity {
 
     public interface IOnBackPressed {
         boolean onBackPressed();
+    }
+
+    private void loadInterstitialAd() {
+        // Check show ad
+        ConfigData configData = mPreferenceManager.getConfigData();
+        totalActionShowAd = configData == null ? totalActionShowAd : configData.getTotalActionShowAd();
+        boolean isShowAd = configData == null ? true : configData.isShowAdApp();
+        if (isShowAd) {
+            mInterstitialAd = new InterstitialAd(this);
+            AdUtil.showInterstitialAd(mInterstitialAd, null);
+        }
+    }
+
+    public void showInterstitlaAd() {
+        numberActionShowAd++;
+        if (!isAdShowed && mInterstitialAd != null && mInterstitialAd.isLoaded() && (numberActionShowAd % totalActionShowAd == 0)) {
+            isAdShowed = true;
+            mInterstitialAd.show();
+            // google analytics
+            trackEvent(getString(R.string.app_name), getString(R.string.action_show_ad_app), "");
+        }
     }
 }
