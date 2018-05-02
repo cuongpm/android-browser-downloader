@@ -47,6 +47,10 @@ public class FileUtil {
         }
         final double length = file.length();
 
+        return getFileSize(length);
+    }
+
+    public static String getFileSize(double length) {
         if (length > MiB) {
             return format.format(length / MiB) + " MB";
         }

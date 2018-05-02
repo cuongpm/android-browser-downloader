@@ -16,7 +16,7 @@
     <dimen name="padding_32">32dp</dimen>
     <dimen name="padding_40">40dp</dimen>
     <dimen name="padding_50">50dp</dimen>
-    <dimen name="padding_64">64dp</dimen>
+    <dimen name="padding_80">80dp</dimen>
 
     <!-- Text size -->
     <dimen name="text_12">12sp</dimen>

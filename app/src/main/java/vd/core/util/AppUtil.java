@@ -1,49 +1,45 @@
 package vd.core.util;
 
-import android.app.DownloadManager;
+import android.content.ClipData;
+import android.content.ClipboardManager;
 import android.content.Context;
-import android.net.Uri;
+import android.os.Build;
 import android.text.TextUtils;
+import android.webkit.CookieManager;
+import android.webkit.CookieSyncManager;
 
-import com.browser.downloader.videodownloader.data.model.StaticData;
-import com.browser.downloader.videodownloader.data.model.Video;
-
-import java.io.File;
-import java.util.Calendar;
-import java.util.Date;
+import com.browser.downloader.videodownloader.data.ConfigData;
 
 import vd.core.common.Constant;
 import vd.core.common.PreferencesManager;
 
 public class AppUtil {
 
-    public static boolean isDownloadVideo = false;
-
-    public static void downloadVideo(Context context, Video video) {
-        isDownloadVideo = true;
-        DownloadManager.Request request = new DownloadManager.Request(Uri.parse(video.getUrl()));
-
-        File localFile = FileUtil.getFolderDir();
-        if (!localFile.exists() && !localFile.mkdirs()) return;
-
-        request.setDestinationInExternalPublicDir(FileUtil.FOLDER_NAME, video.getFileName());
-        request.allowScanningByMediaScanner();
-        request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED);
-        DownloadManager dm = (DownloadManager) context.getSystemService(Context.DOWNLOAD_SERVICE);
-        dm.enqueue(request);
+    public static String buildUrl(Context context, String data) {
+        ConfigData configData = PreferencesManager.getInstance(context).getConfigData();
+        String server = configData != null && !TextUtils.isEmpty(configData.getParserServer()) ? configData.getParserServer() : Constant.PARSER_SERVER;
+        return String.format(server, data);
     }
 
-    public static String buildUrl(Context context, String data) {
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTime(new Date());
-        int hour = calendar.get(Calendar.HOUR_OF_DAY);
+    public static void copyClipboard(Context context, String text) {
+        ClipboardManager clipboard = (ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE);
+        ClipData clip = ClipData.newPlainText("Copied link", text);
+        clipboard.setPrimaryClip(clip);
+    }
 
-        StaticData staticData = PreferencesManager.getInstance(context).getStaticData();
-        String server1 = staticData != null && !TextUtils.isEmpty(staticData.getServer1()) ? staticData.getServer1() : Constant.URL_SERVER_1;
-        String server2 = staticData != null && !TextUtils.isEmpty(staticData.getServer2()) ? staticData.getServer2() : Constant.URL_SERVER_2;
-        String url = String.format(hour >= 0 && hour <= 12 ? server1 : server2, data);
-
-        return url;
+    public static void clearCookies(Context context) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP_MR1) {
+            CookieManager.getInstance().removeAllCookies(null);
+            CookieManager.getInstance().flush();
+        } else {
+            CookieSyncManager cookieSyncMngr = CookieSyncManager.createInstance(context);
+            cookieSyncMngr.startSync();
+            CookieManager cookieManager = CookieManager.getInstance();
+            cookieManager.removeAllCookie();
+            cookieManager.removeSessionCookie();
+            cookieSyncMngr.stopSync();
+            cookieSyncMngr.sync();
+        }
     }
 
 }

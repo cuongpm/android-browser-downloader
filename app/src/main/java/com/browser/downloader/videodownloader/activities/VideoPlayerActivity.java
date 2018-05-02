@@ -13,7 +13,7 @@ import android.view.WindowManager;
 import android.widget.SeekBar;
 
 import com.browser.downloader.videodownloader.R;
-import com.browser.downloader.videodownloader.data.model.VideoState;
+import com.browser.downloader.videodownloader.data.VideoState;
 import com.browser.downloader.videodownloader.databinding.ActivityVideoPlayerBinding;
 
 import java.io.File;
@@ -51,7 +51,7 @@ public class VideoPlayerActivity extends BaseActivity implements SeekBar.OnSeekB
         initUI();
 
         // google analytics
-        trackEvent(getResources().getString(R.string.app_name), getString(R.string.screen_player), "");
+        trackEvent(getString(R.string.app_name), getString(R.string.screen_player), "");
     }
 
     private void initUI() {
