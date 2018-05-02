@@ -458,8 +458,10 @@ public class BrowserFragment extends BaseFragment {
         BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(getContext());
         LayoutVideoDataBinding binding = DataBindingUtil.inflate(getLayoutInflater(), R.layout.layout_video_data, null, false);
 
-        binding.ivThumbnail.setImageURI(Uri.parse(video.getThumbnail()));
         binding.tvName.setText(video.getFileName());
+        if (!TextUtils.isEmpty(video.getThumbnail())) {
+            binding.ivThumbnail.setImageURI(Uri.parse(video.getThumbnail()));
+        }
         if (video.getDuration() != 0) {
             binding.tvTime.setVisibility(View.VISIBLE);
             binding.tvTime.setText(TimeUtil.convertMilliSecondsToTimer(video.getDuration() * 1000));
@@ -471,7 +473,6 @@ public class BrowserFragment extends BaseFragment {
 
         binding.tvOk.setOnClickListener(view -> {
             bottomSheetDialog.dismiss();
-//            AppUtil.downloadVideo(getContext(), video);
             EventBus.getDefault().post(video);
             showInterstitlaAd();
         });
@@ -546,11 +547,7 @@ public class BrowserFragment extends BaseFragment {
                 String url = URLDecoder.decode(link, "UTF-8");
                 if (!TextUtils.isEmpty(url) && url.startsWith("http")) {
                     Video video = new Video(System.currentTimeMillis() + ".mp4", url);
-                    DialogUtil.showAlertDialog(getContext(), video.getFileName(), getString(R.string.message_download_video),
-                            (dialogInterface, i) -> {
-                                showInterstitlaAd();
-                                AppUtil.downloadVideo(getContext(), video);
-                            });
+                    showVideoDataDialog(video);
                     // google analytics
                     trackEvent(getString(R.string.app_name), getString(R.string.event_get_link_facebook), url);
                 }

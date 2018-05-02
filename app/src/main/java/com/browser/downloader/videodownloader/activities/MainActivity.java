@@ -19,7 +19,6 @@ import org.greenrobot.eventbus.Subscribe;
 import butterknife.ButterKnife;
 import vd.core.common.Constant;
 import vd.core.util.AdUtil;
-import vd.core.util.AppUtil;
 import vd.core.util.DialogUtil;
 
 public class MainActivity extends BaseActivity {
@@ -143,7 +142,7 @@ public class MainActivity extends BaseActivity {
                 return;
             }
 
-            if (!mPreferenceManager.isRateApp() && AppUtil.isDownloadVideo) {
+            if (!mPreferenceManager.isRateApp()) {
                 DialogUtil.showRateDialog(this);
             } else {
                 DialogUtil.showAlertDialog(this, getString(R.string.app_name), getString(R.string.message_exit),

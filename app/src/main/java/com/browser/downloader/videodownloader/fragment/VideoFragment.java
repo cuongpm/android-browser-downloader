@@ -59,6 +59,7 @@ public class VideoFragment extends BaseFragment {
                 mListFiles.clear();
                 mListFiles.addAll(FileUtil.getListFiles());
                 mVideoAdapter.notifyDataSetChanged();
+                showEmptyData();
             }
         } catch (Exception e) {
             e.printStackTrace();
