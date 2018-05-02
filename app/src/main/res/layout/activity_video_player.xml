@@ -48,14 +48,13 @@
                     android:textColor="@android:color/white"
                     android:textSize="@dimen/text_16" />
 
-                <SeekBar
+                <android.support.v7.widget.AppCompatSeekBar
                     android:id="@+id/seek_bar"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1.0"
                     android:padding="@dimen/padding_8"
-                    android:progressDrawable="@drawable/progress_seekbar"
-                    android:thumb="@android:color/white" />
+                    android:theme="@style/MySeekBar" />
 
                 <android.support.v7.widget.AppCompatTextView
                     android:id="@+id/tv_total_time"
