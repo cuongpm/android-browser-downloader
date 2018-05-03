@@ -151,3 +151,6 @@
 -dontwarn org.joda.time.**
 -dontwarn org.shaded.apache.**
 -dontwarn org.ietf.jgss.**
+
+# bottom bar
+-keep class com.roughike.bottombar.** { *; }
