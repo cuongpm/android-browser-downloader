@@ -153,4 +153,4 @@
 -dontwarn org.ietf.jgss.**
 
 # bottom bar
--keep class com.roughike.bottombar.** { *; }
+-dontwarn com.roughike.bottombar.**
