@@ -19,4 +19,14 @@
         <item name="colorControlHighlight">@color/white_85</item>
     </style>
 
+    <!-- Dialog theme -->
+    <style name="MyDialogTheme" parent="android:Theme.Dialog">
+        <item name="android:windowAnimationStyle">@style/RatingDialog.Anim</item>
+    </style>
+
+    <style name="RatingDialog.Anim" parent="@android:style/Animation.Activity">
+        <item name="android:windowEnterAnimation">@anim/slide_in_up</item>
+        <item name="android:windowExitAnimation">@anim/slide_out_down</item>
+    </style>
+
 </resources>

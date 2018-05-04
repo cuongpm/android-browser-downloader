@@ -40,6 +40,7 @@ import com.browser.downloader.videodownloader.data.Video;
 import com.browser.downloader.videodownloader.data.WebViewData;
 import com.browser.downloader.videodownloader.databinding.FragmentBrowserBinding;
 import com.browser.downloader.videodownloader.databinding.LayoutVideoDataBinding;
+import com.browser.downloader.videodownloader.dialog.GuidelineDialog;
 import com.browser.downloader.videodownloader.service.DownloadService;
 import com.browser.downloader.videodownloader.service.SearchService;
 import com.google.android.gms.ads.InterstitialAd;
@@ -89,7 +90,7 @@ public class BrowserFragment extends BaseFragment {
 
     public final static String RESULT_URL = "RESULT_URL";
 
-    private LinkStatus mLinkStatus;
+    private LinkStatus mLinkStatus = LinkStatus.SUPPORTED;
 
     private enum LinkStatus {
         SUPPORTED, GENERAL, UNSUPPORTED
@@ -637,16 +638,9 @@ public class BrowserFragment extends BaseFragment {
 
     @OnClick(R.id.fab)
     public void downloadVideo() {
-
-        if (mLinkStatus != null) {
-            if (mLinkStatus == LinkStatus.GENERAL) {
-                DialogUtil.showAlertDialog(getContext(), getString(R.string.error_video_page));
-                return;
-            }
-            if (mLinkStatus == LinkStatus.UNSUPPORTED) {
-                DialogUtil.showAlertDialog(getContext(), getString(R.string.error_unsupported_site));
-                return;
-            }
+        if (mLinkStatus != LinkStatus.SUPPORTED) {
+            GuidelineDialog.getDialog(getContext()).show();
+            return;
         }
 
         String data = mBinding.webview.getUrl();

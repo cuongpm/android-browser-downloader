@@ -55,10 +55,10 @@
     <string name="error_valid_link">Please enter a valid video link!</string>
     <string name="error_facebook">Please click on video to download it!</string>
     <string name="error_video_page">Please go to video detail page to download video!</string>
-    <string name="error_unsupported_site">Unsupported site! Please try other sites to download video.</string>
 
     <string name="message_exit">Do you want to exit this application?</string>
     <string name="message_download_video">Do you want to download this video?</string>
     <string name="message_open_folder">You don\'t have any file explorer app installed on your device</string>
     <string name="message_open_video">You don\'t have any video player app installed on your device</string>
+    <string name="message_guide">Please go to <b>video detail page</b> to <b>play video first</b>, and the download button will be available after Video Downloader detects the video.</string>
 </resources>
