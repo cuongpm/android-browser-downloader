@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">Video Downloader</string>
 
-    <string name="rate_app">Do you enjoy our app? Please take a second to rate and review it!</string>
+    <string name="rate_app">How was your experience with us?</string>
     <string name="text_not_support">YOUTUBE IS NOT SUPPORTED DUE TO THEIR TERMS OF SERVICE !!!</string>
     <string name="text_no_video">You haven not downloaded any video yet.</string>
     <string name="text_no_progress">You are not downloading any video.</string>

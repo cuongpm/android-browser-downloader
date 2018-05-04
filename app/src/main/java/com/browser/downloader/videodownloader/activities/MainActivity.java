@@ -1,5 +1,6 @@
 package com.browser.downloader.videodownloader.activities;
 
+import android.app.Dialog;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.os.Handler;
@@ -7,9 +8,11 @@ import android.support.v4.view.ViewPager;
 
 import com.browser.downloader.videodownloader.R;
 import com.browser.downloader.videodownloader.adapter.HomeAdapter;
+import com.browser.downloader.videodownloader.callback.DialogListener;
 import com.browser.downloader.videodownloader.data.ConfigData;
 import com.browser.downloader.videodownloader.data.Video;
 import com.browser.downloader.videodownloader.databinding.ActivityMainBinding;
+import com.browser.downloader.videodownloader.dialog.RatingDialog;
 import com.google.android.gms.ads.InterstitialAd;
 import com.google.android.gms.ads.MobileAds;
 
@@ -20,6 +23,7 @@ import butterknife.ButterKnife;
 import vd.core.common.Constant;
 import vd.core.util.AdUtil;
 import vd.core.util.DialogUtil;
+import vd.core.util.IntentUtil;
 
 public class MainActivity extends BaseActivity {
 
@@ -143,7 +147,23 @@ public class MainActivity extends BaseActivity {
             }
 
             if (!mPreferenceManager.isRateApp()) {
-                DialogUtil.showRateDialog(this);
+                RatingDialog.getDialog(this, new DialogListener() {
+                    @Override
+                    public void onPositiveButton(Dialog dialog) {
+                        dialog.dismiss();
+                        mPreferenceManager.setRateApp(true);
+                        IntentUtil.openGooglePlay(MainActivity.this, getPackageName());
+                        // google analytics
+                        trackEvent(getString(R.string.app_name), getString(R.string.action_rate_us_exit_app), "");
+                        finish();
+                    }
+
+                    @Override
+                    public void onNegativeButton(Dialog dialog) {
+                        dialog.dismiss();
+                        finish();
+                    }
+                }).show();
             } else {
                 DialogUtil.showAlertDialog(this, getString(R.string.app_name), getString(R.string.message_exit),
                         (dialogInterface, i) -> {

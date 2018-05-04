@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:animateLayoutChanges="true"
+        android:background="@android:color/white">
+
+        <TextView
+            android:id="@+id/dialog_rating_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:gravity="center"
+            android:padding="@dimen/padding_20"
+            android:text="@string/rate_app"
+            android:textSize="@dimen/text_20" />
+
+        <com.hsalf.smilerating.SmileRating
+            android:id="@+id/smile_rating"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/dialog_rating_title"
+
+            android:layout_centerHorizontal="true"
+            android:layout_margin="@dimen/padding_10" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/size_50"
+            android:layout_below="@id/smile_rating"
+            android:layout_marginTop="@dimen/padding_20"
+            android:orientation="horizontal">
+
+            <android.support.v7.widget.AppCompatTextView
+                android:id="@+id/btn_later"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="?attr/selectableItemBackground"
+                android:gravity="center"
+                android:text="Later"
+                android:textColor="@color/black_55"
+                android:textSize="@dimen/text_18"
+                android:textStyle="bold" />
+
+            <android.support.v7.widget.AppCompatTextView
+                android:id="@+id/btn_rate"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="?attr/selectableItemBackground"
+                android:gravity="center"
+                android:text="Rate now"
+                android:textColor="@color/colorPrimary"
+                android:textSize="@dimen/text_18"
+                android:textStyle="bold" />
+
+        </LinearLayout>
+    </RelativeLayout>
+</layout>
