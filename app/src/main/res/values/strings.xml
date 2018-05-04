@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">Video Downloader</string>
 
-    <string name="rate_app">How was your experience with us?</string>
+    <string name="rate_app">We are working hard to bring you better user experience. \n\nHow was your experience with us?</string>
     <string name="youtube_not_support">Due to legal restrictions, videos on YouTube cannot be downloaded.\n\nPlease download videos from other websites.</string>
     <string name="text_no_video">You haven not downloaded any video yet.</string>
     <string name="text_no_progress">You are not downloading any video.</string>
