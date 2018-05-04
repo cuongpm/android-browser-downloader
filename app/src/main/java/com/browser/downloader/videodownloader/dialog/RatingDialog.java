@@ -19,8 +19,9 @@ public class RatingDialog {
     }
 
     static private Dialog create(Context context, final DialogListener dialogListener) {
-        mDialog = new Dialog(context, R.style.MyDialogTheme);
+        mDialog = new Dialog(context);
         mDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        mDialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnim;
         mDialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
         mDialog.setContentView(R.layout.dialog_rating);
 

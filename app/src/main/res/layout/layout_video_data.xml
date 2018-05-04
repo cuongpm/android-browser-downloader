@@ -61,6 +61,15 @@
             android:textColor="@color/black_85"
             android:textSize="@dimen/text_16" />
 
+        <LinearLayout
+            android:id="@+id/layout_banner"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/padding_16"
+            android:background="@android:color/transparent"
+            android:gravity="center"
+            android:orientation="vertical" />
+
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"

@@ -459,6 +459,9 @@ public class BrowserFragment extends BaseFragment {
         BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(getContext());
         LayoutVideoDataBinding binding = DataBindingUtil.inflate(getLayoutInflater(), R.layout.layout_video_data, null, false);
 
+        // Show ad banner
+        AdUtil.showBanner(getContext(), binding.layoutBanner, true);
+
         binding.tvName.setText(video.getFileName());
         if (!TextUtils.isEmpty(video.getThumbnail())) {
             binding.ivThumbnail.setImageURI(Uri.parse(video.getThumbnail()));

@@ -14,18 +14,23 @@ import vd.core.common.Constant;
 
 public class AdUtil {
 
-    public static void showBanner(Context context, ViewGroup layoutBanner) {
-        final AdView adView = new AdView(context);
+    public static void showBanner(Context context, ViewGroup layoutBanner, boolean isGoneWhileLoading) {
+        AdView adView = new AdView(context);
         adView.setAdSize(AdSize.BANNER);
         adView.setAdUnitId(Constant.AD_BANNER_ID);
         AdRequest adRequest = new AdRequest.Builder().build();
         adView.loadAd(adRequest);
+        if (isGoneWhileLoading) {
+            adView.setVisibility(View.GONE);
+        }
         layoutBanner.addView(adView);
         adView.setAdListener(new AdListener() {
             @Override
-            public void onAdFailedToLoad(int i) {
-                adView.setVisibility(View.GONE);
-                super.onAdFailedToLoad(i);
+            public void onAdLoaded() {
+                if (isGoneWhileLoading) {
+                    adView.setVisibility(View.VISIBLE);
+                }
+                super.onAdLoaded();
             }
         });
     }
