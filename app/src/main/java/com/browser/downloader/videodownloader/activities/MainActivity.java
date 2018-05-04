@@ -53,7 +53,7 @@ public class MainActivity extends BaseActivity {
         MobileAds.initialize(this, Constant.AD_APP_ID);
 
         // Show ad banner
-        AdUtil.showBanner(this, mBinding.layoutBanner, false);
+        AdUtil.showBanner(this, mBinding.layoutBanner, true);
 
         // Load ad interstitial
         loadInterstitialAd();

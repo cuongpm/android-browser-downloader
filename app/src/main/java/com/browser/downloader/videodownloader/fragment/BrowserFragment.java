@@ -41,6 +41,7 @@ import com.browser.downloader.videodownloader.data.WebViewData;
 import com.browser.downloader.videodownloader.databinding.FragmentBrowserBinding;
 import com.browser.downloader.videodownloader.databinding.LayoutVideoDataBinding;
 import com.browser.downloader.videodownloader.dialog.GuidelineDialog;
+import com.browser.downloader.videodownloader.dialog.YoutubeDialog;
 import com.browser.downloader.videodownloader.service.DownloadService;
 import com.browser.downloader.videodownloader.service.SearchService;
 import com.google.android.gms.ads.InterstitialAd;
@@ -93,7 +94,7 @@ public class BrowserFragment extends BaseFragment {
     private LinkStatus mLinkStatus = LinkStatus.SUPPORTED;
 
     private enum LinkStatus {
-        SUPPORTED, GENERAL, UNSUPPORTED
+        SUPPORTED, GENERAL, UNSUPPORTED, YOUTUBE
     }
 
     public static BrowserFragment getInstance() {
@@ -324,15 +325,7 @@ public class BrowserFragment extends BaseFragment {
     WebViewClient webViewClient = new WebViewClient() {
         @Override
         public void onPageStarted(WebView view, String url, Bitmap favicon) {
-            if (url.toLowerCase().startsWith("https://youtu.be/") || url.toLowerCase().contains("youtube.com")) {
-                mBinding.webview.setVisibility(View.GONE);
-                mBinding.tvNotSupport.setVisibility(View.VISIBLE);
-                mBinding.layoutSocial.layoutRoot.setVisibility(View.GONE);
-                return;
-            }
-
             mBinding.webview.setVisibility(View.VISIBLE);
-            mBinding.tvNotSupport.setVisibility(View.GONE);
             mBinding.etSearch.setText(url);
             mBinding.fab.setVisibility(View.VISIBLE);
             mBinding.progressBar.setVisibility(View.VISIBLE);
@@ -486,6 +479,13 @@ public class BrowserFragment extends BaseFragment {
     }
 
     private void checkLinkStatus(String url) {
+        // Detect youtube
+        if (url.toLowerCase().startsWith("https://youtu.be/") || url.toLowerCase().contains("youtube.com")) {
+            mLinkStatus = LinkStatus.YOUTUBE;
+            disableDownloadBtn();
+            return;
+        }
+
         ConfigData configData = mPreferenceManager.getConfigData();
         if (configData != null) {
             // General sites
@@ -629,7 +629,6 @@ public class BrowserFragment extends BaseFragment {
         if (mBinding.etSearch.getText().toString().trim().length() > 0) {
             if (isHasFocus) {
                 mBinding.etSearch.setText("");
-                mBinding.tvNotSupport.setVisibility(View.GONE);
                 mBinding.webview.setVisibility(View.GONE);
                 mBinding.fab.setVisibility(View.GONE);
                 mBinding.layoutSocial.layoutRoot.setVisibility(View.VISIBLE);
@@ -641,26 +640,18 @@ public class BrowserFragment extends BaseFragment {
 
     @OnClick(R.id.fab)
     public void downloadVideo() {
-        if (mLinkStatus != LinkStatus.SUPPORTED) {
-            GuidelineDialog.getDialog(getContext()).show();
-            return;
-        }
-
         String data = mBinding.webview.getUrl();
-        if (data == null || data.length() == 0 || !Patterns.WEB_URL.matcher(data).matches()) {
-            DialogUtil.showAlertDialog(getContext(), getString(R.string.error_valid_link));
-            return;
-        }
-
         if (data.contains("facebook.com")) {
             DialogUtil.showAlertDialog(getContext(), getString(R.string.error_facebook));
             return;
-        }
-
-        if (data.toLowerCase().startsWith("https://youtu.be/") || data.toLowerCase().contains("youtube.com")) {
-            Toast.makeText(getContext(), "Unsupported site!", Toast.LENGTH_LONG).show();
-            // google analytics
-            trackEvent(getString(R.string.app_name), getString(R.string.event_unsupported_site), data);
+        } else if (data == null || data.length() == 0 || !Patterns.WEB_URL.matcher(data).matches()) {
+            DialogUtil.showAlertDialog(getContext(), getString(R.string.error_valid_link));
+            return;
+        } else if (mLinkStatus == LinkStatus.YOUTUBE) {
+            YoutubeDialog.getDialog(getContext()).show();
+            return;
+        } else if (mLinkStatus == LinkStatus.GENERAL || mLinkStatus == LinkStatus.UNSUPPORTED) {
+            GuidelineDialog.getDialog(getContext()).show();
             return;
         }
 
