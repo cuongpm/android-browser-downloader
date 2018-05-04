@@ -1,11 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@android:color/white"
         android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/size_100"
+            android:background="@color/color_gray_2"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <android.support.v7.widget.AppCompatImageView
+                android:layout_width="@dimen/size_70"
+                android:layout_height="@dimen/size_70"
+                app:srcCompat="@drawable/ic_review" />
+
+        </LinearLayout>
 
         <android.support.v7.widget.AppCompatTextView
             android:id="@+id/dialog_rating_title"
@@ -53,7 +68,7 @@
                 android:padding="@dimen/padding_10"
                 android:text="Rate on Google Play"
                 android:textAllCaps="true"
-                android:textColor="@color/colorPrimary"
+                android:textColor="@color/colorAccent"
                 android:textSize="@dimen/text_16"
                 android:textStyle="bold" />
 
