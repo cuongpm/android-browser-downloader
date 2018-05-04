@@ -1,8 +1,8 @@
 <resources>
     <string name="app_name">Video Downloader</string>
 
-    <string name="rate_app">Do you enjoy our app? Please take a second to rate and review it!</string>
-    <string name="text_not_support">YOUTUBE IS NOT SUPPORTED DUE TO THEIR TERMS OF SERVICE !!!</string>
+    <string name="rate_app">We are working hard to bring you better user experience. \n\nHow was your experience with us?</string>
+    <string name="youtube_not_support">Due to legal restrictions, videos on YouTube cannot be downloaded.\n\nPlease download videos from other websites.</string>
     <string name="text_no_video">You haven not downloaded any video yet.</string>
     <string name="text_no_progress">You are not downloading any video.</string>
     <string name="text_no_bookmark">No bookmark</string>
@@ -41,7 +41,6 @@
     <string name="action_open_dailymotion">Action Click - Dailymotion</string>
     <string name="action_open_vimeo">Action Click - Vimeo</string>
 
-    <string name="event_unsupported_site">Event Unsupported Site</string>
     <string name="event_get_link_fail">Event Get Link - Failed</string>
     <string name="event_get_link_success">Event Get Link - Succeed</string>
     <string name="event_get_link_facebook">Event Get Link - Facebook</string>
@@ -55,10 +54,10 @@
     <string name="error_valid_link">Please enter a valid video link!</string>
     <string name="error_facebook">Please click on video to download it!</string>
     <string name="error_video_page">Please go to video detail page to download video!</string>
-    <string name="error_unsupported_site">Unsupported site! Please try other sites to download video.</string>
 
     <string name="message_exit">Do you want to exit this application?</string>
     <string name="message_download_video">Do you want to download this video?</string>
     <string name="message_open_folder">You don\'t have any file explorer app installed on your device</string>
     <string name="message_open_video">You don\'t have any video player app installed on your device</string>
+    <string name="message_guide">Please go to <b>video detail page</b> to <b>play video first</b>, and the download button will be available after Video Downloader detects the video.</string>
 </resources>

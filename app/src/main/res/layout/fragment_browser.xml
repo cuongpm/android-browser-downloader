@@ -90,19 +90,6 @@
                     android:layout_height="match_parent"
                     android:visibility="gone" />
 
-                <android.support.v7.widget.AppCompatTextView
-                    android:id="@+id/tv_not_support"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_centerInParent="true"
-                    android:gravity="center"
-                    android:padding="@dimen/padding_40"
-                    android:text="@string/text_not_support"
-                    android:textColor="@color/black_85"
-                    android:textSize="@dimen/text_14"
-                    android:textStyle="bold"
-                    android:visibility="gone" />
-
                 <ProgressBar
                     android:id="@+id/progressBar"
                     style="?android:attr/progressBarStyleHorizontal"

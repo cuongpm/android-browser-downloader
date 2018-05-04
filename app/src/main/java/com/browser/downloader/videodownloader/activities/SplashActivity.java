@@ -15,7 +15,6 @@ import butterknife.ButterKnife;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 import vd.core.common.PreferencesManager;
-import vd.core.util.DialogUtil;
 
 public class SplashActivity extends BaseActivity {
 
@@ -30,30 +29,32 @@ public class SplashActivity extends BaseActivity {
         mBinding = DataBindingUtil.setContentView(this, R.layout.activity_splash);
         ButterKnife.bind(this);
         initUI();
-
-        // Load static data
-//        loadconfigData();
-
-        new Handler().postDelayed(() -> {
-            startActivity(new Intent(SplashActivity.this, MainActivity.class));
-            overridePendingTransition(R.anim.enter_from_right, 0);
-            finish();
-        }, 3000);
     }
 
     private void initUI() {
+        // Load static data
+        loadconfigData();
     }
 
     private void loadconfigData() {
         DataService.Factory.getInstance().getconfigData()
-                .doOnSubscribe(() -> runOnUiThread(() -> DialogUtil.showSimpleProgressDialog(this)))
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(configData -> runOnUiThread(() -> {
                     PreferencesManager.getInstance(this).setConfigData(configData);
+                    startMainActivity();
                 }), throwable -> runOnUiThread(() -> {
                     throwable.printStackTrace();
+                    startMainActivity();
                 }));
+    }
+
+    private void startMainActivity() {
+        new Handler().postDelayed(() -> {
+            startActivity(new Intent(SplashActivity.this, MainActivity.class));
+            overridePendingTransition(R.anim.enter_from_right, 0);
+            finish();
+        }, 2000);
     }
 
 }

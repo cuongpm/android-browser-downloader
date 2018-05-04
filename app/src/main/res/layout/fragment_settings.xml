@@ -173,7 +173,7 @@
                 android:layout_width="@dimen/size_50"
                 android:layout_height="@dimen/size_50"
                 android:padding="@dimen/padding_8"
-                android:src="@drawable/ic_delete"
+                android:src="@drawable/ic_history_gray_24dp"
                 android:tint="@color/color_gray_3" />
 
             <android.support.v7.widget.AppCompatTextView
@@ -205,7 +205,7 @@
                 android:layout_width="@dimen/size_50"
                 android:layout_height="@dimen/size_50"
                 android:padding="@dimen/padding_8"
-                android:src="@drawable/ic_delete"
+                android:src="@drawable/ic_bookmark_gray_24dp"
                 android:tint="@color/color_gray_3" />
 
             <android.support.v7.widget.AppCompatTextView
@@ -236,8 +236,8 @@
             <android.support.v7.widget.AppCompatImageView
                 android:layout_width="@dimen/size_50"
                 android:layout_height="@dimen/size_50"
-                android:padding="@dimen/padding_8"
-                android:src="@drawable/ic_delete"
+                android:padding="@dimen/padding_10"
+                android:src="@drawable/ic_browser"
                 android:tint="@color/color_gray_3" />
 
             <android.support.v7.widget.AppCompatTextView

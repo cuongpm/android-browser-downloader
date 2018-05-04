@@ -1,6 +1,6 @@
 package com.browser.downloader.videodownloader.activities;
 
-import android.app.AlertDialog;
+import android.app.Dialog;
 import android.databinding.DataBindingUtil;
 import android.media.MediaPlayer;
 import android.media.MediaPlayer.OnCompletionListener;
@@ -13,8 +13,10 @@ import android.view.WindowManager;
 import android.widget.SeekBar;
 
 import com.browser.downloader.videodownloader.R;
+import com.browser.downloader.videodownloader.callback.DialogListener;
 import com.browser.downloader.videodownloader.data.VideoState;
 import com.browser.downloader.videodownloader.databinding.ActivityVideoPlayerBinding;
+import com.browser.downloader.videodownloader.dialog.RatingDialog;
 
 import java.io.File;
 
@@ -77,20 +79,23 @@ public class VideoPlayerActivity extends BaseActivity implements SeekBar.OnSeekB
     public void onBackPressed() {
         boolean isShowRate = PreferencesManager.getInstance(this).isRateApp();
         if (!isShowRate) {
-            new AlertDialog.Builder(this).setTitle(getString(R.string.app_name))
-                    .setMessage(getString(R.string.rate_app))
-                    .setPositiveButton("OK", (dialogInterface, i) -> {
-                        dialogInterface.dismiss();
-                        PreferencesManager.getInstance(this).setRateApp(true);
-                        IntentUtil.openGooglePlay(VideoPlayerActivity.this, getPackageName());
-                        // google analytics
-                        trackEvent(getString(R.string.app_name), getString(R.string.action_rate_us_video_player), "");
-                        finish();
-                    })
-                    .setNegativeButton("LATER", (dialogInterface, i) -> {
-                        dialogInterface.dismiss();
-                        finish();
-                    }).show();
+            RatingDialog.getDialog(this, new DialogListener() {
+                @Override
+                public void onPositiveButton(Dialog dialog) {
+                    dialog.dismiss();
+                    mPreferenceManager.setRateApp(true);
+                    IntentUtil.openGooglePlay(VideoPlayerActivity.this, getPackageName());
+                    // google analytics
+                    trackEvent(getString(R.string.app_name), getString(R.string.action_rate_us_video_player), "");
+                    finish();
+                }
+
+                @Override
+                public void onNegativeButton(Dialog dialog) {
+                    dialog.dismiss();
+                    finish();
+                }
+            }).show();
         } else {
             finish();
         }

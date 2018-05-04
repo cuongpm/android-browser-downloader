@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@android:color/white"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:padding="@dimen/padding_20">
+
+        <android.support.v7.widget.AppCompatTextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="No Video Resource Found"
+            android:textColor="@color/black_85"
+            android:textSize="@dimen/text_20"
+            android:textStyle="bold" />
+
+        <android.support.v7.widget.AppCompatTextView
+            android:id="@+id/tv_size"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/padding_20"
+            android:text="@string/message_guide"
+            android:textColor="@color/black_55"
+            android:textSize="@dimen/text_16" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/padding_30"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <android.support.v7.widget.AppCompatImageView
+                android:layout_width="@dimen/size_60"
+                android:layout_height="@dimen/size_60"
+                android:background="@drawable/bg_border_download_disable"
+                android:padding="@dimen/padding_10"
+                app:srcCompat="@drawable/ic_download_white_24dp"
+                tools:ignore="VectorDrawableCompat" />
+
+            <android.support.v7.widget.AppCompatImageView
+                android:layout_width="@dimen/size_60"
+                android:layout_height="@dimen/size_60"
+                android:layout_marginLeft="@dimen/padding_20"
+                android:layout_marginRight="@dimen/padding_20"
+                android:padding="@dimen/padding_10"
+                app:srcCompat="@drawable/arrow_guide"
+                tools:ignore="VectorDrawableCompat" />
+
+            <android.support.v7.widget.AppCompatImageView
+                android:layout_width="@dimen/size_60"
+                android:layout_height="@dimen/size_60"
+                android:background="@drawable/bg_border_download_enable"
+                android:padding="@dimen/padding_10"
+                app:srcCompat="@drawable/ic_download_white_24dp"
+                tools:ignore="VectorDrawableCompat" />
+
+        </LinearLayout>
+
+        <android.support.v7.widget.AppCompatButton
+            android:id="@+id/btn_ok"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/size_60"
+            android:layout_marginTop="@dimen/padding_30"
+            android:background="@drawable/bg_border_button"
+            android:text="GOT IT"
+            android:textColor="@android:color/white"
+            android:textSize="@dimen/text_18"
+            android:textStyle="bold" />
+
+    </LinearLayout>
+
+</layout>
