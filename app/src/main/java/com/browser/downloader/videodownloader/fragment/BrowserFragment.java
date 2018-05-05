@@ -44,6 +44,7 @@ import com.browser.downloader.videodownloader.dialog.GuidelineDialog;
 import com.browser.downloader.videodownloader.dialog.YoutubeDialog;
 import com.browser.downloader.videodownloader.service.DownloadService;
 import com.browser.downloader.videodownloader.service.SearchService;
+import com.google.android.gms.ads.AdSize;
 import com.google.android.gms.ads.InterstitialAd;
 
 import org.greenrobot.eventbus.EventBus;
@@ -453,7 +454,7 @@ public class BrowserFragment extends BaseFragment {
         LayoutVideoDataBinding binding = DataBindingUtil.inflate(getLayoutInflater(), R.layout.layout_video_data, null, false);
 
         // Show ad banner
-        AdUtil.showBanner(getContext(), binding.layoutBanner, true);
+        AdUtil.showBanner(getContext(), binding.layoutBanner, AdSize.BANNER, true);
 
         binding.tvName.setText(video.getFileName());
         if (!TextUtils.isEmpty(video.getThumbnail())) {
@@ -522,7 +523,7 @@ public class BrowserFragment extends BaseFragment {
 
         // Other sites
         mLinkStatus = LinkStatus.SUPPORTED;
-        enableDownloadBtn();
+        enableDownloadBtnAndShake();
     }
 
     private void disableDownloadBtn() {
