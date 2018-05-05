@@ -443,10 +443,14 @@ public class BrowserFragment extends BaseFragment {
     }
 
     private void updateBookmarkMenu(WebView webView) {
-        mMenu.getItem(0).getSubMenu().getItem(0).setIcon(isBookmarkLink(webView)
-                ? R.drawable.ic_star_yellow_24dp : R.drawable.ic_star_border_gray_24dp);
-        mMenu.getItem(0).getSubMenu().getItem(0).setTitle(isBookmarkLink(webView)
-                ? "Remove bookmark" : "Add bookmark");
+        try {
+            mMenu.getItem(0).getSubMenu().getItem(0).setIcon(isBookmarkLink(webView)
+                    ? R.drawable.ic_star_yellow_24dp : R.drawable.ic_star_border_gray_24dp);
+            mMenu.getItem(0).getSubMenu().getItem(0).setTitle(isBookmarkLink(webView)
+                    ? "Remove bookmark" : "Add bookmark");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     private void showVideoDataDialog(Video video) {

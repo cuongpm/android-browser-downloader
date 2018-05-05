@@ -10,8 +10,11 @@ import android.os.Handler;
 import android.support.v4.content.FileProvider;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.SeekBar;
 
 import com.browser.downloader.videodownloader.R;
@@ -77,6 +80,22 @@ public class VideoPlayerActivity extends BaseActivity implements SeekBar.OnSeekB
         mBinding.toolbar.setTitle(file.getName());
 
         mBinding.seekBar.setOnSeekBarChangeListener(this);
+
+        mBinding.getRoot().setOnClickListener(view -> {
+            if (mBinding.toolbar.getVisibility() == View.VISIBLE) {
+                Animation anim = AnimationUtils.loadAnimation(this, android.R.anim.fade_out);
+                mBinding.toolbar.startAnimation(anim);
+                mBinding.layoutBottom.startAnimation(anim);
+                mBinding.toolbar.setVisibility(View.GONE);
+                mBinding.layoutBottom.setVisibility(View.GONE);
+            } else {
+                Animation anim = AnimationUtils.loadAnimation(this, android.R.anim.fade_in);
+                mBinding.toolbar.startAnimation(anim);
+                mBinding.layoutBottom.startAnimation(anim);
+                mBinding.toolbar.setVisibility(View.VISIBLE);
+                mBinding.layoutBottom.setVisibility(View.VISIBLE);
+            }
+        });
 
         mBinding.videoView.setOnCompletionListener(mediaPlayer -> {
             mBinding.ivPlay.setImageResource(R.drawable.ic_play);
