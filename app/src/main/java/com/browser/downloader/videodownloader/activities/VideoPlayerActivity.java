@@ -1,13 +1,15 @@
 package com.browser.downloader.videodownloader.activities;
 
 import android.app.Dialog;
+import android.content.pm.ActivityInfo;
 import android.databinding.DataBindingUtil;
 import android.media.MediaPlayer;
-import android.media.MediaPlayer.OnCompletionListener;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.content.FileProvider;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.SeekBar;
@@ -30,9 +32,15 @@ public class VideoPlayerActivity extends BaseActivity implements SeekBar.OnSeekB
 
     ActivityVideoPlayerBinding mBinding;
 
+    private MediaPlayer mMediaPlayer;
+
     private VideoState mVideoState = new VideoState();
 
     private Handler mHandler = new Handler();
+
+    private boolean isPortraitOrientation = true;
+
+    private boolean isVolumeOn = true;
 
     private boolean isPlaying = true;
 
@@ -49,6 +57,7 @@ public class VideoPlayerActivity extends BaseActivity implements SeekBar.OnSeekB
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
         mBinding = DataBindingUtil.setContentView(this, R.layout.activity_video_player);
+        setSupportActionBar(mBinding.toolbar);
         ButterKnife.bind(this);
         initUI();
 
@@ -69,16 +78,53 @@ public class VideoPlayerActivity extends BaseActivity implements SeekBar.OnSeekB
 
         mBinding.seekBar.setOnSeekBarChangeListener(this);
 
-        mBinding.videoView.setOnCompletionListener(new MediaComplete());
+        mBinding.videoView.setOnCompletionListener(mediaPlayer -> {
+            mBinding.ivPlay.setImageResource(R.drawable.ic_play);
+            mCurrentTime = 0;
+            isPlaying = false;
+        });
+
+        mBinding.videoView.setOnPreparedListener(mediaPlayer -> {
+            mMediaPlayer = mediaPlayer;
+        });
+
         mBinding.videoView.requestFocus();
         mBinding.videoView.start();
         updateSeekBar();
     }
 
+    private void setVolume(boolean isVolumeOn) {
+        int amount = isVolumeOn ? 100 : 0;
+        int max = 100;
+        double numerator = max - amount > 0 ? Math.log(max - amount) : 0;
+        float volume = (float) (1 - (numerator / Math.log(max)));
+        mMediaPlayer.setVolume(volume, volume);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_player, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == R.id.menu_volume) {
+            isVolumeOn = !isVolumeOn;
+            item.setIcon(isVolumeOn ? R.drawable.ic_volume_up_white_24dp : R.drawable.ic_volume_off_white_24dp);
+            setVolume(isVolumeOn);
+        } else if (item.getItemId() == R.id.menu_fullscreen) {
+            isPortraitOrientation = !isPortraitOrientation;
+            item.setIcon(isPortraitOrientation ? R.drawable.ic_fullscreen_white_24dp : R.drawable.ic_fullscreen_exit_white_24dp);
+            setRequestedOrientation(isPortraitOrientation ? ActivityInfo.SCREEN_ORIENTATION_PORTRAIT : ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
     @Override
     public void onBackPressed() {
         boolean isShowRate = PreferencesManager.getInstance(this).isRateApp();
-        if (!isShowRate) {
+        if (!isShowRate && isPortraitOrientation) {
             RatingDialog.getDialog(this, new DialogListener() {
                 @Override
                 public void onPositiveButton(Dialog dialog) {
@@ -169,17 +215,6 @@ public class VideoPlayerActivity extends BaseActivity implements SeekBar.OnSeekB
         mBinding.tvCurrentTime.setText(TimeUtil.convertMilliSecondsToTimer(time));
         updateSeekBar();
     }
-
-    private class MediaComplete implements OnCompletionListener {
-
-        @Override
-        public void onCompletion(MediaPlayer mp) {
-            mBinding.ivPlay.setImageResource(R.drawable.ic_play);
-            mCurrentTime = 0;
-            isPlaying = false;
-        }
-    }
-
 
     private Runnable mTimerRunnable = new Runnable() {
         @Override
