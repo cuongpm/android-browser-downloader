@@ -14,9 +14,9 @@ import vd.core.common.Constant;
 
 public class AdUtil {
 
-    public static void showBanner(Context context, ViewGroup layoutBanner, boolean isGoneWhileLoading) {
+    public static void showBanner(Context context, ViewGroup layoutBanner, AdSize adSize, boolean isGoneWhileLoading) {
         AdView adView = new AdView(context);
-        adView.setAdSize(AdSize.BANNER);
+        adView.setAdSize(adSize);
         adView.setAdUnitId(Constant.AD_BANNER_ID);
         AdRequest adRequest = new AdRequest.Builder().build();
         adView.loadAd(adRequest);

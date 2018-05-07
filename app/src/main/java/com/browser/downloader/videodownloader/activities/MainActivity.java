@@ -13,6 +13,7 @@ import com.browser.downloader.videodownloader.data.ConfigData;
 import com.browser.downloader.videodownloader.data.Video;
 import com.browser.downloader.videodownloader.databinding.ActivityMainBinding;
 import com.browser.downloader.videodownloader.dialog.RatingDialog;
+import com.google.android.gms.ads.AdSize;
 import com.google.android.gms.ads.InterstitialAd;
 import com.google.android.gms.ads.MobileAds;
 
@@ -53,7 +54,7 @@ public class MainActivity extends BaseActivity {
         MobileAds.initialize(this, Constant.AD_APP_ID);
 
         // Show ad banner
-        AdUtil.showBanner(this, mBinding.layoutBanner, true);
+        AdUtil.showBanner(this, mBinding.layoutBanner, AdSize.BANNER, true);
 
         // Load ad interstitial
         loadInterstitialAd();

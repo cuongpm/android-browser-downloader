@@ -44,6 +44,7 @@ import com.browser.downloader.videodownloader.dialog.GuidelineDialog;
 import com.browser.downloader.videodownloader.dialog.YoutubeDialog;
 import com.browser.downloader.videodownloader.service.DownloadService;
 import com.browser.downloader.videodownloader.service.SearchService;
+import com.google.android.gms.ads.AdSize;
 import com.google.android.gms.ads.InterstitialAd;
 
 import org.greenrobot.eventbus.EventBus;
@@ -442,10 +443,14 @@ public class BrowserFragment extends BaseFragment {
     }
 
     private void updateBookmarkMenu(WebView webView) {
-        mMenu.getItem(0).getSubMenu().getItem(0).setIcon(isBookmarkLink(webView)
-                ? R.drawable.ic_star_yellow_24dp : R.drawable.ic_star_border_gray_24dp);
-        mMenu.getItem(0).getSubMenu().getItem(0).setTitle(isBookmarkLink(webView)
-                ? "Remove bookmark" : "Add bookmark");
+        try {
+            mMenu.getItem(0).getSubMenu().getItem(0).setIcon(isBookmarkLink(webView)
+                    ? R.drawable.ic_star_yellow_24dp : R.drawable.ic_star_border_gray_24dp);
+            mMenu.getItem(0).getSubMenu().getItem(0).setTitle(isBookmarkLink(webView)
+                    ? "Remove bookmark" : "Add bookmark");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     private void showVideoDataDialog(Video video) {
@@ -453,7 +458,7 @@ public class BrowserFragment extends BaseFragment {
         LayoutVideoDataBinding binding = DataBindingUtil.inflate(getLayoutInflater(), R.layout.layout_video_data, null, false);
 
         // Show ad banner
-        AdUtil.showBanner(getContext(), binding.layoutBanner, true);
+        AdUtil.showBanner(getContext(), binding.layoutBanner, AdSize.BANNER, true);
 
         binding.tvName.setText(video.getFileName());
         if (!TextUtils.isEmpty(video.getThumbnail())) {
@@ -522,7 +527,7 @@ public class BrowserFragment extends BaseFragment {
 
         // Other sites
         mLinkStatus = LinkStatus.SUPPORTED;
-        enableDownloadBtn();
+        enableDownloadBtnAndShake();
     }
 
     private void disableDownloadBtn() {
