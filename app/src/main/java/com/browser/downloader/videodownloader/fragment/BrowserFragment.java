@@ -80,6 +80,8 @@ public class BrowserFragment extends BaseFragment {
 
     private ArrayList<WebViewData> mBookmarData;
 
+    private Video mCurrentVideo;
+
     private Menu mMenu;
 
     private boolean isAdShowed = false;
@@ -327,12 +329,12 @@ public class BrowserFragment extends BaseFragment {
         @Override
         public void onPageStarted(WebView view, String url, Bitmap favicon) {
             mBinding.webview.setVisibility(View.VISIBLE);
-            mBinding.etSearch.setText(url);
+            mBinding.etSearch.setText(view.getUrl());
             mBinding.fab.setVisibility(View.VISIBLE);
             mBinding.progressBar.setVisibility(View.VISIBLE);
             mBinding.layoutSocial.layoutRoot.setVisibility(View.GONE);
 
-            checkLinkStatus(url);
+            checkLinkStatus(view.getUrl());
             updateBookmarkMenu(view);
             super.onPageStarted(view, url, favicon);
         }
@@ -349,6 +351,7 @@ public class BrowserFragment extends BaseFragment {
         public void onLoadResource(WebView view, String url) {
             super.onLoadResource(view, url);
             try {
+                mBinding.etSearch.setText(view.getUrl());
                 if (url.contains("facebook.com")) {
                     view.loadUrl(ScriptUtil.FACEBOOK_SCRIPT);
                 }
@@ -359,9 +362,9 @@ public class BrowserFragment extends BaseFragment {
 
         @Override
         public void onPageFinished(WebView view, String url) {
-            mBinding.etSearch.setText(url);
+            mBinding.etSearch.setText(view.getUrl());
             mBinding.progressBar.setVisibility(View.GONE);
-            checkLinkStatus(url);
+            checkLinkStatus(view.getUrl());
             saveWebViewHistory(view);
             updateBookmarkMenu(view);
             super.onPageFinished(view, url);
@@ -454,6 +457,8 @@ public class BrowserFragment extends BaseFragment {
     }
 
     private void showVideoDataDialog(Video video) {
+        mCurrentVideo = video;
+
         BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(getContext());
         LayoutVideoDataBinding binding = DataBindingUtil.inflate(getLayoutInflater(), R.layout.layout_video_data, null, false);
 
@@ -484,8 +489,22 @@ public class BrowserFragment extends BaseFragment {
     }
 
     private void checkLinkStatus(String url) {
+
+        // show appbar
+        mBinding.appBar.setExpanded(true, true);
+
+        // Clear current data
+        mCurrentVideo = null;
+
+        // Check url
+        if (TextUtils.isEmpty(url)) {
+            return;
+        } else {
+            url = url.toLowerCase();
+        }
+
         // Detect youtube
-        if (url.toLowerCase().startsWith("https://youtu.be/") || url.toLowerCase().contains("youtube.com")) {
+        if (url.startsWith("https://youtu.be/") || url.contains("youtube.com")) {
             mLinkStatus = LinkStatus.YOUTUBE;
             disableDownloadBtn();
             return;
@@ -496,7 +515,7 @@ public class BrowserFragment extends BaseFragment {
             // General sites
             if (configData.getPagesGeneral() != null) {
                 for (String link : configData.getPagesGeneral()) {
-                    if (url.startsWith(link) || url.equals(link)) {
+                    if (url.startsWith(link) || url.contains(link)) {
                         mLinkStatus = LinkStatus.GENERAL;
                         disableDownloadBtn();
                         return;
@@ -506,7 +525,7 @@ public class BrowserFragment extends BaseFragment {
             // General sites with specific link
             if (configData.getPagesGeneral1() != null) {
                 for (String link : configData.getPagesGeneral1()) {
-                    if (url.equals(link)) {
+                    if (url.equals(link) || url.endsWith(link)) {
                         mLinkStatus = LinkStatus.GENERAL;
                         disableDownloadBtn();
                         return;
@@ -516,7 +535,7 @@ public class BrowserFragment extends BaseFragment {
             // Unsupported sites
             if (configData.getPagesUnsupported() != null) {
                 for (String link : configData.getPagesUnsupported()) {
-                    if (url.startsWith(link)) {
+                    if (url.startsWith(link) || url.contains(link)) {
                         mLinkStatus = LinkStatus.UNSUPPORTED;
                         disableDownloadBtn();
                         return;
@@ -553,6 +572,11 @@ public class BrowserFragment extends BaseFragment {
     public void getVideoData(String link) {
         getActivity().runOnUiThread(() -> {
             try {
+                if (mCurrentVideo != null) {
+                    showVideoDataDialog(mCurrentVideo);
+                    return;
+                }
+
                 String url = URLDecoder.decode(link, "UTF-8");
                 if (!TextUtils.isEmpty(url) && url.startsWith("http")) {
                     Video video = new Video(System.currentTimeMillis() + ".mp4", url);
@@ -646,20 +670,24 @@ public class BrowserFragment extends BaseFragment {
     @OnClick(R.id.fab)
     public void downloadVideo() {
         String data = mBinding.webview.getUrl();
-        if (data.contains("facebook.com")) {
-            DialogUtil.showAlertDialog(getContext(), getString(R.string.error_facebook));
-            return;
-        } else if (data == null || data.length() == 0 || !Patterns.WEB_URL.matcher(data).matches()) {
+        if (TextUtils.isEmpty(data) || !Patterns.WEB_URL.matcher(data).matches()) {
             DialogUtil.showAlertDialog(getContext(), getString(R.string.error_valid_link));
             return;
         } else if (mLinkStatus == LinkStatus.YOUTUBE) {
-            YoutubeDialog.getDialog(getContext()).show();
+            YoutubeDialog.getDialog(getContext(), true).show();
             return;
-        } else if (mLinkStatus == LinkStatus.GENERAL || mLinkStatus == LinkStatus.UNSUPPORTED) {
+        } else if (mLinkStatus == LinkStatus.UNSUPPORTED) {
+            YoutubeDialog.getDialog(getContext(), false).show();
+            return;
+        } else if (mLinkStatus == LinkStatus.GENERAL) {
             GuidelineDialog.getDialog(getContext()).show();
             return;
         }
 
-        new DownloadService(getContext(), video -> showVideoDataDialog(video)).execute(data);
+        if (mCurrentVideo == null) {
+            new DownloadService(getContext(), video -> showVideoDataDialog(video)).execute(data);
+        } else {
+            showVideoDataDialog(mCurrentVideo);
+        }
     }
 }

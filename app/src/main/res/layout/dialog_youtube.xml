@@ -10,16 +10,17 @@
         android:padding="@dimen/padding_20">
 
         <android.support.v7.widget.AppCompatTextView
+            android:id="@+id/tv_title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:text="Youtube is not supported!"
+            android:text="@string/youtube_not_support_title"
             android:textColor="@color/black_85"
             android:textSize="@dimen/text_20"
             android:textStyle="bold" />
 
         <android.support.v7.widget.AppCompatTextView
-            android:id="@+id/tv_size"
+            android:id="@+id/tv_content"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/padding_20"

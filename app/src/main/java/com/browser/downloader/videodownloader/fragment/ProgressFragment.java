@@ -145,6 +145,8 @@ public class ProgressFragment extends BaseFragment {
                             mProgressAdapter.notifyDataSetChanged();
                             mPreferenceManager.setProgress(getProgressInfos());
                             showEmptyData();
+                            // google analytics
+                            trackEvent(getString(R.string.app_name), getString(R.string.action_download_done), progressInfo.getVideo().getUrl());
                         });
                     } else if (cursor.getInt(cursor.getColumnIndex(DownloadManager.COLUMN_STATUS)) == DownloadManager.STATUS_FAILED) {
                         isDownloading = false;
@@ -154,6 +156,8 @@ public class ProgressFragment extends BaseFragment {
                             mProgressAdapter.notifyDataSetChanged();
                             mPreferenceManager.setProgress(getProgressInfos());
                             showEmptyData();
+                            // google analytics
+                            trackEvent(getString(R.string.app_name), getString(R.string.action_download_failed), progressInfo.getVideo().getUrl());
                         });
                     } else if (cursor.getInt(cursor.getColumnIndex(DownloadManager.COLUMN_STATUS)) == DownloadManager.STATUS_RUNNING) {
                         int bytesDownloaded = cursor.getInt(cursor
