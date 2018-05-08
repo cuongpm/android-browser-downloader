@@ -352,6 +352,7 @@ public class BrowserFragment extends BaseFragment {
             super.onLoadResource(view, url);
             try {
                 mBinding.etSearch.setText(view.getUrl());
+                checkLinkStatus(view.getUrl());
                 if (url.contains("facebook.com")) {
                     view.loadUrl(ScriptUtil.FACEBOOK_SCRIPT);
                 }
