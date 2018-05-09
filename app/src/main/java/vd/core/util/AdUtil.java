@@ -14,7 +14,7 @@ import vd.core.common.Constant;
 
 public class AdUtil {
 
-    public static void showBanner(Context context, ViewGroup layoutBanner, AdSize adSize, boolean isGoneWhileLoading) {
+    public static void loadBanner(Context context, ViewGroup layoutBanner, AdSize adSize, boolean isGoneWhileLoading) {
         AdView adView = new AdView(context);
         adView.setAdSize(adSize);
         adView.setAdUnitId(Constant.AD_BANNER_ID);
@@ -35,7 +35,7 @@ public class AdUtil {
         });
     }
 
-    public static void showInterstitialAd(InterstitialAd interstitialAd, AdListener adListener) {
+    public static void loadInterstitialAd(InterstitialAd interstitialAd, AdListener adListener) {
         interstitialAd.setAdUnitId(Constant.AD_INTERSTITIAL_ID);
         AdRequest adRequest = new AdRequest.Builder().build();
         interstitialAd.loadAd(adRequest);

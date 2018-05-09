@@ -39,9 +39,6 @@ public class SettingsFragment extends BaseFragment {
         ButterKnife.bind(this, mBinding.getRoot());
         initUI();
 
-//        // Load ad interstitial
-//        loadInterstitialAd();
-
         return mBinding.getRoot();
     }
 

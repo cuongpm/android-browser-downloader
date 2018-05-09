@@ -31,10 +31,17 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.Toast;
 
+import com.applovin.adview.AppLovinInterstitialAd;
+import com.applovin.adview.AppLovinInterstitialAdDialog;
+import com.applovin.sdk.AppLovinAd;
+import com.applovin.sdk.AppLovinAdLoadListener;
+import com.applovin.sdk.AppLovinAdSize;
+import com.applovin.sdk.AppLovinSdk;
 import com.browser.downloader.videodownloader.R;
 import com.browser.downloader.videodownloader.activities.BookmarkActivity;
 import com.browser.downloader.videodownloader.activities.HistoryActivity;
 import com.browser.downloader.videodownloader.adapter.SuggestionAdapter;
+import com.browser.downloader.videodownloader.data.AdType;
 import com.browser.downloader.videodownloader.data.ConfigData;
 import com.browser.downloader.videodownloader.data.Video;
 import com.browser.downloader.videodownloader.data.WebViewData;
@@ -71,6 +78,8 @@ public class BrowserFragment extends BaseFragment {
     FragmentBrowserBinding mBinding;
 
     private InterstitialAd mInterstitialAd;
+
+    private AppLovinAd mAppLovinAd;
 
     private PublishSubject<String> mPublishSubject;
 
@@ -129,19 +138,45 @@ public class BrowserFragment extends BaseFragment {
         // Check show ad
         ConfigData configData = mPreferenceManager.getConfigData();
         boolean isShowAd = configData == null ? true : configData.isShowAdBrowser();
+        int adType = configData == null ? AdType.ADMOB.getValue() : configData.getShowAdAppType();
         if (isShowAd) {
-            mInterstitialAd = new InterstitialAd(getContext());
-            AdUtil.showInterstitialAd(mInterstitialAd, null);
+            if (adType == AdType.ADMOB.getValue()) {
+                mInterstitialAd = new InterstitialAd(getContext());
+                AdUtil.loadInterstitialAd(mInterstitialAd, null);
+            } else if (adType == AdType.APPLOVIN.getValue()) {
+                loadInterstitialAppLovin();
+            }
         }
     }
 
     private void showInterstitlaAd() {
-        if (!isAdShowed && mInterstitialAd != null && mInterstitialAd.isLoaded()) {
-            isAdShowed = true;
-            mInterstitialAd.show();
-            // google analytics
-            trackEvent(getString(R.string.app_name), getString(R.string.action_show_ad_browser), "");
+        if (!isAdShowed) {
+            if (mInterstitialAd != null && mInterstitialAd.isLoaded()) {
+                mInterstitialAd.show();
+                isAdShowed = true;
+                // google analytics
+                trackEvent(getString(R.string.app_name), getString(R.string.action_show_ad_browser), "Admob");
+            } else if (mAppLovinAd != null) {
+                AppLovinInterstitialAdDialog interstitialAd = AppLovinInterstitialAd.create(AppLovinSdk.getInstance(getContext()), getContext());
+                interstitialAd.showAndRender(mAppLovinAd);
+                isAdShowed = true;
+                // google analytics
+                trackEvent(getString(R.string.app_name), getString(R.string.action_show_ad_browser), "AppLovin");
+            }
         }
+    }
+
+    private void loadInterstitialAppLovin() {
+        AppLovinSdk.getInstance(getContext()).getAdService().loadNextAd(AppLovinAdSize.INTERSTITIAL, new AppLovinAdLoadListener() {
+            @Override
+            public void adReceived(AppLovinAd ad) {
+                mAppLovinAd = ad;
+            }
+
+            @Override
+            public void failedToReceiveAd(int errorCode) {
+            }
+        });
     }
 
     @Override
@@ -464,7 +499,7 @@ public class BrowserFragment extends BaseFragment {
         LayoutVideoDataBinding binding = DataBindingUtil.inflate(getLayoutInflater(), R.layout.layout_video_data, null, false);
 
         // Show ad banner
-        AdUtil.showBanner(getContext(), binding.layoutBanner, AdSize.BANNER, true);
+        AdUtil.loadBanner(getContext(), binding.layoutBanner, AdSize.BANNER, true);
 
         binding.tvName.setText(video.getFileName());
         if (!TextUtils.isEmpty(video.getThumbnail())) {

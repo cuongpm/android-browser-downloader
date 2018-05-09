@@ -6,9 +6,16 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.view.ViewPager;
 
+import com.applovin.adview.AppLovinInterstitialAd;
+import com.applovin.adview.AppLovinInterstitialAdDialog;
+import com.applovin.sdk.AppLovinAd;
+import com.applovin.sdk.AppLovinAdLoadListener;
+import com.applovin.sdk.AppLovinAdSize;
+import com.applovin.sdk.AppLovinSdk;
 import com.browser.downloader.videodownloader.R;
 import com.browser.downloader.videodownloader.adapter.HomeAdapter;
 import com.browser.downloader.videodownloader.callback.DialogListener;
+import com.browser.downloader.videodownloader.data.AdType;
 import com.browser.downloader.videodownloader.data.ConfigData;
 import com.browser.downloader.videodownloader.data.Video;
 import com.browser.downloader.videodownloader.databinding.ActivityMainBinding;
@@ -36,6 +43,8 @@ public class MainActivity extends BaseActivity {
 
     private InterstitialAd mInterstitialAd;
 
+    private AppLovinAd mAppLovinAd;
+
     private boolean isAdShowed = false;
 
     private int numberActionShowAd = 0;
@@ -50,11 +59,15 @@ public class MainActivity extends BaseActivity {
         ButterKnife.bind(this);
         initUI();
 
+        // Init AppLovin
+        AppLovinSdk.initializeSdk(getApplicationContext());
+//        AppLovinSdk.getInstance(getApplicationContext()).getSettings().setTestAdsEnabled(true);
+
         // Init Admob
         MobileAds.initialize(this, Constant.AD_APP_ID);
 
         // Show ad banner
-        AdUtil.showBanner(this, mBinding.layoutBanner, AdSize.BANNER, true);
+        AdUtil.loadBanner(this, mBinding.layoutBanner, AdSize.BANNER, true);
 
         // Load ad interstitial
         loadInterstitialAd();
@@ -192,19 +205,46 @@ public class MainActivity extends BaseActivity {
         ConfigData configData = mPreferenceManager.getConfigData();
         totalActionShowAd = configData == null ? totalActionShowAd : configData.getTotalActionShowAd();
         boolean isShowAd = configData == null ? true : configData.isShowAdApp();
+        int adType = configData == null ? AdType.ADMOB.getValue() : configData.getShowAdAppType();
         if (isShowAd) {
-            mInterstitialAd = new InterstitialAd(this);
-            AdUtil.showInterstitialAd(mInterstitialAd, null);
+            if (adType == AdType.ADMOB.getValue()) {
+                mInterstitialAd = new InterstitialAd(this);
+                AdUtil.loadInterstitialAd(mInterstitialAd, null);
+            } else if (adType == AdType.APPLOVIN.getValue()) {
+                loadInterstitialAppLovin();
+            }
         }
     }
 
     public void showInterstitlaAd() {
         numberActionShowAd++;
-        if (!isAdShowed && mInterstitialAd != null && mInterstitialAd.isLoaded() && (numberActionShowAd % totalActionShowAd == 0)) {
-            isAdShowed = true;
-            mInterstitialAd.show();
-            // google analytics
-            trackEvent(getString(R.string.app_name), getString(R.string.action_show_ad_app), "");
+        if (!isAdShowed && (numberActionShowAd % totalActionShowAd == 0)) {
+            if (mInterstitialAd != null && mInterstitialAd.isLoaded()) {
+                mInterstitialAd.show();
+                isAdShowed = true;
+                // google analytics
+                trackEvent(getString(R.string.app_name), getString(R.string.action_show_ad_app), "Admob");
+            } else if (mAppLovinAd != null) {
+                AppLovinInterstitialAdDialog interstitialAd = AppLovinInterstitialAd.create(AppLovinSdk.getInstance(this), this);
+                interstitialAd.showAndRender(mAppLovinAd);
+                isAdShowed = true;
+                // google analytics
+                trackEvent(getString(R.string.app_name), getString(R.string.action_show_ad_app), "AppLovin");
+            }
         }
     }
+
+    private void loadInterstitialAppLovin() {
+        AppLovinSdk.getInstance(this).getAdService().loadNextAd(AppLovinAdSize.INTERSTITIAL, new AppLovinAdLoadListener() {
+            @Override
+            public void adReceived(AppLovinAd ad) {
+                mAppLovinAd = ad;
+            }
+
+            @Override
+            public void failedToReceiveAd(int errorCode) {
+            }
+        });
+    }
+
 }

@@ -39,6 +39,18 @@
             android:screenOrientation="portrait"
             android:theme="@style/ActivityTheme" />
 
+        <!-- AppLovin SDK Key -->
+        <meta-data
+            android:name="applovin.sdk.key"
+            android:value="IW-b6vyeIRwOZ2Mbvr4XLtoeOS8o5h6NC4-J-wzGMtewv0VpsaLCR7rqa-cfgi2tn1Amy70I_fCvgihWH1kk9T" />
+
+        <activity
+            android:name="com.applovin.adview.AppLovinInterstitialActivity"
+            android:configChanges="orientation|screenSize" />
+        <activity
+            android:name="com.applovin.adview.AppLovinConfirmationActivity"
+            android:configChanges="orientation|screenSize" />
+
         <provider
             android:name="android.support.v4.content.FileProvider"
             android:authorities="${applicationId}.provider"

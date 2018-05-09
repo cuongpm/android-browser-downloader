@@ -23,6 +23,14 @@ public class ConfigData {
     @Expose
     private int totalActionShowAd;
 
+    @SerializedName("show_ad_browser_type")
+    @Expose
+    private int showAdBrowserType;
+
+    @SerializedName("show_ad_app_type")
+    @Expose
+    private int showAdAppType;
+
     @SerializedName("parser_server")
     @Expose
     private String parserServer;
@@ -69,6 +77,22 @@ public class ConfigData {
 
     public void setTotalActionShowAd(int totalActionShowAd) {
         this.totalActionShowAd = totalActionShowAd;
+    }
+
+    public int getShowAdBrowserType() {
+        return showAdBrowserType;
+    }
+
+    public void setShowAdBrowserType(int showAdBrowserType) {
+        this.showAdBrowserType = showAdBrowserType;
+    }
+
+    public int getShowAdAppType() {
+        return showAdAppType;
+    }
+
+    public void setShowAdAppType(int showAdAppType) {
+        this.showAdAppType = showAdAppType;
     }
 
     public String getParserServer() {

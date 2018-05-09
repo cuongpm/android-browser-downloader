@@ -6,8 +6,8 @@ android {
         applicationId "com.browser.downloader.videodownloader"
         minSdkVersion 15
         targetSdkVersion 27
-        versionCode 3
-        versionName "1.0.2"
+        versionCode 4
+        versionName "1.0.3"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
@@ -55,6 +55,8 @@ dependencies {
     implementation 'com.roughike:bottom-bar:2.3.1'
 
     implementation 'com.github.sujithkanna:smileyrating:1.5.0'
+
+    implementation 'com.applovin:applovin-sdk:+'
 
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'com.android.support.test:runner:1.0.1'
