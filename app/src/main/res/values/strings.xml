@@ -21,6 +21,7 @@
     <string name="screen_bookmark">Screen Bookmark</string>
     <string name="screen_history">Screen History</string>
 
+    <string name="action_show_ad_splash">Action Show Ad - Splash</string>
     <string name="action_show_ad_browser">Action Show Ad - Browser</string>
     <string name="action_show_ad_app">Action Show Ad - App</string>
     <string name="action_rate_us_exit_app">Action Rate Us - Exit App</string>

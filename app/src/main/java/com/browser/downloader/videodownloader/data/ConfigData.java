@@ -7,6 +7,10 @@ import java.util.List;
 
 public class ConfigData {
 
+    @SerializedName("is_show_ad_splash")
+    @Expose
+    private boolean isShowAdSplash = true;
+
     @SerializedName("is_show_ad_browser")
     @Expose
     private boolean isShowAdBrowser = true;
@@ -22,6 +26,10 @@ public class ConfigData {
     @SerializedName("total_action_show_ad")
     @Expose
     private int totalActionShowAd;
+
+    @SerializedName("show_ad_splash_type")
+    @Expose
+    private int showAdSplashType;
 
     @SerializedName("show_ad_browser_type")
     @Expose
@@ -46,6 +54,14 @@ public class ConfigData {
     @SerializedName("pages_unsupported")
     @Expose
     private List<String> pagesUnsupported;
+
+    public boolean isShowAdSplash() {
+        return isShowAdSplash;
+    }
+
+    public void setShowAdSplash(boolean showAdSplash) {
+        isShowAdSplash = showAdSplash;
+    }
 
     public boolean isShowAdBrowser() {
         return isShowAdBrowser;
@@ -77,6 +93,14 @@ public class ConfigData {
 
     public void setTotalActionShowAd(int totalActionShowAd) {
         this.totalActionShowAd = totalActionShowAd;
+    }
+
+    public int getShowAdSplashType() {
+        return showAdSplashType;
+    }
+
+    public void setShowAdSplashType(int showAdSplashType) {
+        this.showAdSplashType = showAdSplashType;
     }
 
     public int getShowAdBrowserType() {

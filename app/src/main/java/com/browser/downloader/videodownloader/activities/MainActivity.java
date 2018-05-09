@@ -20,15 +20,14 @@ import com.browser.downloader.videodownloader.data.ConfigData;
 import com.browser.downloader.videodownloader.data.Video;
 import com.browser.downloader.videodownloader.databinding.ActivityMainBinding;
 import com.browser.downloader.videodownloader.dialog.RatingDialog;
+import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdSize;
 import com.google.android.gms.ads.InterstitialAd;
-import com.google.android.gms.ads.MobileAds;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
 import butterknife.ButterKnife;
-import vd.core.common.Constant;
 import vd.core.util.AdUtil;
 import vd.core.util.DialogUtil;
 import vd.core.util.IntentUtil;
@@ -58,13 +57,6 @@ public class MainActivity extends BaseActivity {
         mBinding = DataBindingUtil.setContentView(this, R.layout.activity_main);
         ButterKnife.bind(this);
         initUI();
-
-        // Init AppLovin
-        AppLovinSdk.initializeSdk(getApplicationContext());
-//        AppLovinSdk.getInstance(getApplicationContext()).getSettings().setTestAdsEnabled(true);
-
-        // Init Admob
-        MobileAds.initialize(this, Constant.AD_APP_ID);
 
         // Show ad banner
         AdUtil.loadBanner(this, mBinding.layoutBanner, AdSize.BANNER, true);
@@ -201,17 +193,57 @@ public class MainActivity extends BaseActivity {
     }
 
     private void loadInterstitialAd() {
-        // Check show ad
+        // Get config
         ConfigData configData = mPreferenceManager.getConfigData();
+
+        // Get total actions to show ad
         totalActionShowAd = configData == null ? totalActionShowAd : configData.getTotalActionShowAd();
+
+        // Check show ad
         boolean isShowAd = configData == null ? true : configData.isShowAdApp();
+
+        // Check ad type
         int adType = configData == null ? AdType.ADMOB.getValue() : configData.getShowAdAppType();
+
+        // Show ad
         if (isShowAd) {
             if (adType == AdType.ADMOB.getValue()) {
+                // Admob type
                 mInterstitialAd = new InterstitialAd(this);
-                AdUtil.loadInterstitialAd(mInterstitialAd, null);
+                AdUtil.loadInterstitialAd(mInterstitialAd, new AdListener() {
+                    @Override
+                    public void onAdFailedToLoad(int i) {
+                        super.onAdFailedToLoad(i);
+                        // Load admob failed -> load AppLovin
+                        AppLovinSdk.getInstance(MainActivity.this).getAdService().loadNextAd(AppLovinAdSize.INTERSTITIAL, new AppLovinAdLoadListener() {
+                            @Override
+                            public void adReceived(AppLovinAd ad) {
+                                mAppLovinAd = ad;
+                            }
+
+                            @Override
+                            public void failedToReceiveAd(int errorCode) {
+                            }
+                        });
+                    }
+                });
             } else if (adType == AdType.APPLOVIN.getValue()) {
-                loadInterstitialAppLovin();
+                // AppLovin type
+                AppLovinSdk.getInstance(this).getAdService().loadNextAd(AppLovinAdSize.INTERSTITIAL, new AppLovinAdLoadListener() {
+                    @Override
+                    public void adReceived(AppLovinAd ad) {
+                        mAppLovinAd = ad;
+                    }
+
+                    @Override
+                    public void failedToReceiveAd(int errorCode) {
+                        // Load AppLovin failed -> load Admob
+                        runOnUiThread(() -> {
+                            mInterstitialAd = new InterstitialAd(MainActivity.this);
+                            AdUtil.loadInterstitialAd(mInterstitialAd, null);
+                        });
+                    }
+                });
             }
         }
     }
@@ -232,19 +264,6 @@ public class MainActivity extends BaseActivity {
                 trackEvent(getString(R.string.app_name), getString(R.string.action_show_ad_app), "AppLovin");
             }
         }
-    }
-
-    private void loadInterstitialAppLovin() {
-        AppLovinSdk.getInstance(this).getAdService().loadNextAd(AppLovinAdSize.INTERSTITIAL, new AppLovinAdLoadListener() {
-            @Override
-            public void adReceived(AppLovinAd ad) {
-                mAppLovinAd = ad;
-            }
-
-            @Override
-            public void failedToReceiveAd(int errorCode) {
-            }
-        });
     }
 
 }

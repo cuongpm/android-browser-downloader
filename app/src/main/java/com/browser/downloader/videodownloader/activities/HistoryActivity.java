@@ -36,7 +36,6 @@ public class HistoryActivity extends BaseActivity {
                     resultIntent.putExtra(BrowserFragment.RESULT_URL, history.getUrl());
                     setResult(Activity.RESULT_OK, resultIntent);
                     finish();
-                    overridePendingTransition(0, R.anim.exit_to_right);
                 });
         mBinding.rvHistory.setAdapter(historyAdapter);
 
@@ -57,6 +56,5 @@ public class HistoryActivity extends BaseActivity {
     @Override
     public void onBackPressed() {
         finish();
-        overridePendingTransition(0, R.anim.exit_to_right);
     }
 }

@@ -3,18 +3,31 @@ package com.browser.downloader.videodownloader.activities;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
-import android.os.Handler;
 import android.view.Window;
 import android.view.WindowManager;
 
+import com.applovin.adview.AppLovinInterstitialAd;
+import com.applovin.adview.AppLovinInterstitialAdDialog;
+import com.applovin.sdk.AppLovinAd;
+import com.applovin.sdk.AppLovinAdDisplayListener;
+import com.applovin.sdk.AppLovinAdLoadListener;
+import com.applovin.sdk.AppLovinAdSize;
+import com.applovin.sdk.AppLovinSdk;
 import com.browser.downloader.videodownloader.R;
+import com.browser.downloader.videodownloader.data.AdType;
+import com.browser.downloader.videodownloader.data.ConfigData;
 import com.browser.downloader.videodownloader.databinding.ActivitySplashBinding;
 import com.browser.downloader.videodownloader.service.DataService;
+import com.google.android.gms.ads.AdListener;
+import com.google.android.gms.ads.InterstitialAd;
+import com.google.android.gms.ads.MobileAds;
 
 import butterknife.ButterKnife;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
+import vd.core.common.Constant;
 import vd.core.common.PreferencesManager;
+import vd.core.util.AdUtil;
 
 public class SplashActivity extends BaseActivity {
 
@@ -32,8 +45,20 @@ public class SplashActivity extends BaseActivity {
     }
 
     private void initUI() {
+        // Init AppLovin
+        AppLovinSdk.initializeSdk(getApplicationContext());
+//        AppLovinSdk.getInstance(getApplicationContext()).getSettings().setTestAdsEnabled(true);
+
+        // Init Admob
+        MobileAds.initialize(this, Constant.AD_APP_ID);
+
         // Load static data
         loadconfigData();
+    }
+
+    private void startMainActivity() {
+        startActivity(new Intent(SplashActivity.this, MainActivity.class));
+        finish();
     }
 
     private void loadconfigData() {
@@ -42,19 +67,94 @@ public class SplashActivity extends BaseActivity {
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(configData -> runOnUiThread(() -> {
                     PreferencesManager.getInstance(this).setConfigData(configData);
-                    startMainActivity();
+                    // Load interstitial ad
+                    loadInterstitialAd();
                 }), throwable -> runOnUiThread(() -> {
                     throwable.printStackTrace();
-                    startMainActivity();
+                    // Load interstitial ad
+                    loadInterstitialAd();
                 }));
     }
 
-    private void startMainActivity() {
-        new Handler().postDelayed(() -> {
-            startActivity(new Intent(SplashActivity.this, MainActivity.class));
-            overridePendingTransition(R.anim.enter_from_right, 0);
-            finish();
-        }, 2000);
-    }
+    private void loadInterstitialAd() {
 
+        // Get config
+        ConfigData configData = mPreferenceManager.getConfigData();
+
+        // Check show ad
+        boolean isShowAd = configData == null ? true : configData.isShowAdSplash();
+
+        // Check ad type
+        int adType = configData == null ? AdType.ADMOB.getValue() : configData.getShowAdSplashType();
+
+        // Show ad
+        if (isShowAd) {
+            if (adType == AdType.ADMOB.getValue()) {
+                // Admob type
+                InterstitialAd interstitialAd = new InterstitialAd(this);
+                AdUtil.loadInterstitialAd(interstitialAd, new AdListener() {
+                    @Override
+                    public void onAdLoaded() {
+                        super.onAdLoaded();
+                        // Show ad
+                        interstitialAd.show();
+                        // google analytics
+                        trackEvent(getString(R.string.app_name), getString(R.string.action_show_ad_splash), "Admob");
+                    }
+
+                    @Override
+                    public void onAdFailedToLoad(int i) {
+                        super.onAdFailedToLoad(i);
+                        // Open home screen
+                        startMainActivity();
+                    }
+
+                    @Override
+                    public void onAdClosed() {
+                        super.onAdClosed();
+                        // Open home screen
+                        startMainActivity();
+                    }
+                });
+            } else if (adType == AdType.APPLOVIN.getValue()) {
+                // AppLovin type
+                AppLovinInterstitialAdDialog interstitialAd = AppLovinInterstitialAd.
+                        create(AppLovinSdk.getInstance(SplashActivity.this), SplashActivity.this);
+                interstitialAd.setAdDisplayListener(new AppLovinAdDisplayListener() {
+                    @Override
+                    public void adDisplayed(AppLovinAd appLovinAd) {
+                    }
+
+                    @Override
+                    public void adHidden(AppLovinAd appLovinAd) {
+                        // Open home screen
+                        startMainActivity();
+                    }
+                });
+                AppLovinSdk.getInstance(this).getAdService().loadNextAd(AppLovinAdSize.INTERSTITIAL, new AppLovinAdLoadListener() {
+                    @Override
+                    public void adReceived(AppLovinAd ad) {
+                        // Show ad
+                        runOnUiThread(() -> {
+                            interstitialAd.showAndRender(ad);
+                            // google analytics
+                            trackEvent(getString(R.string.app_name), getString(R.string.action_show_ad_splash), "AppLovin");
+                        });
+                    }
+
+                    @Override
+                    public void failedToReceiveAd(int errorCode) {
+                        // Open home screen
+                        runOnUiThread(() -> startMainActivity());
+                    }
+                });
+            } else {
+                // Open home screen
+                startMainActivity();
+            }
+        } else {
+            // Open home screen
+            startMainActivity();
+        }
+    }
 }

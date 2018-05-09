@@ -51,6 +51,7 @@ import com.browser.downloader.videodownloader.dialog.GuidelineDialog;
 import com.browser.downloader.videodownloader.dialog.YoutubeDialog;
 import com.browser.downloader.videodownloader.service.DownloadService;
 import com.browser.downloader.videodownloader.service.SearchService;
+import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdSize;
 import com.google.android.gms.ads.InterstitialAd;
 
@@ -135,16 +136,55 @@ public class BrowserFragment extends BaseFragment {
     }
 
     private void loadInterstitialAd() {
-        // Check show ad
+
+        // Get config
         ConfigData configData = mPreferenceManager.getConfigData();
+
+        // Check show ad
         boolean isShowAd = configData == null ? true : configData.isShowAdBrowser();
-        int adType = configData == null ? AdType.ADMOB.getValue() : configData.getShowAdAppType();
+
+        // Check ad type
+        int adType = configData == null ? AdType.ADMOB.getValue() : configData.getShowAdBrowserType();
+
+        // Show ad
         if (isShowAd) {
             if (adType == AdType.ADMOB.getValue()) {
+                // Admob type
                 mInterstitialAd = new InterstitialAd(getContext());
-                AdUtil.loadInterstitialAd(mInterstitialAd, null);
+                AdUtil.loadInterstitialAd(mInterstitialAd, new AdListener() {
+                    @Override
+                    public void onAdFailedToLoad(int i) {
+                        super.onAdFailedToLoad(i);
+                        // Load admob failed -> load AppLovin
+                        AppLovinSdk.getInstance(getContext()).getAdService().loadNextAd(AppLovinAdSize.INTERSTITIAL, new AppLovinAdLoadListener() {
+                            @Override
+                            public void adReceived(AppLovinAd ad) {
+                                mAppLovinAd = ad;
+                            }
+
+                            @Override
+                            public void failedToReceiveAd(int errorCode) {
+                            }
+                        });
+                    }
+                });
             } else if (adType == AdType.APPLOVIN.getValue()) {
-                loadInterstitialAppLovin();
+                // AppLovin type
+                AppLovinSdk.getInstance(getContext()).getAdService().loadNextAd(AppLovinAdSize.INTERSTITIAL, new AppLovinAdLoadListener() {
+                    @Override
+                    public void adReceived(AppLovinAd ad) {
+                        mAppLovinAd = ad;
+                    }
+
+                    @Override
+                    public void failedToReceiveAd(int errorCode) {
+                        // Load AppLovin failed -> load Admob
+                        mActivity.runOnUiThread(() -> {
+                            mInterstitialAd = new InterstitialAd(getContext());
+                            AdUtil.loadInterstitialAd(mInterstitialAd, null);
+                        });
+                    }
+                });
             }
         }
     }
@@ -164,19 +204,6 @@ public class BrowserFragment extends BaseFragment {
                 trackEvent(getString(R.string.app_name), getString(R.string.action_show_ad_browser), "AppLovin");
             }
         }
-    }
-
-    private void loadInterstitialAppLovin() {
-        AppLovinSdk.getInstance(getContext()).getAdService().loadNextAd(AppLovinAdSize.INTERSTITIAL, new AppLovinAdLoadListener() {
-            @Override
-            public void adReceived(AppLovinAd ad) {
-                mAppLovinAd = ad;
-            }
-
-            @Override
-            public void failedToReceiveAd(int errorCode) {
-            }
-        });
     }
 
     @Override
@@ -200,14 +227,12 @@ public class BrowserFragment extends BaseFragment {
 
         } else if (item.getItemId() == R.id.menu_bookmark) {
             startActivityForResult(new Intent(getContext(), BookmarkActivity.class), ACTIVITY_BOOKMARK);
-            getActivity().overridePendingTransition(R.anim.enter_from_right, 0);
             if (!mPreferenceManager.getBookmark().isEmpty()) {
                 showInterstitlaAd();
             }
 
         } else if (item.getItemId() == R.id.menu_history) {
             startActivityForResult(new Intent(getContext(), HistoryActivity.class), ACTIVITY_HISTORY);
-            getActivity().overridePendingTransition(R.anim.enter_from_right, 0);
             if (!mPreferenceManager.getHistory().isEmpty()) {
                 showInterstitlaAd();
             }
@@ -648,7 +673,6 @@ public class BrowserFragment extends BaseFragment {
     public void clickFacebook() {
         mBinding.etSearch.setText(mBinding.layoutSocial.tvFacebook.getText().toString());
         loadWebView();
-        showInterstitlaAd();
         // google analytics
         trackEvent(getString(R.string.app_name), getString(R.string.action_open_facebook), "");
     }
@@ -657,7 +681,6 @@ public class BrowserFragment extends BaseFragment {
     public void clickTwitter() {
         mBinding.etSearch.setText(mBinding.layoutSocial.tvTwitter.getText().toString());
         loadWebView();
-        showInterstitlaAd();
         // google analytics
         trackEvent(getString(R.string.app_name), getString(R.string.action_open_twitter), "");
     }
@@ -666,7 +689,6 @@ public class BrowserFragment extends BaseFragment {
     public void clickInstagram() {
         mBinding.etSearch.setText(mBinding.layoutSocial.tvInstagram.getText().toString());
         loadWebView();
-        showInterstitlaAd();
         // google analytics
         trackEvent(getString(R.string.app_name), getString(R.string.action_open_instagram), "");
     }
@@ -675,7 +697,6 @@ public class BrowserFragment extends BaseFragment {
     public void clickDailymotion() {
         mBinding.etSearch.setText(mBinding.layoutSocial.tvDailymotion.getText().toString());
         loadWebView();
-        showInterstitlaAd();
         // google analytics
         trackEvent(getString(R.string.app_name), getString(R.string.action_open_dailymotion), "");
     }
@@ -684,7 +705,6 @@ public class BrowserFragment extends BaseFragment {
     public void clickVimeo() {
         mBinding.etSearch.setText(mBinding.layoutSocial.tvVimeo.getText().toString());
         loadWebView();
-        showInterstitlaAd();
         // google analytics
         trackEvent(getString(R.string.app_name), getString(R.string.action_open_vimeo), "");
     }
