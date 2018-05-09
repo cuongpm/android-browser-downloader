@@ -578,7 +578,7 @@ public class BrowserFragment extends BaseFragment {
             if (configData.getPagesSupported() != null) {
                 for (PagesSupported pagesSupported : configData.getPagesSupported()) {
                     if (url.contains(pagesSupported.getName())) {
-                        if (url.matches(pagesSupported.getPattern())) {
+                        if (url.matches(pagesSupported.getPattern()) || url.contains(pagesSupported.getPattern())) {
                             mLinkStatus = LinkStatus.SUPPORTED;
                             enableDownloadBtnAndShake();
                         } else {
