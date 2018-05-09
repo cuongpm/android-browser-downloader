@@ -80,7 +80,7 @@ public class DownloadService extends AsyncTask<String, Integer, Video> {
     @Override
     protected void onPostExecute(Video video) {
         DialogUtil.closeProgressDialog();
-        if (video != null && mDownloadCallback != null) {
+        if (video != null) {
             mDownloadCallback.onDownloadCompleted(video);
             try {
                 // google analytics
@@ -91,7 +91,7 @@ public class DownloadService extends AsyncTask<String, Integer, Video> {
                 e.printStackTrace();
             }
         } else {
-            DialogUtil.showAlertDialog(mContext, mContext.getString(R.string.error_video_page));
+            mDownloadCallback.onDownloadFailed(mUrl);
             try {
                 // google analytics
                 String website = mUrl;
@@ -110,6 +110,8 @@ public class DownloadService extends AsyncTask<String, Integer, Video> {
 
     public interface DownloadCallback {
         void onDownloadCompleted(Video video);
+
+        void onDownloadFailed(String url);
     }
 
 }

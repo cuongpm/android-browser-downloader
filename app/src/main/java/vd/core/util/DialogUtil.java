@@ -69,4 +69,14 @@ public class DialogUtil {
                 .setPositiveButton(android.R.string.ok, (dialog, which) -> dialog.dismiss())
                 .show();
     }
+
+    public static void showAlertDialog(Context context, String btnPositive, String btnNegative, String message,
+                                       OnClickListener onClickListenerPositive, OnClickListener onClickListenerNegative) {
+        AlertDialog.Builder arAlertDialog = new AlertDialog.Builder(context);
+        arAlertDialog.setTitle(context.getString(R.string.app_name))
+                .setMessage(message)
+                .setPositiveButton(btnPositive, onClickListenerPositive)
+                .setNegativeButton(btnNegative, onClickListenerNegative)
+                .show();
+    }
 }

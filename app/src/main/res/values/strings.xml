@@ -51,6 +51,8 @@
     <string name="event_get_link_success">Event Get Link - Succeed</string>
     <string name="event_get_link_facebook">Event Get Link - Facebook</string>
 
+    <string name="event_report_link">Event Report Link</string>
+
     <string name="link_facebook">https://facebook.com</string>
     <string name="link_twitter">https://twitter.com</string>
     <string name="link_instagram">https://instagram.com</string>
@@ -58,8 +60,9 @@
     <string name="link_vimeo">https://www.vimeo.com</string>
 
     <string name="error_valid_link">Please enter a valid video link!</string>
-    <string name="error_video_page">Please go to video detail page to download video!</string>
+    <string name="error_video_page">Can\'t get video link. Please try again!</string>
 
+    <string name="message_report">Thank you for your report. We are working hard to bring you better user experience.</string>
     <string name="message_exit">Do you want to exit this application?</string>
     <string name="message_download_video">Do you want to download this video?</string>
     <string name="message_open_folder">You don\'t have any file explorer app installed on your device</string>

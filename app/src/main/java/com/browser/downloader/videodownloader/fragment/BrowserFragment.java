@@ -43,6 +43,7 @@ import com.browser.downloader.videodownloader.activities.HistoryActivity;
 import com.browser.downloader.videodownloader.adapter.SuggestionAdapter;
 import com.browser.downloader.videodownloader.data.AdType;
 import com.browser.downloader.videodownloader.data.ConfigData;
+import com.browser.downloader.videodownloader.data.PagesSupported;
 import com.browser.downloader.videodownloader.data.Video;
 import com.browser.downloader.videodownloader.data.WebViewData;
 import com.browser.downloader.videodownloader.databinding.FragmentBrowserBinding;
@@ -573,6 +574,22 @@ public class BrowserFragment extends BaseFragment {
 
         ConfigData configData = mPreferenceManager.getConfigData();
         if (configData != null) {
+            // Check site and pattern
+            if (configData.getPagesSupported() != null) {
+                for (PagesSupported pagesSupported : configData.getPagesSupported()) {
+                    if (url.contains(pagesSupported.getName())) {
+                        if (url.matches(pagesSupported.getPattern())) {
+                            mLinkStatus = LinkStatus.SUPPORTED;
+                            enableDownloadBtnAndShake();
+                        } else {
+                            mLinkStatus = LinkStatus.GENERAL;
+                            disableDownloadBtn();
+                        }
+                        return;
+                    }
+                }
+            }
+
             // General sites
             if (configData.getPagesGeneral() != null) {
                 for (String link : configData.getPagesGeneral()) {
@@ -741,9 +758,38 @@ public class BrowserFragment extends BaseFragment {
         }
 
         if (mCurrentVideo == null) {
-            new DownloadService(getContext(), video -> showVideoDataDialog(video)).execute(data);
+            downloadVideoService(data);
         } else {
             showVideoDataDialog(mCurrentVideo);
         }
+    }
+
+    private void downloadVideoService(String data) {
+        new DownloadService(getContext(), new DownloadService.DownloadCallback() {
+            @Override
+            public void onDownloadCompleted(Video video) {
+                showVideoDataDialog(video);
+            }
+
+            @Override
+            public void onDownloadFailed(String url) {
+                DialogUtil.showAlertDialog(getContext(), "Try again", "Report link", getString(R.string.error_video_page),
+                        (dialog, i) -> {
+                            dialog.dismiss();
+                            downloadVideoService(data);
+                        }, (dialog, i) -> {
+                            dialog.dismiss();
+                            DialogUtil.showAlertDialog(getContext(), getContext().getString(R.string.message_report));
+                            try {
+                                // google analytics
+                                String website = url;
+                                if (url.contains("/")) website = url.split("/")[2];
+                                trackEvent(getString(R.string.event_report_link), website, url);
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+                        });
+            }
+        }).execute(data);
     }
 }

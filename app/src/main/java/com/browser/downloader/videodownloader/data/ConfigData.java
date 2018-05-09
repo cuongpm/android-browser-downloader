@@ -43,6 +43,10 @@ public class ConfigData {
     @Expose
     private String parserServer;
 
+    @SerializedName("pages_supported")
+    @Expose
+    private List<PagesSupported> pagesSupported;
+
     @SerializedName("pages_general")
     @Expose
     private List<String> pagesGeneral;
@@ -125,6 +129,14 @@ public class ConfigData {
 
     public void setParserServer(String parserServer) {
         this.parserServer = parserServer;
+    }
+
+    public List<PagesSupported> getPagesSupported() {
+        return pagesSupported;
+    }
+
+    public void setPagesSupported(List<PagesSupported> pagesSupported) {
+        this.pagesSupported = pagesSupported;
     }
 
     public List<String> getPagesGeneral() {
