@@ -145,8 +145,14 @@ public class ProgressFragment extends BaseFragment {
                             mProgressAdapter.notifyDataSetChanged();
                             mPreferenceManager.setProgress(getProgressInfos());
                             showEmptyData();
-                            // google analytics
-                            trackEvent(getString(R.string.app_name), getString(R.string.action_download_done), progressInfo.getVideo().getUrl());
+                            try {
+                                // google analytics
+                                String website = progressInfo.getVideo().getUrl();
+                                if (website.contains("/")) website = website.split("/")[2];
+                                trackEvent(getString(R.string.action_download_done), website, progressInfo.getVideo().getUrl());
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
                         });
                     } else if (cursor.getInt(cursor.getColumnIndex(DownloadManager.COLUMN_STATUS)) == DownloadManager.STATUS_FAILED) {
                         isDownloading = false;
@@ -156,8 +162,14 @@ public class ProgressFragment extends BaseFragment {
                             mProgressAdapter.notifyDataSetChanged();
                             mPreferenceManager.setProgress(getProgressInfos());
                             showEmptyData();
-                            // google analytics
-                            trackEvent(getString(R.string.app_name), getString(R.string.action_download_failed), progressInfo.getVideo().getUrl());
+                            try {
+                                // google analytics
+                                String website = progressInfo.getVideo().getUrl();
+                                if (website.contains("/")) website = website.split("/")[2];
+                                trackEvent(getString(R.string.action_download_failed), website, progressInfo.getVideo().getUrl());
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
                         });
                     } else if (cursor.getInt(cursor.getColumnIndex(DownloadManager.COLUMN_STATUS)) == DownloadManager.STATUS_RUNNING) {
                         int bytesDownloaded = cursor.getInt(cursor
