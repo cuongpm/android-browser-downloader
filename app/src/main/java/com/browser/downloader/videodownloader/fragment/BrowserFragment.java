@@ -674,7 +674,9 @@ public class BrowserFragment extends BaseFragment {
 
         String content = mBinding.etSearch.getText().toString().trim();
         if (content.length() > 0) {
-            if (content.startsWith("http://") || content.startsWith("https://")) {
+            if (content.toLowerCase().contains("youtu.be") || content.toLowerCase().contains("youtube.com")) {
+                YoutubeDialog.getDialog(getContext(), true).show();
+            } else if (content.startsWith("http://") || content.startsWith("https://")) {
                 mBinding.webview.loadUrl(content);
             } else if (Patterns.WEB_URL.matcher(content).matches()) {
                 mBinding.webview.loadUrl("http://" + content);
