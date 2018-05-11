@@ -22,7 +22,7 @@ public class AppApplication extends Application {
         // Init AppLovin
         AppLovinSdk.initializeSdk(this);
         mAppLovinSdk = AppLovinSdk.getInstance(this);
-        mAppLovinSdk.getSettings().setTestAdsEnabled(true);
+        mAppLovinSdk.getSettings().setTestAdsEnabled(false);
 
         // Init Admob
         MobileAds.initialize(this, Constant.AD_APP_ID);
