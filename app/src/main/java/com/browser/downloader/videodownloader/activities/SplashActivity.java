@@ -84,13 +84,13 @@ public class SplashActivity extends BaseActivity {
         if (isShowAd) {
             if (adType == AdType.ADMOB.getValue()) {
                 // Admob type
-                showInterstitialAdmob();
+                loadInterstitialAdmob();
             } else if (adType == AdType.APPLOVIN.getValue()) {
                 // AppLovin type
-                showInterstitialAppLovin();
+                loadInterstitialAppLovin();
             } else {
-                // Open home screen
-                startMainActivity();
+                // Default is admob type
+                loadInterstitialAdmob();
             }
         } else {
             // Open home screen
@@ -98,7 +98,7 @@ public class SplashActivity extends BaseActivity {
         }
     }
 
-    private void showInterstitialAdmob() {
+    private void loadInterstitialAdmob() {
         InterstitialAd interstitialAd = new InterstitialAd(this);
         AdUtil.loadInterstitialAd(interstitialAd, new AdListener() {
             @Override
@@ -119,7 +119,7 @@ public class SplashActivity extends BaseActivity {
                     startMainActivity();
                 } else {
                     // Ad loaded failed first time -> load other ad
-                    showInterstitialAppLovin();
+                    loadInterstitialAppLovin();
                     isLoadAdFailed = true;
                 }
 
@@ -134,7 +134,7 @@ public class SplashActivity extends BaseActivity {
         });
     }
 
-    private void showInterstitialAppLovin() {
+    private void loadInterstitialAppLovin() {
         AppLovinInterstitialAdDialog interstitialAd = AppLovinInterstitialAd.create(AppApplication.getAppLovinSdk(), getApplicationContext());
         interstitialAd.setAdDisplayListener(new AppLovinAdDisplayListener() {
             @Override
@@ -167,7 +167,7 @@ public class SplashActivity extends BaseActivity {
                         startMainActivity();
                     } else {
                         // Ad loaded failed first time -> load other ad
-                        showInterstitialAdmob();
+                        loadInterstitialAdmob();
                         isLoadAdFailed = true;
                     }
                 });

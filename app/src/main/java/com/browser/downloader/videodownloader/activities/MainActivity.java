@@ -209,26 +209,24 @@ public class MainActivity extends BaseActivity {
         if (isShowAd) {
             if (adType == AdType.ADMOB.getValue()) {
                 // Admob type
-                mInterstitialAd = new InterstitialAd(this);
-                AdUtil.loadInterstitialAd(mInterstitialAd, new AdListener() {
-                    @Override
-                    public void onAdFailedToLoad(int i) {
-                        super.onAdFailedToLoad(i);
-                        // Load admob failed -> load AppLovin
-                        AppApplication.getAppLovinSdk().getAdService().loadNextAd(AppLovinAdSize.INTERSTITIAL, new AppLovinAdLoadListener() {
-                            @Override
-                            public void adReceived(AppLovinAd ad) {
-                                mAppLovinAd = ad;
-                            }
-
-                            @Override
-                            public void failedToReceiveAd(int errorCode) {
-                            }
-                        });
-                    }
-                });
+                loadInterstitialAdmob();
             } else if (adType == AdType.APPLOVIN.getValue()) {
                 // AppLovin type
+                loadInterstitialAppLovin();
+            } else {
+                // Default is admob type
+                loadInterstitialAdmob();
+            }
+        }
+    }
+
+    private void loadInterstitialAdmob() {
+        mInterstitialAd = new InterstitialAd(this);
+        AdUtil.loadInterstitialAd(mInterstitialAd, new AdListener() {
+            @Override
+            public void onAdFailedToLoad(int i) {
+                super.onAdFailedToLoad(i);
+                // Load admob failed -> load AppLovin
                 AppApplication.getAppLovinSdk().getAdService().loadNextAd(AppLovinAdSize.INTERSTITIAL, new AppLovinAdLoadListener() {
                     @Override
                     public void adReceived(AppLovinAd ad) {
@@ -237,15 +235,28 @@ public class MainActivity extends BaseActivity {
 
                     @Override
                     public void failedToReceiveAd(int errorCode) {
-                        // Load AppLovin failed -> load Admob
-                        runOnUiThread(() -> {
-                            mInterstitialAd = new InterstitialAd(MainActivity.this);
-                            AdUtil.loadInterstitialAd(mInterstitialAd, null);
-                        });
                     }
                 });
             }
-        }
+        });
+    }
+
+    private void loadInterstitialAppLovin() {
+        AppApplication.getAppLovinSdk().getAdService().loadNextAd(AppLovinAdSize.INTERSTITIAL, new AppLovinAdLoadListener() {
+            @Override
+            public void adReceived(AppLovinAd ad) {
+                mAppLovinAd = ad;
+            }
+
+            @Override
+            public void failedToReceiveAd(int errorCode) {
+                // Load AppLovin failed -> load Admob
+                runOnUiThread(() -> {
+                    mInterstitialAd = new InterstitialAd(MainActivity.this);
+                    AdUtil.loadInterstitialAd(mInterstitialAd, null);
+                });
+            }
+        });
     }
 
     public void showInterstitlaAd() {
