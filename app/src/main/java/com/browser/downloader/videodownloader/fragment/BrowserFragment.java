@@ -36,7 +36,7 @@ import com.applovin.adview.AppLovinInterstitialAdDialog;
 import com.applovin.sdk.AppLovinAd;
 import com.applovin.sdk.AppLovinAdLoadListener;
 import com.applovin.sdk.AppLovinAdSize;
-import com.applovin.sdk.AppLovinSdk;
+import com.browser.downloader.videodownloader.AppApplication;
 import com.browser.downloader.videodownloader.R;
 import com.browser.downloader.videodownloader.activities.BookmarkActivity;
 import com.browser.downloader.videodownloader.activities.HistoryActivity;
@@ -157,7 +157,7 @@ public class BrowserFragment extends BaseFragment {
                     public void onAdFailedToLoad(int i) {
                         super.onAdFailedToLoad(i);
                         // Load admob failed -> load AppLovin
-                        AppLovinSdk.getInstance(getContext()).getAdService().loadNextAd(AppLovinAdSize.INTERSTITIAL, new AppLovinAdLoadListener() {
+                        AppApplication.getAppLovinSdk().getAdService().loadNextAd(AppLovinAdSize.INTERSTITIAL, new AppLovinAdLoadListener() {
                             @Override
                             public void adReceived(AppLovinAd ad) {
                                 mAppLovinAd = ad;
@@ -171,7 +171,7 @@ public class BrowserFragment extends BaseFragment {
                 });
             } else if (adType == AdType.APPLOVIN.getValue()) {
                 // AppLovin type
-                AppLovinSdk.getInstance(getContext()).getAdService().loadNextAd(AppLovinAdSize.INTERSTITIAL, new AppLovinAdLoadListener() {
+                AppApplication.getAppLovinSdk().getAdService().loadNextAd(AppLovinAdSize.INTERSTITIAL, new AppLovinAdLoadListener() {
                     @Override
                     public void adReceived(AppLovinAd ad) {
                         mAppLovinAd = ad;
@@ -198,7 +198,7 @@ public class BrowserFragment extends BaseFragment {
                 // google analytics
                 trackEvent(getString(R.string.app_name), getString(R.string.action_show_ad_browser), "Admob");
             } else if (mAppLovinAd != null) {
-                AppLovinInterstitialAdDialog interstitialAd = AppLovinInterstitialAd.create(AppLovinSdk.getInstance(getContext()), getContext());
+                AppLovinInterstitialAdDialog interstitialAd = AppLovinInterstitialAd.create(AppApplication.getAppLovinSdk(), mActivity.getApplicationContext());
                 interstitialAd.showAndRender(mAppLovinAd);
                 isAdShowed = true;
                 // google analytics

@@ -12,7 +12,7 @@ import com.applovin.sdk.AppLovinAd;
 import com.applovin.sdk.AppLovinAdDisplayListener;
 import com.applovin.sdk.AppLovinAdLoadListener;
 import com.applovin.sdk.AppLovinAdSize;
-import com.applovin.sdk.AppLovinSdk;
+import com.browser.downloader.videodownloader.AppApplication;
 import com.browser.downloader.videodownloader.R;
 import com.browser.downloader.videodownloader.data.AdType;
 import com.browser.downloader.videodownloader.data.ConfigData;
@@ -20,12 +20,10 @@ import com.browser.downloader.videodownloader.databinding.ActivitySplashBinding;
 import com.browser.downloader.videodownloader.service.DataService;
 import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.InterstitialAd;
-import com.google.android.gms.ads.MobileAds;
 
 import butterknife.ButterKnife;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
-import vd.core.common.Constant;
 import vd.core.common.PreferencesManager;
 import vd.core.util.AdUtil;
 
@@ -47,13 +45,6 @@ public class SplashActivity extends BaseActivity {
     }
 
     private void initUI() {
-        // Init AppLovin
-        AppLovinSdk.initializeSdk(getApplicationContext());
-//        AppLovinSdk.getInstance(getApplicationContext()).getSettings().setTestAdsEnabled(true);
-
-        // Init Admob
-        MobileAds.initialize(this, Constant.AD_APP_ID);
-
         // Load static data
         loadconfigData();
     }
@@ -144,8 +135,7 @@ public class SplashActivity extends BaseActivity {
     }
 
     private void showInterstitialAppLovin() {
-        AppLovinInterstitialAdDialog interstitialAd = AppLovinInterstitialAd.
-                create(AppLovinSdk.getInstance(SplashActivity.this), SplashActivity.this);
+        AppLovinInterstitialAdDialog interstitialAd = AppLovinInterstitialAd.create(AppApplication.getAppLovinSdk(), getApplicationContext());
         interstitialAd.setAdDisplayListener(new AppLovinAdDisplayListener() {
             @Override
             public void adDisplayed(AppLovinAd appLovinAd) {
@@ -157,7 +147,7 @@ public class SplashActivity extends BaseActivity {
                 startMainActivity();
             }
         });
-        AppLovinSdk.getInstance(this).getAdService().loadNextAd(AppLovinAdSize.INTERSTITIAL, new AppLovinAdLoadListener() {
+        AppApplication.getAppLovinSdk().getAdService().loadNextAd(AppLovinAdSize.INTERSTITIAL, new AppLovinAdLoadListener() {
             @Override
             public void adReceived(AppLovinAd ad) {
                 // Show ad
