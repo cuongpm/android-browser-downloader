@@ -152,6 +152,7 @@ public class ProgressFragment extends BaseFragment {
                                 trackEvent(getString(R.string.action_download_done), website, progressInfo.getVideo().getUrl());
                             } catch (Exception e) {
                                 e.printStackTrace();
+                                trackEvent(getString(R.string.action_download_done), progressInfo.getVideo().getUrl(), "");
                             }
                         });
                     } else if (cursor.getInt(cursor.getColumnIndex(DownloadManager.COLUMN_STATUS)) == DownloadManager.STATUS_FAILED) {
@@ -169,6 +170,7 @@ public class ProgressFragment extends BaseFragment {
                                 trackEvent(getString(R.string.action_download_failed), website, progressInfo.getVideo().getUrl());
                             } catch (Exception e) {
                                 e.printStackTrace();
+                                trackEvent(getString(R.string.action_download_failed), progressInfo.getVideo().getUrl(), "");
                             }
                         });
                     } else if (cursor.getInt(cursor.getColumnIndex(DownloadManager.COLUMN_STATUS)) == DownloadManager.STATUS_RUNNING) {

@@ -106,7 +106,7 @@ public class VideoAdapter
                     return true;
 
                 case R.id.item_share:
-                    IntentUtil.shareVideo(view.getContext(), file.getPath());
+                    IntentUtil.shareVideo(view.getContext(), file);
 
                     mOnClickListener.onClick(view);
                     return true;

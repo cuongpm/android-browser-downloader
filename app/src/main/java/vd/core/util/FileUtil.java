@@ -42,12 +42,13 @@ public class FileUtil {
     }
 
     public static String getFileSize(File file) {
-        if (!file.isFile()) {
-            throw new IllegalArgumentException("Expected a file");
+        try {
+            double length = file.length();
+            return getFileSize(length);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return "";
         }
-        final double length = file.length();
-
-        return getFileSize(length);
     }
 
     public static String getFileSize(double length) {

@@ -366,6 +366,9 @@ public class BrowserFragment extends BaseFragment {
     }
 
     private void showSuggestion(List<String> suggestions) {
+        if (suggestions == null || suggestions.size() == 0) {
+            return;
+        }
         mSuggestionAdapter = new SuggestionAdapter(getContext(), R.layout.item_suggestion, suggestions);
         mBinding.etSearch.setAdapter(mSuggestionAdapter);
         mBinding.etSearch.showDropDown();
@@ -628,11 +631,19 @@ public class BrowserFragment extends BaseFragment {
     }
 
     private void disableDownloadBtn() {
-        mBinding.fab.setBackgroundTintList(ColorStateList.valueOf(ContextCompat.getColor(getContext(), R.color.color_gray_1)));
+        try {
+            mBinding.fab.setBackgroundTintList(ColorStateList.valueOf(ContextCompat.getColor(getContext(), R.color.color_gray_1)));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     private void enableDownloadBtn() {
-        mBinding.fab.setBackgroundTintList(ColorStateList.valueOf(ContextCompat.getColor(getContext(), R.color.colorAccent)));
+        try {
+            mBinding.fab.setBackgroundTintList(ColorStateList.valueOf(ContextCompat.getColor(getContext(), R.color.colorAccent)));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     private void enableDownloadBtnAndShake() {

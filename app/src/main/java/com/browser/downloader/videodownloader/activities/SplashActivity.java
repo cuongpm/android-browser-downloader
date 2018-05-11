@@ -33,6 +33,8 @@ public class SplashActivity extends BaseActivity {
 
     ActivitySplashBinding mBinding;
 
+    private boolean isLoadAdFailed;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -91,63 +93,10 @@ public class SplashActivity extends BaseActivity {
         if (isShowAd) {
             if (adType == AdType.ADMOB.getValue()) {
                 // Admob type
-                InterstitialAd interstitialAd = new InterstitialAd(this);
-                AdUtil.loadInterstitialAd(interstitialAd, new AdListener() {
-                    @Override
-                    public void onAdLoaded() {
-                        super.onAdLoaded();
-                        // Show ad
-                        interstitialAd.show();
-                        // google analytics
-                        trackEvent(getString(R.string.app_name), getString(R.string.action_show_ad_splash), "Admob");
-                    }
-
-                    @Override
-                    public void onAdFailedToLoad(int i) {
-                        super.onAdFailedToLoad(i);
-                        // Open home screen
-                        startMainActivity();
-                    }
-
-                    @Override
-                    public void onAdClosed() {
-                        super.onAdClosed();
-                        // Open home screen
-                        startMainActivity();
-                    }
-                });
+                showInterstitialAdmob();
             } else if (adType == AdType.APPLOVIN.getValue()) {
                 // AppLovin type
-                AppLovinInterstitialAdDialog interstitialAd = AppLovinInterstitialAd.
-                        create(AppLovinSdk.getInstance(SplashActivity.this), SplashActivity.this);
-                interstitialAd.setAdDisplayListener(new AppLovinAdDisplayListener() {
-                    @Override
-                    public void adDisplayed(AppLovinAd appLovinAd) {
-                    }
-
-                    @Override
-                    public void adHidden(AppLovinAd appLovinAd) {
-                        // Open home screen
-                        startMainActivity();
-                    }
-                });
-                AppLovinSdk.getInstance(this).getAdService().loadNextAd(AppLovinAdSize.INTERSTITIAL, new AppLovinAdLoadListener() {
-                    @Override
-                    public void adReceived(AppLovinAd ad) {
-                        // Show ad
-                        runOnUiThread(() -> {
-                            interstitialAd.showAndRender(ad);
-                            // google analytics
-                            trackEvent(getString(R.string.app_name), getString(R.string.action_show_ad_splash), "AppLovin");
-                        });
-                    }
-
-                    @Override
-                    public void failedToReceiveAd(int errorCode) {
-                        // Open home screen
-                        runOnUiThread(() -> startMainActivity());
-                    }
-                });
+                showInterstitialAppLovin();
             } else {
                 // Open home screen
                 startMainActivity();
@@ -156,5 +105,83 @@ public class SplashActivity extends BaseActivity {
             // Open home screen
             startMainActivity();
         }
+    }
+
+    private void showInterstitialAdmob() {
+        InterstitialAd interstitialAd = new InterstitialAd(this);
+        AdUtil.loadInterstitialAd(interstitialAd, new AdListener() {
+            @Override
+            public void onAdLoaded() {
+                super.onAdLoaded();
+                // Show ad
+                interstitialAd.show();
+                // google analytics
+                trackEvent(getString(R.string.app_name), getString(R.string.action_show_ad_splash), "Admob");
+            }
+
+            @Override
+            public void onAdFailedToLoad(int i) {
+                super.onAdFailedToLoad(i);
+                // Load admob failed -> load Applovin
+                if (isLoadAdFailed) {
+                    // Ad loaded failed second time -> Open home screen
+                    startMainActivity();
+                } else {
+                    // Ad loaded failed first time -> load other ad
+                    showInterstitialAppLovin();
+                    isLoadAdFailed = true;
+                }
+
+            }
+
+            @Override
+            public void onAdClosed() {
+                super.onAdClosed();
+                // Open home screen
+                startMainActivity();
+            }
+        });
+    }
+
+    private void showInterstitialAppLovin() {
+        AppLovinInterstitialAdDialog interstitialAd = AppLovinInterstitialAd.
+                create(AppLovinSdk.getInstance(SplashActivity.this), SplashActivity.this);
+        interstitialAd.setAdDisplayListener(new AppLovinAdDisplayListener() {
+            @Override
+            public void adDisplayed(AppLovinAd appLovinAd) {
+            }
+
+            @Override
+            public void adHidden(AppLovinAd appLovinAd) {
+                // Open home screen
+                startMainActivity();
+            }
+        });
+        AppLovinSdk.getInstance(this).getAdService().loadNextAd(AppLovinAdSize.INTERSTITIAL, new AppLovinAdLoadListener() {
+            @Override
+            public void adReceived(AppLovinAd ad) {
+                // Show ad
+                runOnUiThread(() -> {
+                    interstitialAd.showAndRender(ad);
+                    // google analytics
+                    trackEvent(getString(R.string.app_name), getString(R.string.action_show_ad_splash), "AppLovin");
+                });
+            }
+
+            @Override
+            public void failedToReceiveAd(int errorCode) {
+                // Load applovin failed -> load admob
+                runOnUiThread(() -> {
+                    if (isLoadAdFailed) {
+                        // Ad loaded failed second time -> Open home screen
+                        startMainActivity();
+                    } else {
+                        // Ad loaded failed first time -> load other ad
+                        showInterstitialAdmob();
+                        isLoadAdFailed = true;
+                    }
+                });
+            }
+        });
     }
 }

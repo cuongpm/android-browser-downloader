@@ -3,9 +3,12 @@ package vd.core.util;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
+import android.support.v4.content.FileProvider;
 import android.widget.Toast;
 
 import com.browser.downloader.videodownloader.R;
+
+import java.io.File;
 
 public class IntentUtil {
 
@@ -21,10 +24,11 @@ public class IntentUtil {
         context.startActivity(intent);
     }
 
-    public static void shareVideo(Context context, String link) {
+    public static void shareVideo(Context context, File file) {
         Intent intent = new Intent(Intent.ACTION_SEND);
         intent.setType("video/*");
-        intent.putExtra(Intent.EXTRA_STREAM, Uri.parse("file://" + link));
+        Uri uri = FileProvider.getUriForFile(context, context.getPackageName() + ".provider", file);
+        intent.putExtra(Intent.EXTRA_STREAM, uri);
 
         if (intent.resolveActivityInfo(context.getPackageManager(), 0) != null) {
             context.startActivity(Intent.createChooser(intent, "Share via:"));
