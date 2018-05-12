@@ -39,6 +39,10 @@ public class ConfigData {
     @Expose
     private int showAdAppType;
 
+    @SerializedName("app_version")
+    @Expose
+    private String appVersion;
+
     @SerializedName("parser_server")
     @Expose
     private String parserServer;
@@ -113,6 +117,14 @@ public class ConfigData {
 
     public void setShowAdAppType(int showAdAppType) {
         this.showAdAppType = showAdAppType;
+    }
+
+    public String getAppVersion() {
+        return appVersion;
+    }
+
+    public void setAppVersion(String appVersion) {
+        this.appVersion = appVersion;
     }
 
     public String getParserServer() {

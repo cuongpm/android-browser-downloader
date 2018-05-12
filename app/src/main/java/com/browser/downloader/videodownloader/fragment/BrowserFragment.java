@@ -391,11 +391,10 @@ public class BrowserFragment extends BaseFragment {
         mBinding.etSearch.setOnItemClickListener((parent, view, position, id) -> {
             // Update text for search box
             mBinding.etSearch.setText(listSuggestions.get(position).getSuggestion());
+            // google analytics
+            trackEvent(getString(R.string.app_name), getString(R.string.action_search_suggestion), listSuggestions.get(position).getSuggestion());
             // Search keyword
             loadWebView();
-            // google analytics
-            String content = mBinding.etSearch.getText().toString().trim();
-            trackEvent(getString(R.string.app_name), getString(R.string.action_search_suggestion), content);
         });
     }
 

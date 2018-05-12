@@ -5,6 +5,7 @@ import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.view.ViewPager;
+import android.text.TextUtils;
 
 import com.applovin.adview.AppLovinInterstitialAd;
 import com.applovin.adview.AppLovinInterstitialAdDialog;
@@ -12,6 +13,7 @@ import com.applovin.sdk.AppLovinAd;
 import com.applovin.sdk.AppLovinAdLoadListener;
 import com.applovin.sdk.AppLovinAdSize;
 import com.browser.downloader.videodownloader.AppApplication;
+import com.browser.downloader.videodownloader.BuildConfig;
 import com.browser.downloader.videodownloader.R;
 import com.browser.downloader.videodownloader.adapter.HomeAdapter;
 import com.browser.downloader.videodownloader.callback.DialogListener;
@@ -20,6 +22,7 @@ import com.browser.downloader.videodownloader.data.ConfigData;
 import com.browser.downloader.videodownloader.data.Video;
 import com.browser.downloader.videodownloader.databinding.ActivityMainBinding;
 import com.browser.downloader.videodownloader.dialog.RatingDialog;
+import com.browser.downloader.videodownloader.dialog.UpdateDialog;
 import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdSize;
 import com.google.android.gms.ads.InterstitialAd;
@@ -119,6 +122,22 @@ public class MainActivity extends BaseActivity {
         // google analytics
         trackEvent(getString(R.string.app_name), getString(R.string.screen_browser), "");
         trackView(getString(R.string.screen_browser));
+
+        // Update dialog
+        showUpdateDialog();
+    }
+
+    private void showUpdateDialog() {
+
+        ConfigData configData = mPreferenceManager.getConfigData();
+        if (configData != null && !TextUtils.isEmpty(configData.getAppVersion())
+                && !configData.getAppVersion().equals(BuildConfig.VERSION_NAME)) {
+            UpdateDialog.getDialog(this, configData.getAppVersion(), view -> {
+                IntentUtil.openGooglePlay(MainActivity.this, getPackageName());
+                // google analytics
+                trackEvent(getString(R.string.app_name), getString(R.string.action_update), BuildConfig.VERSION_NAME);
+            }).show();
+        }
     }
 
     @Subscribe
