@@ -44,6 +44,8 @@ import com.browser.downloader.videodownloader.adapter.SuggestionAdapter;
 import com.browser.downloader.videodownloader.data.AdType;
 import com.browser.downloader.videodownloader.data.ConfigData;
 import com.browser.downloader.videodownloader.data.PagesSupported;
+import com.browser.downloader.videodownloader.data.Suggestion;
+import com.browser.downloader.videodownloader.data.SuggestionType;
 import com.browser.downloader.videodownloader.data.Video;
 import com.browser.downloader.videodownloader.data.WebViewData;
 import com.browser.downloader.videodownloader.databinding.FragmentBrowserBinding;
@@ -359,7 +361,7 @@ public class BrowserFragment extends BaseFragment {
             if (searchValue.length() > 0 && !searchValue.startsWith("http://") && !searchValue.startsWith("https://")) {
                 getActivity().runOnUiThread(() -> {
                     new SearchService(suggestions -> {
-                        showSuggestion(suggestions);
+                        showSuggestion(suggestions, searchValue);
                     }).execute(String.format(Constant.SUGGESTION_URL, searchValue));
                 });
             }
@@ -376,14 +378,19 @@ public class BrowserFragment extends BaseFragment {
         }
     }
 
-    private void showSuggestion(List<String> suggestions) {
+    private void showSuggestion(List<String> suggestions, String searchValue) {
         if (suggestions == null || suggestions.size() == 0) {
             return;
         }
-        mSuggestionAdapter = new SuggestionAdapter(getContext(), R.layout.item_suggestion, suggestions);
+
+        List<Suggestion> listSuggestions = generateSuggestions(suggestions, searchValue);
+
+        mSuggestionAdapter = new SuggestionAdapter(getContext(), R.layout.item_suggestion, listSuggestions);
         mBinding.etSearch.setAdapter(mSuggestionAdapter);
         mBinding.etSearch.showDropDown();
         mBinding.etSearch.setOnItemClickListener((parent, view, position, id) -> {
+            // Update text for search box
+            mBinding.etSearch.setText(listSuggestions.get(position).getSuggestion());
             // Search keyword
             loadWebView();
             // google analytics
@@ -391,6 +398,34 @@ public class BrowserFragment extends BaseFragment {
             trackEvent(getString(R.string.app_name), getString(R.string.action_search_suggestion), content);
         });
     }
+
+    private List<Suggestion> generateSuggestions(List<String> suggestions, String searchValue) {
+        List<Suggestion> suggestionList = new ArrayList<>();
+
+        // Add all supported pages
+        ConfigData configData = mPreferenceManager.getConfigData();
+        if (configData != null && configData.getPagesSupported() != null) {
+            for (PagesSupported pagesSupported : configData.getPagesSupported()) {
+                if (pagesSupported.getName().contains(searchValue.toLowerCase())) {
+                    Suggestion suggestionWeb = new Suggestion();
+                    suggestionWeb.setSuggestion(pagesSupported.getName());
+                    suggestionWeb.setSuggestionType(SuggestionType.WEB.getValue());
+                    suggestionList.add(suggestionWeb);
+                }
+            }
+        }
+
+        // Add all suggestions
+        for (String suggestion : suggestions) {
+            Suggestion suggestionString = new Suggestion();
+            suggestionString.setSuggestion(suggestion);
+            suggestionString.setSuggestionType(SuggestionType.SUGGESTION.getValue());
+            suggestionList.add(suggestionString);
+        }
+
+        return suggestionList;
+    }
+
 
     WebChromeClient webChromeClient = new WebChromeClient() {
         @Override
@@ -614,31 +649,11 @@ public class BrowserFragment extends BaseFragment {
                     }
                 }
             }
-            // General sites with specific link
-            if (configData.getPagesGeneral1() != null) {
-                for (String link : configData.getPagesGeneral1()) {
-                    if (url.equals(link) || url.endsWith(link)) {
-                        mLinkStatus = LinkStatus.GENERAL;
-                        disableDownloadBtn();
-                        return;
-                    }
-                }
-            }
-            // Unsupported sites
-            if (configData.getPagesUnsupported() != null) {
-                for (String link : configData.getPagesUnsupported()) {
-                    if (url.startsWith(link) || url.contains(link)) {
-                        mLinkStatus = LinkStatus.UNSUPPORTED;
-                        disableDownloadBtn();
-                        return;
-                    }
-                }
-            }
         }
 
         // Other sites
-        mLinkStatus = LinkStatus.SUPPORTED;
-        enableDownloadBtnAndShake();
+        mLinkStatus = LinkStatus.UNSUPPORTED;
+        disableDownloadBtn();
     }
 
     private void disableDownloadBtn() {

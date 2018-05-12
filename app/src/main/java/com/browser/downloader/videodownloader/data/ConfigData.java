@@ -51,14 +51,6 @@ public class ConfigData {
     @Expose
     private List<String> pagesGeneral;
 
-    @SerializedName("pages_general_1")
-    @Expose
-    private List<String> pagesGeneral1;
-
-    @SerializedName("pages_unsupported")
-    @Expose
-    private List<String> pagesUnsupported;
-
     public boolean isShowAdSplash() {
         return isShowAdSplash;
     }
@@ -147,19 +139,4 @@ public class ConfigData {
         this.pagesGeneral = pagesGeneral;
     }
 
-    public List<String> getPagesGeneral1() {
-        return pagesGeneral1;
-    }
-
-    public void setPagesGeneral1(List<String> pagesGeneral1) {
-        this.pagesGeneral1 = pagesGeneral1;
-    }
-
-    public List<String> getPagesUnsupported() {
-        return pagesUnsupported;
-    }
-
-    public void setPagesUnsupported(List<String> pagesUnsupported) {
-        this.pagesUnsupported = pagesUnsupported;
-    }
 }

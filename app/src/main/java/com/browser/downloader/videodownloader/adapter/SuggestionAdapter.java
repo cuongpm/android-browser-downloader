@@ -8,16 +8,18 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 
 import com.browser.downloader.videodownloader.R;
+import com.browser.downloader.videodownloader.data.Suggestion;
+import com.browser.downloader.videodownloader.data.SuggestionType;
 
 import java.util.List;
 
-public class SuggestionAdapter extends ArrayAdapter<String> {
+public class SuggestionAdapter extends ArrayAdapter<Suggestion> {
 
     private Context mContext;
 
-    private List<String> mSuggestions;
+    private List<Suggestion> mSuggestions;
 
-    public SuggestionAdapter(Context context, int layout, List<String> suggestions) {
+    public SuggestionAdapter(Context context, int layout, List<Suggestion> suggestions) {
         super(context, layout, suggestions);
         mContext = context;
         this.mSuggestions = suggestions;
@@ -37,7 +39,13 @@ public class SuggestionAdapter extends ArrayAdapter<String> {
             holder = (ViewHolder) convertView.getTag();
         }
 
-        holder.tvSuggestion.setText(mSuggestions.get(position));
+        holder.tvSuggestion.setText(mSuggestions.get(position).getSuggestion());
+        if (mSuggestions.get(position).getSuggestionType() == SuggestionType.SUGGESTION.getValue()) {
+            holder.tvSuggestion.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_search_gray_24dp, 0, 0, 0);
+        } else {
+            holder.tvSuggestion.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_star_border_gray_24dp, 0, 0, 0);
+        }
+
         return convertView;
     }
 
