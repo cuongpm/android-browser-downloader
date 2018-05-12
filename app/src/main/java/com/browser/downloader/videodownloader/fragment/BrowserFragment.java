@@ -358,10 +358,11 @@ public class BrowserFragment extends BaseFragment {
 
         mPublishSubject = PublishSubject.create();
         mPublishSubject.debounce(300, TimeUnit.MILLISECONDS).subscribe(searchValue -> {
+            List<Suggestion> listSuggestions = addAllSupportedPages(searchValue);
             if (searchValue.length() > 0 && !searchValue.startsWith("http://") && !searchValue.startsWith("https://")) {
                 getActivity().runOnUiThread(() -> {
                     new SearchService(suggestions -> {
-                        showSuggestion(suggestions, searchValue);
+                        showSuggestion(listSuggestions, suggestions);
                     }).execute(String.format(Constant.SUGGESTION_URL, searchValue));
                 });
             }
@@ -378,12 +379,9 @@ public class BrowserFragment extends BaseFragment {
         }
     }
 
-    private void showSuggestion(List<String> suggestions, String searchValue) {
-        if (suggestions == null || suggestions.size() == 0) {
-            return;
-        }
+    private void showSuggestion(List<Suggestion> suggestionList, List<String> suggestions) {
 
-        List<Suggestion> listSuggestions = generateSuggestions(suggestions, searchValue);
+        List<Suggestion> listSuggestions = addAllSuggestions(suggestionList, suggestions);
 
         mSuggestionAdapter = new SuggestionAdapter(getContext(), R.layout.item_suggestion, listSuggestions);
         mBinding.etSearch.setAdapter(mSuggestionAdapter);
@@ -398,7 +396,7 @@ public class BrowserFragment extends BaseFragment {
         });
     }
 
-    private List<Suggestion> generateSuggestions(List<String> suggestions, String searchValue) {
+    private List<Suggestion> addAllSupportedPages(String searchValue) {
         List<Suggestion> suggestionList = new ArrayList<>();
 
         // Add all supported pages
@@ -412,6 +410,14 @@ public class BrowserFragment extends BaseFragment {
                     suggestionList.add(suggestionWeb);
                 }
             }
+        }
+
+        return suggestionList;
+    }
+
+    private List<Suggestion> addAllSuggestions(List<Suggestion> suggestionList, List<String> suggestions) {
+        if (suggestions == null || suggestions.size() == 0) {
+            return suggestionList;
         }
 
         // Add all suggestions
