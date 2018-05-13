@@ -130,7 +130,7 @@ public class MainActivity extends BaseActivity {
     private void showUpdateDialog() {
 
         ConfigData configData = mPreferenceManager.getConfigData();
-        if (configData != null && !TextUtils.isEmpty(configData.getAppVersion())
+        if (configData != null && configData.isUpdateApp() && !TextUtils.isEmpty(configData.getAppVersion())
                 && !configData.getAppVersion().equals(BuildConfig.VERSION_NAME)) {
             UpdateDialog.getDialog(this, configData.getAppVersion(), view -> {
                 IntentUtil.openGooglePlay(MainActivity.this, getPackageName());
