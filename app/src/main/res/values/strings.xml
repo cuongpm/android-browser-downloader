@@ -67,6 +67,7 @@
     <string name="message_report">Thank you for your report. We are working hard to bring you better user experience.</string>
     <string name="message_exit">Do you want to exit this application?</string>
     <string name="message_download_video">Do you want to download this video?</string>
+    <string name="message_save_video">If you don\’t want to download or can\’t download this video right now, you can save this video to watch it online and download it later on.</string>
     <string name="message_open_folder">You don\'t have any file explorer app installed on your device</string>
     <string name="message_open_video">You don\'t have any video player app installed on your device</string>
     <string name="message_guide">Please go to <b>video detail page</b> to <b>play video first</b>, and the download button will be available after Video Downloader detects the video.</string>

@@ -48,8 +48,8 @@ import com.browser.downloader.videodownloader.data.Suggestion;
 import com.browser.downloader.videodownloader.data.SuggestionType;
 import com.browser.downloader.videodownloader.data.Video;
 import com.browser.downloader.videodownloader.data.WebViewData;
+import com.browser.downloader.videodownloader.databinding.DialogDownloadVideoBinding;
 import com.browser.downloader.videodownloader.databinding.FragmentBrowserBinding;
-import com.browser.downloader.videodownloader.databinding.LayoutVideoDataBinding;
 import com.browser.downloader.videodownloader.dialog.GuidelineDialog;
 import com.browser.downloader.videodownloader.dialog.YoutubeDialog;
 import com.browser.downloader.videodownloader.service.DownloadService;
@@ -576,32 +576,82 @@ public class BrowserFragment extends BaseFragment {
         mCurrentVideo = video;
 
         BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(getContext());
-        LayoutVideoDataBinding binding = DataBindingUtil.inflate(getLayoutInflater(), R.layout.layout_video_data, null, false);
+        DialogDownloadVideoBinding binding = DataBindingUtil.inflate(getLayoutInflater(), R.layout.dialog_download_video, null, false);
 
         // Show ad banner
-        AdUtil.loadBanner(getContext(), binding.layoutBanner, AdSize.BANNER, true);
+        AdUtil.loadBanner(getContext(), binding.layoutBanner, AdSize.SMART_BANNER, false);
 
-        binding.tvName.setText(video.getFileName());
+        // Layout video menu
+        binding.layoutVideoMenu.tvPreview.setOnClickListener(view -> {
+
+        });
+
+        binding.layoutVideoMenu.tvSave.setOnClickListener(view -> {
+            openDialogAnimation(binding.layoutVideoMenu.getRoot(), binding.layoutVideoSave.getRoot(), true);
+        });
+
+        binding.layoutVideoMenu.tvDownload.setOnClickListener(view -> {
+            openDialogAnimation(binding.layoutVideoMenu.getRoot(), binding.layoutVideoDownload.getRoot(), true);
+        });
+
+        binding.layoutVideoMenu.tvCancel.setOnClickListener(view -> {
+            bottomSheetDialog.dismiss();
+        });
+
+        // Layout video save
+        binding.layoutVideoSave.tvName.setText(video.getFileName());
         if (!TextUtils.isEmpty(video.getThumbnail())) {
-            binding.ivThumbnail.setImageURI(Uri.parse(video.getThumbnail()));
+            binding.layoutVideoSave.ivThumbnail.setImageURI(Uri.parse(video.getThumbnail()));
         }
         if (video.getDuration() != 0) {
-            binding.tvTime.setVisibility(View.VISIBLE);
-            binding.tvTime.setText(TimeUtil.convertMilliSecondsToTimer(video.getDuration() * 1000));
+            binding.layoutVideoSave.tvTime.setVisibility(View.VISIBLE);
+            binding.layoutVideoSave.tvTime.setText(TimeUtil.convertMilliSecondsToTimer(video.getDuration() * 1000));
         } else {
-            binding.tvTime.setVisibility(View.GONE);
+            binding.layoutVideoSave.tvTime.setVisibility(View.GONE);
+        }
+        binding.layoutVideoSave.tvCancel.setOnClickListener(view -> {
+            openDialogAnimation(binding.layoutVideoSave.getRoot(), binding.layoutVideoMenu.getRoot(), false);
+        });
+        binding.layoutVideoSave.tvOk.setOnClickListener(view -> {
+            bottomSheetDialog.dismiss();
+//            EventBus.getDefault().post(video);
+//            showInterstitlaAd();
+        });
+
+        // Layout video download
+        binding.layoutVideoDownload.tvName.setText(video.getFileName());
+        if (!TextUtils.isEmpty(video.getThumbnail())) {
+            binding.layoutVideoDownload.ivThumbnail.setImageURI(Uri.parse(video.getThumbnail()));
+        }
+        if (video.getDuration() != 0) {
+            binding.layoutVideoDownload.tvTime.setVisibility(View.VISIBLE);
+            binding.layoutVideoDownload.tvTime.setText(TimeUtil.convertMilliSecondsToTimer(video.getDuration() * 1000));
+        } else {
+            binding.layoutVideoDownload.tvTime.setVisibility(View.GONE);
         }
 
-        binding.tvCancel.setOnClickListener(view -> bottomSheetDialog.dismiss());
+        binding.layoutVideoDownload.tvCancel.setOnClickListener(view -> {
+            openDialogAnimation(binding.layoutVideoDownload.getRoot(), binding.layoutVideoMenu.getRoot(), false);
+        });
 
-        binding.tvOk.setOnClickListener(view -> {
+        binding.layoutVideoDownload.tvOk.setOnClickListener(view -> {
             bottomSheetDialog.dismiss();
             EventBus.getDefault().post(video);
             showInterstitlaAd();
         });
 
+        // Show dialog
         bottomSheetDialog.setContentView(binding.getRoot());
         bottomSheetDialog.show();
+    }
+
+    private void openDialogAnimation(View viewExit, View viewEnter, boolean isNext) {
+        Animation enterAnimation = AnimationUtils.loadAnimation(getContext(), isNext ? R.anim.enter_from_right : R.anim.enter_from_left);
+        Animation exitAnimation = AnimationUtils.loadAnimation(getContext(), isNext ? R.anim.exit_to_left : R.anim.exit_to_right);
+        viewExit.startAnimation(exitAnimation);
+        viewExit.setVisibility(View.GONE);
+        viewEnter.startAnimation(enterAnimation);
+        viewEnter.setVisibility(View.VISIBLE);
     }
 
     private void checkLinkStatus(String url) {

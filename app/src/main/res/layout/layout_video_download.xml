@@ -81,14 +81,14 @@
             android:orientation="horizontal">
 
             <android.support.v7.widget.AppCompatTextView
-                android:id="@+id/tv_ok"
+                android:id="@+id/tv_cancel"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:background="?attr/selectableItemBackground"
                 android:gravity="center"
-                android:text="OK"
-                android:textColor="@color/colorAccent"
+                android:text="BACK"
+                android:textColor="@color/black_55"
                 android:textSize="@dimen/text_14"
                 android:textStyle="bold" />
 
@@ -98,16 +98,17 @@
                 android:background="@color/black_15" />
 
             <android.support.v7.widget.AppCompatTextView
-                android:id="@+id/tv_cancel"
+                android:id="@+id/tv_ok"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:background="?attr/selectableItemBackground"
                 android:gravity="center"
-                android:text="CANCEL"
-                android:textColor="@color/black_55"
+                android:text="DOWNLOAD"
+                android:textColor="@color/colorAccent"
                 android:textSize="@dimen/text_14"
                 android:textStyle="bold" />
+
         </LinearLayout>
 
     </LinearLayout>

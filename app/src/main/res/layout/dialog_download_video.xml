@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <include
+                android:id="@+id/layout_video_menu"
+                layout="@layout/layout_video_menu" />
+
+            <include
+                android:id="@+id/layout_video_save"
+                layout="@layout/layout_video_save"
+                android:visibility="gone" />
+
+            <include
+                android:id="@+id/layout_video_download"
+                layout="@layout/layout_video_download"
+                android:visibility="gone" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/layout_banner"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@android:color/transparent"
+            android:gravity="center"
+            android:orientation="vertical" />
+
+    </LinearLayout>
+</layout>

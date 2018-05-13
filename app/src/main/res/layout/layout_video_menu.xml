@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <android.support.v7.widget.AppCompatTextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="?attr/selectableItemBackground"
+            android:padding="@dimen/padding_16"
+            android:text="Video found:"
+            android:textSize="@dimen/text_24" />
+
+        <android.support.v7.widget.AppCompatTextView
+            android:id="@+id/tv_preview"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="?attr/selectableItemBackground"
+            android:drawableLeft="@drawable/ic_video_gray_24dp"
+            android:drawablePadding="@dimen/padding_8"
+            android:padding="@dimen/padding_16"
+            android:text="Preview Video"
+            android:textSize="@dimen/text_16" />
+
+        <android.support.v7.widget.AppCompatTextView
+            android:id="@+id/tv_save"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="?attr/selectableItemBackground"
+            android:drawableLeft="@drawable/ic_cloud_gray_24dp"
+            android:drawablePadding="@dimen/padding_8"
+            android:padding="@dimen/padding_16"
+            android:text="Save Video"
+            android:textSize="@dimen/text_16" />
+
+        <android.support.v7.widget.AppCompatTextView
+            android:id="@+id/tv_download"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="?attr/selectableItemBackground"
+            android:drawableLeft="@drawable/ic_download_gray_24dp"
+            android:drawablePadding="@dimen/padding_8"
+            android:padding="@dimen/padding_16"
+            android:text="Download Video"
+            android:textSize="@dimen/text_16" />
+
+        <android.support.v7.widget.AppCompatTextView
+            android:id="@+id/tv_cancel"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="?attr/selectableItemBackground"
+            android:drawableLeft="@drawable/ic_cancel_gray_24dp"
+            android:drawablePadding="@dimen/padding_8"
+            android:padding="@dimen/padding_16"
+            android:text="Cancel"
+            android:textSize="@dimen/text_16" />
+
+
+    </LinearLayout>
+</layout>
