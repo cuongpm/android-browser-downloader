@@ -20,6 +20,7 @@
             android:id="@+id/iv_thumbnail"
             android:layout_width="@dimen/size_80"
             android:layout_height="@dimen/size_80"
+            android:background="@color/black_15"
             app:actualImageScaleType="centerCrop" />
 
         <LinearLayout

@@ -68,7 +68,8 @@ public class VideoPlayerActivity extends BaseActivity implements SeekBar.OnSeekB
         initUI();
 
         // google analytics
-        trackEvent(getString(R.string.app_name), getString(R.string.screen_player), "");
+        trackEvent(getString(R.string.app_name), getString(R.string.screen_player),
+                mVideoState.getPath().startsWith("http") ? "Online" : "Offline");
     }
 
     private void initUI() {
