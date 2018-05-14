@@ -44,7 +44,7 @@ public class HistoryActivity extends BaseActivity {
         }
 
         // google analytics
-        trackEvent(getString(R.string.app_name), getString(R.string.screen_history), "");
+        trackEvent(getString(R.string.app_name), getString(R.string.screen_history), mPreferenceManager.getHistory().size() + "");
     }
 
     @Override

@@ -44,7 +44,7 @@ public class BookmarkActivity extends BaseActivity {
         }
 
         // google analytics
-        trackEvent(getString(R.string.app_name), getString(R.string.screen_bookmark), "");
+        trackEvent(getString(R.string.app_name), getString(R.string.screen_bookmark), mPreferenceManager.getBookmark().size() + "");
     }
 
     @Override

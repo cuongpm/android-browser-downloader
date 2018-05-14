@@ -91,11 +91,14 @@ public class MainActivity extends BaseActivity {
                 mPagePosition = position;
                 mBinding.bottomBar.setDefaultTabPosition(position);
                 // google analytics
-                trackEvent(getString(R.string.app_name), getString(position == 0 ? R.string.screen_browser
+                String category = getString(position == 0 ? R.string.screen_browser
                         : position == 1 ? R.string.screen_progress : position == 2 ? R.string.screen_video
-                        : position == 3 ? R.string.screen_online : R.string.screen_settings), position == 2 ? (FileUtil.getListFiles().size() + "") : "");
-                trackView(getString(position == 0 ? R.string.screen_browser : position == 1
-                        ? R.string.screen_progress : position == 2 ? R.string.screen_video : position == 3 ? R.string.screen_online : R.string.screen_settings));
+                        : position == 3 ? R.string.screen_online : R.string.screen_settings);
+                String action = (position == 1 ? (mPreferenceManager.getProgress().size() + "")
+                        : position == 2 ? (FileUtil.getListFiles().size() + "")
+                        : position == 3 ? (mPreferenceManager.getSavedVideos().size() + "") : "");
+                trackEvent(getString(R.string.app_name), category, action);
+                trackView(category);
             }
 
             @Override
