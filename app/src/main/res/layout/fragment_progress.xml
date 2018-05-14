@@ -25,14 +25,40 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent" />
 
-            <android.support.v7.widget.AppCompatTextView
-                android:id="@+id/tv_no_video"
-                android:layout_width="wrap_content"
+            <LinearLayout
+                android:id="@+id/layout_no_video"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_centerInParent="true"
-                android:text="@string/text_no_progress"
-                android:textColor="@color/black_85"
-                android:visibility="gone" />
+                android:gravity="center"
+                android:orientation="vertical"
+                android:padding="@dimen/padding_40"
+                android:visibility="gone">
+
+                <android.support.v7.widget.AppCompatTextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/padding_32"
+                    android:gravity="center"
+                    android:text="Powerful download manager with full features"
+                    android:textColor="@color/black_85"
+                    android:textSize="@dimen/text_20" />
+
+                <android.support.v7.widget.AppCompatImageView
+                    android:layout_width="@dimen/size_70"
+                    android:layout_height="@dimen/size_70"
+                    android:layout_marginBottom="@dimen/padding_8"
+                    android:tint="@color/color_gray_3"
+                    app:srcCompat="@drawable/ic_empty" />
+
+                <android.support.v7.widget.AppCompatTextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="@string/text_no_progress"
+                    android:textColor="@color/black_55"
+                    android:textSize="@dimen/text_16" />
+            </LinearLayout>
 
         </RelativeLayout>
 

@@ -81,9 +81,9 @@ public class ProgressFragment extends BaseFragment {
 
     private void showEmptyData() {
         if (mPreferenceManager.getProgress().isEmpty()) {
-            mBinding.tvNoVideo.setVisibility(View.VISIBLE);
+            mBinding.layoutNoVideo.setVisibility(View.VISIBLE);
         } else {
-            mBinding.tvNoVideo.setVisibility(View.GONE);
+            mBinding.layoutNoVideo.setVisibility(View.GONE);
         }
     }
 
