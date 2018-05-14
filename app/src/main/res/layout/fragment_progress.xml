@@ -40,7 +40,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="@dimen/padding_32"
                     android:gravity="center"
-                    android:text="Powerful download manager with full features"
+                    android:text="Powerful download manager \n with full features"
                     android:textColor="@color/black_85"
                     android:textSize="@dimen/text_20" />
 

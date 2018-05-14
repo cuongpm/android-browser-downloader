@@ -13,6 +13,8 @@ import com.browser.downloader.videodownloader.activities.VideoPlayerActivity;
 import com.browser.downloader.videodownloader.data.Video;
 import com.browser.downloader.videodownloader.databinding.ItemVideoSavedBinding;
 
+import org.greenrobot.eventbus.EventBus;
+
 import java.util.ArrayList;
 
 import vd.core.common.PreferencesManager;
@@ -82,11 +84,17 @@ public class SavedVideoAdapter
 
     private void showPopupMenu(View view, Video video, int position) {
         PopupMenu popupMenu = new PopupMenu(view.getContext(), view);
-        popupMenu.getMenuInflater().inflate(R.menu.menu_video, popupMenu.getMenu());
+        popupMenu.getMenuInflater().inflate(R.menu.menu_video_online, popupMenu.getMenu());
         popupMenu.show();
 
         popupMenu.setOnMenuItemClickListener(arg0 -> {
             switch (arg0.getItemId()) {
+                case R.id.item_download:
+                    EventBus.getDefault().post(video);
+                    // Callback
+                    mOnClickListener.onClick(view);
+                    return true;
+
                 case R.id.item_rename:
                     FileUtil.renameFile(view.getContext(), video.getFileName(), fileName -> {
                         mVideos.get(position).setFileName(fileName);
@@ -94,7 +102,7 @@ public class SavedVideoAdapter
                         // Save changes
                         PreferencesManager.getInstance(view.getContext()).setSavedVideos(mVideos);
                     });
-
+                    // Callback
                     mOnClickListener.onClick(view);
                     return true;
 
@@ -103,13 +111,13 @@ public class SavedVideoAdapter
                     notifyDataSetChanged();
                     // Save changes
                     PreferencesManager.getInstance(view.getContext()).setSavedVideos(mVideos);
-
+                    // Callback
                     mOnClickListener.onClick(view);
                     return true;
 
                 case R.id.item_share:
                     IntentUtil.shareLink(view.getContext(), video.getUrl());
-
+                    // Callback
                     mOnClickListener.onClick(view);
                     return true;
                 default:
