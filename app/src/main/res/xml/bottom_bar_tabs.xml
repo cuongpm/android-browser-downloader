@@ -10,7 +10,11 @@
     <tab
         icon="@drawable/ic_video"
         id="@+id/tab_video"
-        title="Player" />
+        title="Offline" />
+    <tab
+        icon="@drawable/ic_cloud_gray_24dp"
+        id="@+id/tab_online"
+        title="Online" />
     <tab
         icon="@drawable/ic_settings"
         id="@+id/tab_settings"

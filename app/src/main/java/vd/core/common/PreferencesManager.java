@@ -6,6 +6,7 @@ import android.text.TextUtils;
 
 import com.browser.downloader.videodownloader.data.ConfigData;
 import com.browser.downloader.videodownloader.data.ProgressInfo;
+import com.browser.downloader.videodownloader.data.Video;
 import com.browser.downloader.videodownloader.data.WebViewData;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -18,9 +19,11 @@ public class PreferencesManager {
     private static final String PRE_CONFIG_DATA = "PRE_CONFIG_DATA";
     private static final String PRE_RATE_APP = "PRE_RATE_APP";
     private static final String PRE_TAB_VIDEO_BADGE = "PRE_TAB_VIDEO_BADGE";
+    private static final String PRE_TAB_ONLINE_BADGE = "PRE_TAB_ONLINE_BADGE";
     private static final String PRE_HISTORY = "PRE_HISTORY";
     private static final String PRE_BOOKMARK = "PRE_BOOKMARK";
     private static final String PRE_PROGRESS = "PRE_PROGRESS";
+    private static final String PRE_VIDEO_SAVED = "PRE_VIDEO_SAVED";
 
     private static PreferencesManager instance = null;
 
@@ -68,6 +71,14 @@ public class PreferencesManager {
         mSharePreferences.edit().putInt(PRE_TAB_VIDEO_BADGE, badge).apply();
     }
 
+    public int getTabOnlineBadge() {
+        return mSharePreferences.getInt(PRE_TAB_ONLINE_BADGE, 0);
+    }
+
+    public void setTabOnlineBadge(int badge) {
+        mSharePreferences.edit().putInt(PRE_TAB_ONLINE_BADGE, badge).apply();
+    }
+
     public void setHistory(ArrayList<WebViewData> listHistory) {
         mSharePreferences.edit().putString(PRE_HISTORY, new Gson().toJson(listHistory)).apply();
     }
@@ -104,6 +115,20 @@ public class PreferencesManager {
         String listProgress = mSharePreferences.getString(PRE_PROGRESS, "");
         if (listProgress.length() > 0) {
             return new Gson().fromJson(listProgress, new TypeToken<ArrayList<ProgressInfo>>() {
+            }.getType());
+        } else {
+            return new ArrayList<>();
+        }
+    }
+
+    public void setSavedVideos(ArrayList<Video> videos) {
+        mSharePreferences.edit().putString(PRE_VIDEO_SAVED, new Gson().toJson(videos)).apply();
+    }
+
+    public ArrayList<Video> getSavedVideos() {
+        String videos = mSharePreferences.getString(PRE_VIDEO_SAVED, "");
+        if (videos.length() > 0) {
+            return new Gson().fromJson(videos, new TypeToken<ArrayList<Video>>() {
             }.getType());
         } else {
             return new ArrayList<>();

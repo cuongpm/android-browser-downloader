@@ -40,10 +40,12 @@ import com.browser.downloader.videodownloader.AppApplication;
 import com.browser.downloader.videodownloader.R;
 import com.browser.downloader.videodownloader.activities.BookmarkActivity;
 import com.browser.downloader.videodownloader.activities.HistoryActivity;
+import com.browser.downloader.videodownloader.activities.VideoPlayerActivity;
 import com.browser.downloader.videodownloader.adapter.SuggestionAdapter;
 import com.browser.downloader.videodownloader.data.AdType;
 import com.browser.downloader.videodownloader.data.ConfigData;
 import com.browser.downloader.videodownloader.data.PagesSupported;
+import com.browser.downloader.videodownloader.data.SavedVideo;
 import com.browser.downloader.videodownloader.data.Suggestion;
 import com.browser.downloader.videodownloader.data.SuggestionType;
 import com.browser.downloader.videodownloader.data.Video;
@@ -583,19 +585,32 @@ public class BrowserFragment extends BaseFragment {
 
         // Layout video menu
         binding.layoutVideoMenu.tvPreview.setOnClickListener(view -> {
-
+            Intent intent = new Intent(getContext(), VideoPlayerActivity.class);
+            intent.putExtra(VideoPlayerActivity.VIDEO_PATH, video.getUrl());
+            intent.putExtra(VideoPlayerActivity.VIDEO_NAME, video.getFileName());
+            startActivity(intent);
+            // Show ad
+            showInterstitlaAd();
+            // google analytics
+            logEventGA(video.getUrl(), getString(R.string.action_video_preview));
         });
 
         binding.layoutVideoMenu.tvSave.setOnClickListener(view -> {
             openDialogAnimation(binding.layoutVideoMenu.getRoot(), binding.layoutVideoSave.getRoot(), true);
+            // google analytics
+            logEventGA(video.getUrl(), getString(R.string.action_video_save));
         });
 
         binding.layoutVideoMenu.tvDownload.setOnClickListener(view -> {
             openDialogAnimation(binding.layoutVideoMenu.getRoot(), binding.layoutVideoDownload.getRoot(), true);
+            // google analytics
+            logEventGA(video.getUrl(), getString(R.string.action_video_download));
         });
 
         binding.layoutVideoMenu.tvCancel.setOnClickListener(view -> {
             bottomSheetDialog.dismiss();
+            // google analytics
+            logEventGA(video.getUrl(), getString(R.string.action_video_cancel));
         });
 
         // Layout video save
@@ -611,11 +626,23 @@ public class BrowserFragment extends BaseFragment {
         }
         binding.layoutVideoSave.tvCancel.setOnClickListener(view -> {
             openDialogAnimation(binding.layoutVideoSave.getRoot(), binding.layoutVideoMenu.getRoot(), false);
+            // google analytics
+            logEventGA(video.getUrl(), getString(R.string.action_video_save_cancel));
         });
         binding.layoutVideoSave.tvOk.setOnClickListener(view -> {
             bottomSheetDialog.dismiss();
-//            EventBus.getDefault().post(video);
-//            showInterstitlaAd();
+            // Save video
+            ArrayList<Video> currentVideos = mPreferenceManager.getSavedVideos();
+            currentVideos.add(video);
+            mPreferenceManager.setSavedVideos(currentVideos);
+            // Show badge for tab online
+            mActivity.showOnlineTabBadge();
+            // Send event to Online screen to update list saved video
+            EventBus.getDefault().post(new SavedVideo(video));
+            // Show ad
+            showInterstitlaAd();
+            // google analytics
+            logEventGA(video.getUrl(), getString(R.string.action_video_save_ok));
         });
 
         // Layout video download
@@ -632,12 +659,16 @@ public class BrowserFragment extends BaseFragment {
 
         binding.layoutVideoDownload.tvCancel.setOnClickListener(view -> {
             openDialogAnimation(binding.layoutVideoDownload.getRoot(), binding.layoutVideoMenu.getRoot(), false);
+            // google analytics
+            logEventGA(video.getUrl(), getString(R.string.action_video_download_cancel));
         });
 
         binding.layoutVideoDownload.tvOk.setOnClickListener(view -> {
             bottomSheetDialog.dismiss();
             EventBus.getDefault().post(video);
             showInterstitlaAd();
+            // google analytics
+            logEventGA(video.getUrl(), getString(R.string.action_video_download_ok));
         });
 
         // Show dialog
@@ -652,6 +683,18 @@ public class BrowserFragment extends BaseFragment {
         viewExit.setVisibility(View.GONE);
         viewEnter.startAnimation(enterAnimation);
         viewEnter.setVisibility(View.VISIBLE);
+    }
+
+    private void logEventGA(String url, String event) {
+        try {
+            // google analytics
+            String website = url;
+            if (website.contains("/")) website = website.split("/")[2];
+            trackEvent(event, website, url);
+        } catch (Exception e) {
+            e.printStackTrace();
+            trackEvent(event, url, "");
+        }
     }
 
     private void checkLinkStatus(String url) {

@@ -4,7 +4,7 @@
     <string name="rate_app">We are working hard to bring you better user experience. \n\nHow was your experience with us?</string>
     <string name="youtube_not_support">Due to legal restrictions, videos on %s cannot be downloaded.\n\nPlease download videos from other websites.</string>
     <string name="youtube_not_support_title">%s is not supported!</string>
-    <string name="text_no_video">You haven not downloaded any video yet.</string>
+    <string name="text_no_video">You have not downloaded any video yet.</string>
     <string name="text_no_progress">You are not downloading any video.</string>
     <string name="text_no_bookmark">No bookmark</string>
     <string name="text_no_history">No history</string>
@@ -16,6 +16,7 @@
     <string name="screen_browser">Screen Browser</string>
     <string name="screen_progress">Screen Progress</string>
     <string name="screen_video">Screen Video</string>
+    <string name="screen_online">Screen Online</string>
     <string name="screen_settings">Screen Settings</string>
     <string name="screen_player">Screen Player</string>
     <string name="screen_bookmark">Screen Bookmark</string>
@@ -48,6 +49,15 @@
 
     <string name="action_download_done">Action Download - Done</string>
     <string name="action_download_failed">Action Download - Failed</string>
+
+    <string name="action_video_preview">Action Video - Preview</string>
+    <string name="action_video_save">Action Video - Save</string>
+    <string name="action_video_save_ok">Action Video - Save - Ok</string>
+    <string name="action_video_save_cancel">Action Video - Save - Cancel</string>
+    <string name="action_video_download">Action Video - Download</string>
+    <string name="action_video_download_ok">Action Video - Download - Ok</string>
+    <string name="action_video_download_cancel">Action Video - Download - Cancel</string>
+    <string name="action_video_cancel">Action Video - Cancel</string>
 
     <string name="event_get_link_fail">Event Get Link - Failed</string>
     <string name="event_get_link_success">Event Get Link - Succeed</string>

@@ -82,7 +82,7 @@ public class FileUtil {
                 MediaStore.Video.Media.DATA + "=?", new String[]{file.getAbsolutePath()});
     }
 
-    public static void renameFile(final Context context, File file, OnFileChangedCallback onFileChangedCallback) {
+    public static void renameFile(Context context, File file, OnFileChangedCallback onFileChangedCallback) {
         try {
             final InputMethodManager imm = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
             imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
@@ -118,6 +118,45 @@ public class FileUtil {
                                 scanMedia(context, newFile);
                                 onFileChangedCallback.renameFileCompleted(newFile.getName());
                             }
+                        } else {
+                            Toast.makeText(context, context.getString(R.string.rename_invalid), Toast.LENGTH_SHORT).show();
+                        }
+                        imm.hideSoftInputFromWindow(etName.getWindowToken(), 0);
+                    }).show();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void renameFile(Context context, String name, OnFileChangedCallback onFileChangedCallback) {
+        try {
+            final InputMethodManager imm = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
+
+            String extension = "." + getFileExtension(name);
+            String currentName = name.substring(0, name.length() - extension.length());
+
+            LinearLayout layout = new LinearLayout(context);
+            layout.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+            layout.setOrientation(LinearLayout.VERTICAL);
+            layout.setPadding(80, 40, 80, 20);
+            EditText etName = new EditText(context);
+            etName.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+            etName.setText(currentName);
+            etName.setSelection(etName.getText().length());
+            etName.setTextColor(Color.BLACK);
+            etName.setImeOptions(EditorInfo.IME_ACTION_DONE);
+            etName.setInputType(InputType.TYPE_TEXT_FLAG_CAP_SENTENCES);
+            etName.setSingleLine();
+            layout.addView(etName);
+
+            new AlertDialog.Builder(context).setTitle(context.getString(R.string.rename_title)).setView(layout)
+                    .setNegativeButton(context.getString(android.R.string.cancel),
+                            (dialog, whichButton) -> imm.hideSoftInputFromWindow(etName.getWindowToken(), 0))
+                    .setPositiveButton(context.getString(android.R.string.ok), (dialog, whichButton) -> {
+                        String fileName = etName.getText().toString().trim();
+                        if (!TextUtils.isEmpty(fileName)) {
+                            onFileChangedCallback.renameFileCompleted(fileName + extension);
                         } else {
                             Toast.makeText(context, context.getString(R.string.rename_invalid), Toast.LENGTH_SHORT).show();
                         }

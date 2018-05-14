@@ -33,11 +33,9 @@ public class VideoAdapter
     }
 
     @Override
-    public VideoAdapter.FileViewHolder onCreateViewHolder(ViewGroup parent,
-                                                          int viewType) {
-        return new FileViewHolder(
-                DataBindingUtil.inflate(LayoutInflater.from(parent.getContext()),
-                        R.layout.item_video, parent, false));
+    public VideoAdapter.FileViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        return new FileViewHolder(DataBindingUtil.inflate(LayoutInflater.from(parent.getContext()),
+                R.layout.item_video, parent, false));
     }
 
     @Override
@@ -60,6 +58,7 @@ public class VideoAdapter
         holder.mBinding.getRoot().setOnClickListener(view -> {
             Intent intent = new Intent(view.getContext(), VideoPlayerActivity.class);
             intent.putExtra(VideoPlayerActivity.VIDEO_PATH, file.getPath());
+            intent.putExtra(VideoPlayerActivity.VIDEO_NAME, file.getName());
             view.getContext().startActivity(intent);
 
             mOnClickListener.onClick(view);

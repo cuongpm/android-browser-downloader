@@ -33,6 +33,7 @@ import org.greenrobot.eventbus.Subscribe;
 import butterknife.ButterKnife;
 import vd.core.util.AdUtil;
 import vd.core.util.DialogUtil;
+import vd.core.util.FileUtil;
 import vd.core.util.IntentUtil;
 
 public class MainActivity extends BaseActivity {
@@ -77,7 +78,7 @@ public class MainActivity extends BaseActivity {
     private void initUI() {
         HomeAdapter adapter = new HomeAdapter(getSupportFragmentManager());
         mBinding.viewPager.setAdapter(adapter);
-        mBinding.viewPager.setOffscreenPageLimit(4);
+        mBinding.viewPager.setOffscreenPageLimit(5);
 
         mBinding.viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
@@ -90,11 +91,11 @@ public class MainActivity extends BaseActivity {
                 mPagePosition = position;
                 mBinding.bottomBar.setDefaultTabPosition(position);
                 // google analytics
-                trackEvent(getString(R.string.app_name), getString(position == 0
-                        ? R.string.screen_browser : position == 1 ? R.string.screen_progress : position == 2
-                        ? R.string.screen_video : R.string.screen_settings), "");
+                trackEvent(getString(R.string.app_name), getString(position == 0 ? R.string.screen_browser
+                        : position == 1 ? R.string.screen_progress : position == 2 ? R.string.screen_video
+                        : position == 3 ? R.string.screen_online : R.string.screen_settings), position == 2 ? (FileUtil.getListFiles().size() + "") : "");
                 trackView(getString(position == 0 ? R.string.screen_browser : position == 1
-                        ? R.string.screen_progress : position == 2 ? R.string.screen_video : R.string.screen_settings));
+                        ? R.string.screen_progress : position == 2 ? R.string.screen_video : position == 3 ? R.string.screen_online : R.string.screen_settings));
             }
 
             @Override
@@ -111,8 +112,12 @@ public class MainActivity extends BaseActivity {
                 mBinding.viewPager.setCurrentItem(2, true);
                 mPreferenceManager.setTabVideoBadge(0);
                 mBinding.bottomBar.getTabWithId(tabId).removeBadge();
-            } else {
+            } else if (tabId == R.id.tab_online) {
                 mBinding.viewPager.setCurrentItem(3, true);
+                mPreferenceManager.setTabOnlineBadge(0);
+                mBinding.bottomBar.getTabWithId(tabId).removeBadge();
+            } else {
+                mBinding.viewPager.setCurrentItem(4, true);
             }
         });
 
@@ -161,6 +166,11 @@ public class MainActivity extends BaseActivity {
                 mBinding.bottomBar.getTabWithId(R.id.tab_progress).removeBadge();
             }
         }, 1000);
+    }
+
+    public void showOnlineTabBadge() {
+        mPreferenceManager.setTabOnlineBadge(mPreferenceManager.getTabOnlineBadge() + 1);
+        mBinding.bottomBar.getTabWithId(R.id.tab_online).setBadgeCount(mPreferenceManager.getTabOnlineBadge());
     }
 
     @Override

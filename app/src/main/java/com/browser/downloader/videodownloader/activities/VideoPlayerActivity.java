@@ -53,6 +53,9 @@ public class VideoPlayerActivity extends BaseActivity implements SeekBar.OnSeekB
 
     public final static String VIDEO_PATH = "video_path";
 
+    public final static String VIDEO_NAME = "video_name";
+
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -70,14 +73,20 @@ public class VideoPlayerActivity extends BaseActivity implements SeekBar.OnSeekB
 
     private void initUI() {
         Bundle extras = getIntent().getExtras();
-        mVideoState.setFileName(extras.getString(VIDEO_PATH));
+        mVideoState.setPath(extras.getString(VIDEO_PATH));
+        mVideoState.setFileName(extras.getString(VIDEO_NAME));
 
-        File file = new File(mVideoState.getFileName());
-        Uri uri = FileProvider.getUriForFile(this, getPackageName() + ".provider", file);
+        Uri uri;
+        if (mVideoState.getPath().startsWith("http")) {
+            uri = Uri.parse(mVideoState.getPath());
+        } else {
+            File file = new File(mVideoState.getPath());
+            uri = FileProvider.getUriForFile(this, getPackageName() + ".provider", file);
+        }
         mBinding.videoView.setVideoURI(uri);
 
         mBinding.toolbar.setNavigationOnClickListener(view -> onBackPressed());
-        mBinding.toolbar.setTitle(file.getName());
+        mBinding.toolbar.setTitle(mVideoState.getFileName());
 
         mBinding.seekBar.setOnSeekBarChangeListener(this);
 

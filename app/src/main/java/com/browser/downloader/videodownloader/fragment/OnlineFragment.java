@@ -8,28 +8,26 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.browser.downloader.videodownloader.R;
-import com.browser.downloader.videodownloader.adapter.VideoAdapter;
+import com.browser.downloader.videodownloader.adapter.SavedVideoAdapter;
+import com.browser.downloader.videodownloader.data.SavedVideo;
 import com.browser.downloader.videodownloader.data.Video;
-import com.browser.downloader.videodownloader.databinding.FragmentVideoBinding;
+import com.browser.downloader.videodownloader.databinding.FragmentOnlineBinding;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
-import java.io.File;
 import java.util.ArrayList;
 
-import vd.core.util.FileUtil;
+public class OnlineFragment extends BaseFragment {
 
-public class VideoFragment extends BaseFragment {
+    FragmentOnlineBinding mBinding;
 
-    FragmentVideoBinding mBinding;
+    private SavedVideoAdapter mSavedVideoAdapter;
 
-    VideoAdapter mVideoAdapter;
+    private ArrayList<Video> mVideos;
 
-    private ArrayList<File> mListFiles;
-
-    public static VideoFragment getInstance() {
-        return new VideoFragment();
+    public static OnlineFragment getInstance() {
+        return new OnlineFragment();
     }
 
     @Override
@@ -47,38 +45,31 @@ public class VideoFragment extends BaseFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
-        mBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_video, container, false);
+        mBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_online, container, false);
         initUI();
         return mBinding.getRoot();
     }
 
     @Subscribe
-    public void onDownloadVideo(Video video) {
-        try {
-            if (video.isDownloadCompleted()) {
-                mListFiles.clear();
-                mListFiles.addAll(FileUtil.getListFiles());
-                mVideoAdapter.notifyDataSetChanged();
-                showEmptyData();
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+    public void onDownloadVideo(SavedVideo savedVideo) {
+        mVideos.add(savedVideo.getVideo());
+        mSavedVideoAdapter.notifyDataSetChanged();
+        showEmptyData();
     }
 
     private void initUI() {
-        mListFiles = FileUtil.getListFiles();
+        mVideos = mPreferenceManager.getSavedVideos();
         mBinding.rvVideo.setLayoutManager(new LinearLayoutManager(getContext()));
-        mVideoAdapter = new VideoAdapter(mListFiles, view -> {
+        mSavedVideoAdapter = new SavedVideoAdapter(mVideos, view -> {
             mActivity.showInterstitlaAd();
             showEmptyData();
         });
-        mBinding.rvVideo.setAdapter(mVideoAdapter);
+        mBinding.rvVideo.setAdapter(mSavedVideoAdapter);
         showEmptyData();
     }
 
     private void showEmptyData() {
-        if (FileUtil.getListFiles().isEmpty()) {
+        if (mVideos.isEmpty()) {
             mBinding.layoutNoVideo.setVisibility(View.VISIBLE);
         } else {
             mBinding.layoutNoVideo.setVisibility(View.GONE);

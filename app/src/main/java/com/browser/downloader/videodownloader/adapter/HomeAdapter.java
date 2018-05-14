@@ -5,6 +5,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
 import com.browser.downloader.videodownloader.fragment.BrowserFragment;
+import com.browser.downloader.videodownloader.fragment.OnlineFragment;
 import com.browser.downloader.videodownloader.fragment.ProgressFragment;
 import com.browser.downloader.videodownloader.fragment.SettingsFragment;
 import com.browser.downloader.videodownloader.fragment.VideoFragment;
@@ -23,6 +24,8 @@ public class HomeAdapter extends FragmentPagerAdapter {
             return ProgressFragment.getInstance();
         } else if (position == 2) {
             return VideoFragment.getInstance();
+        } else if (position == 3) {
+            return OnlineFragment.getInstance();
         } else {
             return SettingsFragment.getInstance();
         }
@@ -30,7 +33,7 @@ public class HomeAdapter extends FragmentPagerAdapter {
 
     @Override
     public int getCount() {
-        return 4;
+        return 5;
     }
 
 }

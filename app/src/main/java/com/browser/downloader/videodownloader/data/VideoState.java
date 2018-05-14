@@ -4,6 +4,8 @@ public class VideoState {
 
     private String fileName;
 
+    private String path;
+
     private int currentTime;
 
     public String getFileName() {
@@ -12,6 +14,14 @@ public class VideoState {
 
     public void setFileName(String fileName) {
         this.fileName = fileName;
+    }
+
+    public String getPath() {
+        return path;
+    }
+
+    public void setPath(String path) {
+        this.path = path;
     }
 
     public int getCurrentTime() {
