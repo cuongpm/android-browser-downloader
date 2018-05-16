@@ -81,7 +81,7 @@ public class PreferencesManager {
     }
 
     public long getRetentionTime() {
-        return mSharePreferences.getInt(PRE_RETENTION_TIME, 0);
+        return mSharePreferences.getLong(PRE_RETENTION_TIME, 0);
     }
 
     public void setRetentionTime(long time) {
