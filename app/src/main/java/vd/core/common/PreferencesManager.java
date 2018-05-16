@@ -24,6 +24,7 @@ public class PreferencesManager {
     private static final String PRE_BOOKMARK = "PRE_BOOKMARK";
     private static final String PRE_PROGRESS = "PRE_PROGRESS";
     private static final String PRE_VIDEO_SAVED = "PRE_VIDEO_SAVED";
+    private static final String PRE_RETENTION_TIME = "PRE_RETENTION_TIME";
 
     private static PreferencesManager instance = null;
 
@@ -77,6 +78,14 @@ public class PreferencesManager {
 
     public void setTabOnlineBadge(int badge) {
         mSharePreferences.edit().putInt(PRE_TAB_ONLINE_BADGE, badge).apply();
+    }
+
+    public long getRetentionTime() {
+        return mSharePreferences.getInt(PRE_RETENTION_TIME, 0);
+    }
+
+    public void setRetentionTime(long time) {
+        mSharePreferences.edit().putLong(PRE_RETENTION_TIME, time).apply();
     }
 
     public void setHistory(ArrayList<WebViewData> listHistory) {

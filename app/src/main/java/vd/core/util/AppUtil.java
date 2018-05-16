@@ -15,6 +15,8 @@ import vd.core.common.PreferencesManager;
 
 public class AppUtil {
 
+    public final static int DAY_MILISECONDS = 86400000;
+
     public static String buildUrl(Context context, String data) {
         ConfigData configData = PreferencesManager.getInstance(context).getConfigData();
         String server = configData != null && !TextUtils.isEmpty(configData.getParserServer()) ? configData.getParserServer() : Constant.PARSER_SERVER;
@@ -39,6 +41,29 @@ public class AppUtil {
             cookieManager.removeSessionCookie();
             cookieSyncMngr.stopSync();
             cookieSyncMngr.sync();
+        }
+    }
+
+    public static String getRetentionTime(Context context) {
+
+        PreferencesManager preferencesManager = PreferencesManager.getInstance(context);
+        long startTime = preferencesManager.getRetentionTime();
+        if (startTime == 0) {
+            preferencesManager.setRetentionTime(System.currentTimeMillis());
+            return "new";
+        } else {
+            int numberOfDays = (int) ((System.currentTimeMillis() - startTime) / DAY_MILISECONDS);
+            if (numberOfDays <= 1) {
+                return "1 day";
+            } else if (numberOfDays < 7) {
+                return numberOfDays + " days";
+            } else if (numberOfDays < 30) {
+                int numberOfWeeks = numberOfDays / 7;
+                return numberOfWeeks + (numberOfWeeks == 1 ? " week" : " weeks");
+            } else {
+                int numberOfMonths = numberOfDays / 30;
+                return numberOfMonths + (numberOfMonths == 1 ? " month" : " months");
+            }
         }
     }
 

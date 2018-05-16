@@ -37,6 +37,7 @@
     <string name="action_clear_cookie">Action Clear Cookie</string>
 
     <string name="action_update">Action Update App</string>
+    <string name="action_check_user">Action Check User</string>
 
     <string name="action_search">Action Search</string>
     <string name="action_search_suggestion">Action Search - Suggestion</string>

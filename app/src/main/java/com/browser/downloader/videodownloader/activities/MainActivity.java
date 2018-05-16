@@ -32,6 +32,7 @@ import org.greenrobot.eventbus.Subscribe;
 
 import butterknife.ButterKnife;
 import vd.core.util.AdUtil;
+import vd.core.util.AppUtil;
 import vd.core.util.DialogUtil;
 import vd.core.util.FileUtil;
 import vd.core.util.IntentUtil;
@@ -130,6 +131,9 @@ public class MainActivity extends BaseActivity {
         // google analytics
         trackEvent(getString(R.string.app_name), getString(R.string.screen_browser), "");
         trackView(getString(R.string.screen_browser));
+
+        // Check retention
+        trackEvent(getString(R.string.app_name), getString(R.string.action_check_user), AppUtil.getRetentionTime(this));
 
         // Update dialog
         showUpdateDialog();
