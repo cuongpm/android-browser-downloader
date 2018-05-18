@@ -115,6 +115,7 @@ public class VideoPlayerActivity extends BaseActivity implements SeekBar.OnSeekB
 
         mBinding.videoView.setOnPreparedListener(mediaPlayer -> {
             mMediaPlayer = mediaPlayer;
+            setVolume(isVolumeOn);
         });
 
         mBinding.videoView.requestFocus();
@@ -123,6 +124,8 @@ public class VideoPlayerActivity extends BaseActivity implements SeekBar.OnSeekB
     }
 
     private void setVolume(boolean isVolumeOn) {
+        if (mMediaPlayer == null) return;
+
         int amount = isVolumeOn ? 100 : 0;
         int max = 100;
         double numerator = max - amount > 0 ? Math.log(max - amount) : 0;

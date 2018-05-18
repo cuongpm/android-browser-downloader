@@ -167,7 +167,7 @@ public class BrowserFragment extends BaseFragment {
     }
 
     private void loadInterstitialAdmob() {
-        mInterstitialAd = new InterstitialAd(getContext());
+        mInterstitialAd = new InterstitialAd(mActivity);
         AdUtil.loadInterstitialAd(mInterstitialAd, new AdListener() {
             @Override
             public void onAdFailedToLoad(int i) {
@@ -198,7 +198,7 @@ public class BrowserFragment extends BaseFragment {
             public void failedToReceiveAd(int errorCode) {
                 // Load AppLovin failed -> load Admob
                 mActivity.runOnUiThread(() -> {
-                    mInterstitialAd = new InterstitialAd(getContext());
+                    mInterstitialAd = new InterstitialAd(mActivity);
                     AdUtil.loadInterstitialAd(mInterstitialAd, null);
                 });
             }
@@ -242,28 +242,28 @@ public class BrowserFragment extends BaseFragment {
             }
 
         } else if (item.getItemId() == R.id.menu_bookmark) {
-            startActivityForResult(new Intent(getContext(), BookmarkActivity.class), ACTIVITY_BOOKMARK);
+            startActivityForResult(new Intent(mActivity, BookmarkActivity.class), ACTIVITY_BOOKMARK);
             if (!mPreferenceManager.getBookmark().isEmpty()) {
                 showInterstitlaAd();
             }
 
         } else if (item.getItemId() == R.id.menu_history) {
-            startActivityForResult(new Intent(getContext(), HistoryActivity.class), ACTIVITY_HISTORY);
+            startActivityForResult(new Intent(mActivity, HistoryActivity.class), ACTIVITY_HISTORY);
             if (!mPreferenceManager.getHistory().isEmpty()) {
                 showInterstitlaAd();
             }
 
         } else if (item.getItemId() == R.id.menu_share) {
             if (mBinding.webview != null && !TextUtils.isEmpty(mBinding.webview.getUrl())) {
-                IntentUtil.shareLink(getContext(), mBinding.webview.getUrl());
+                IntentUtil.shareLink(mActivity, mBinding.webview.getUrl());
                 // google analytics
                 trackEvent(getString(R.string.app_name), getString(R.string.action_share_link), "");
             }
 
         } else if (item.getItemId() == R.id.menu_copy_link) {
             if (mBinding.webview != null && !TextUtils.isEmpty(mBinding.webview.getUrl())) {
-                AppUtil.copyClipboard(getContext(), mBinding.webview.getUrl());
-                Toast.makeText(getContext(), "Copied link", Toast.LENGTH_SHORT).show();
+                AppUtil.copyClipboard(mActivity, mBinding.webview.getUrl());
+                Toast.makeText(mActivity, "Copied link", Toast.LENGTH_SHORT).show();
                 // google analytics
                 trackEvent(getString(R.string.app_name), getString(R.string.action_copy_link), "");
             }
@@ -292,7 +292,7 @@ public class BrowserFragment extends BaseFragment {
 
     private void initUI() {
         // Grant permission
-        if (ContextCompat.checkSelfPermission(getContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+        if (ContextCompat.checkSelfPermission(mActivity, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 0);
         }
 
@@ -375,9 +375,9 @@ public class BrowserFragment extends BaseFragment {
         mBinding.etSearch.setFocusable(isFocus);
         mBinding.etSearch.setFocusableInTouchMode(isFocus);
         if (isFocus) {
-            ViewUtil.showSoftKeyboard(getContext(), mBinding.etSearch);
+            ViewUtil.showSoftKeyboard(mActivity, mBinding.etSearch);
         } else {
-            ViewUtil.hideSoftKeyboard(getContext(), mBinding.etSearch);
+            ViewUtil.hideSoftKeyboard(mActivity, mBinding.etSearch);
         }
     }
 
@@ -385,7 +385,7 @@ public class BrowserFragment extends BaseFragment {
 
         List<Suggestion> listSuggestions = addAllSuggestions(suggestionList, suggestions);
 
-        mSuggestionAdapter = new SuggestionAdapter(getContext(), R.layout.item_suggestion, listSuggestions);
+        mSuggestionAdapter = new SuggestionAdapter(mActivity, R.layout.item_suggestion, listSuggestions);
         mBinding.etSearch.setAdapter(mSuggestionAdapter);
         mBinding.etSearch.showDropDown();
         mBinding.etSearch.setOnItemClickListener((parent, view, position, id) -> {
@@ -577,15 +577,15 @@ public class BrowserFragment extends BaseFragment {
     private void showVideoDataDialog(Video video) {
         mCurrentVideo = video;
 
-        BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(getContext());
+        BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(mActivity);
         DialogDownloadVideoBinding binding = DataBindingUtil.inflate(getLayoutInflater(), R.layout.dialog_download_video, null, false);
 
         // Show ad banner
-        AdUtil.loadBanner(getContext(), binding.layoutBanner, AdSize.SMART_BANNER, false);
+        AdUtil.loadBanner(mActivity, binding.layoutBanner, AdSize.SMART_BANNER, false);
 
         // Layout video menu
         binding.layoutVideoMenu.tvPreview.setOnClickListener(view -> {
-            Intent intent = new Intent(getContext(), VideoPlayerActivity.class);
+            Intent intent = new Intent(mActivity, VideoPlayerActivity.class);
             intent.putExtra(VideoPlayerActivity.VIDEO_PATH, video.getUrl());
             intent.putExtra(VideoPlayerActivity.VIDEO_NAME, video.getFileName());
             startActivity(intent);
@@ -677,8 +677,8 @@ public class BrowserFragment extends BaseFragment {
     }
 
     private void openDialogAnimation(View viewExit, View viewEnter, boolean isNext) {
-        Animation enterAnimation = AnimationUtils.loadAnimation(getContext(), isNext ? R.anim.enter_from_right : R.anim.enter_from_left);
-        Animation exitAnimation = AnimationUtils.loadAnimation(getContext(), isNext ? R.anim.exit_to_left : R.anim.exit_to_right);
+        Animation enterAnimation = AnimationUtils.loadAnimation(mActivity, isNext ? R.anim.enter_from_right : R.anim.enter_from_left);
+        Animation exitAnimation = AnimationUtils.loadAnimation(mActivity, isNext ? R.anim.exit_to_left : R.anim.exit_to_right);
         viewExit.startAnimation(exitAnimation);
         viewExit.setVisibility(View.GONE);
         viewEnter.startAnimation(enterAnimation);
@@ -756,7 +756,7 @@ public class BrowserFragment extends BaseFragment {
 
     private void disableDownloadBtn() {
         try {
-            mBinding.fab.setBackgroundTintList(ColorStateList.valueOf(ContextCompat.getColor(getContext(), R.color.color_gray_1)));
+            mBinding.fab.setBackgroundTintList(ColorStateList.valueOf(ContextCompat.getColor(mActivity, R.color.color_gray_1)));
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -764,7 +764,7 @@ public class BrowserFragment extends BaseFragment {
 
     private void enableDownloadBtn() {
         try {
-            mBinding.fab.setBackgroundTintList(ColorStateList.valueOf(ContextCompat.getColor(getContext(), R.color.colorAccent)));
+            mBinding.fab.setBackgroundTintList(ColorStateList.valueOf(ContextCompat.getColor(mActivity, R.color.colorAccent)));
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -776,7 +776,7 @@ public class BrowserFragment extends BaseFragment {
     }
 
     private void shakeButton(View view) {
-        Animation anim = AnimationUtils.loadAnimation(getContext(), R.anim.shake_btn_anim);
+        Animation anim = AnimationUtils.loadAnimation(mActivity, R.anim.shake_btn_anim);
         anim.setDuration(50L);
         view.startAnimation(anim);
     }
@@ -810,7 +810,7 @@ public class BrowserFragment extends BaseFragment {
         String content = mBinding.etSearch.getText().toString().trim();
         if (content.length() > 0) {
             if (content.toLowerCase().contains("youtu.be") || content.toLowerCase().contains("youtube.com")) {
-                YoutubeDialog.getDialog(getContext(), true).show();
+                YoutubeDialog.getDialog(mActivity, true).show();
             } else if (content.startsWith("http://") || content.startsWith("https://")) {
                 mBinding.webview.loadUrl(content);
             } else if (Patterns.WEB_URL.matcher(content).matches()) {
@@ -881,16 +881,16 @@ public class BrowserFragment extends BaseFragment {
     public void downloadVideo() {
         String data = mBinding.webview.getUrl();
         if (TextUtils.isEmpty(data) || !Patterns.WEB_URL.matcher(data).matches()) {
-            DialogUtil.showAlertDialog(getContext(), getString(R.string.error_valid_link));
+            DialogUtil.showAlertDialog(mActivity, getString(R.string.error_valid_link));
             return;
         } else if (mLinkStatus == LinkStatus.YOUTUBE) {
-            YoutubeDialog.getDialog(getContext(), true).show();
+            YoutubeDialog.getDialog(mActivity, true).show();
             return;
         } else if (mLinkStatus == LinkStatus.UNSUPPORTED) {
-            YoutubeDialog.getDialog(getContext(), false).show();
+            YoutubeDialog.getDialog(mActivity, false).show();
             return;
         } else if (mLinkStatus == LinkStatus.GENERAL) {
-            GuidelineDialog.getDialog(getContext()).show();
+            GuidelineDialog.getDialog(mActivity).show();
             return;
         }
 
@@ -902,7 +902,7 @@ public class BrowserFragment extends BaseFragment {
     }
 
     private void downloadVideoService(String data) {
-        new DownloadService(getContext(), new DownloadService.DownloadCallback() {
+        new DownloadService(mActivity, new DownloadService.DownloadCallback() {
             @Override
             public void onDownloadCompleted(Video video) {
                 showVideoDataDialog(video);
@@ -910,13 +910,13 @@ public class BrowserFragment extends BaseFragment {
 
             @Override
             public void onDownloadFailed(String url) {
-                DialogUtil.showAlertDialog(getContext(), "Try again", "Report link", getString(R.string.error_video_page),
+                DialogUtil.showAlertDialog(mActivity, "Try again", "Report link", getString(R.string.error_video_page),
                         (dialog, i) -> {
                             dialog.dismiss();
                             downloadVideoService(data);
                         }, (dialog, i) -> {
                             dialog.dismiss();
-                            DialogUtil.showAlertDialog(getContext(), getContext().getString(R.string.message_report));
+                            DialogUtil.showAlertDialog(mActivity, getString(R.string.message_report));
                             try {
                                 // google analytics
                                 String website = url;
