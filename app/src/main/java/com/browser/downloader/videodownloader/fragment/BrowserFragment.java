@@ -575,6 +575,7 @@ public class BrowserFragment extends BaseFragment {
     }
 
     private void showVideoDataDialog(Video video) {
+        mActivity.setGetLinkSuccess(true);
         mCurrentVideo = video;
 
         BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(mActivity);

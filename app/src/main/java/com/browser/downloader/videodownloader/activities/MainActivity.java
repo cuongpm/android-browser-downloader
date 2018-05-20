@@ -49,6 +49,8 @@ public class MainActivity extends BaseActivity {
 
     private AppLovinAd mAppLovinAd;
 
+    private boolean isGetLinkSuccess = false;
+
     private boolean isAdShowed = false;
 
     private int numberActionShowAd = 0;
@@ -188,7 +190,7 @@ public class MainActivity extends BaseActivity {
                 return;
             }
 
-            if (!mPreferenceManager.isRateApp()) {
+            if ((isGetLinkSuccess || !mPreferenceManager.isFirstTime()) && !mPreferenceManager.isRateApp()) {
                 RatingDialog.getDialog(this, new DialogListener() {
                     @Override
                     public void onPositiveButton(Dialog dialog) {
@@ -213,6 +215,9 @@ public class MainActivity extends BaseActivity {
                             finish();
                         });
             }
+
+            // set first time data
+            mPreferenceManager.setFirstTime(false);
         }
     }
 
@@ -313,4 +318,11 @@ public class MainActivity extends BaseActivity {
         }
     }
 
+    public boolean isGetLinkSuccess() {
+        return isGetLinkSuccess;
+    }
+
+    public void setGetLinkSuccess(boolean getLinkSuccess) {
+        isGetLinkSuccess = getLinkSuccess;
+    }
 }

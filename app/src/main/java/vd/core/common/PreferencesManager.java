@@ -25,6 +25,8 @@ public class PreferencesManager {
     private static final String PRE_PROGRESS = "PRE_PROGRESS";
     private static final String PRE_VIDEO_SAVED = "PRE_VIDEO_SAVED";
     private static final String PRE_RETENTION_TIME = "PRE_RETENTION_TIME";
+    private static final String PRE_FIRST_TIME = "PRE_FIRST_TIME";
+
 
     private static PreferencesManager instance = null;
 
@@ -90,6 +92,14 @@ public class PreferencesManager {
 
     public void setHistory(ArrayList<WebViewData> listHistory) {
         mSharePreferences.edit().putString(PRE_HISTORY, new Gson().toJson(listHistory)).apply();
+    }
+
+    public boolean isFirstTime() {
+        return mSharePreferences.getBoolean(PRE_FIRST_TIME, true);
+    }
+
+    public void setFirstTime(boolean isFirstTime) {
+        mSharePreferences.edit().putBoolean(PRE_FIRST_TIME, isFirstTime).apply();
     }
 
     public ArrayList<WebViewData> getHistory() {
