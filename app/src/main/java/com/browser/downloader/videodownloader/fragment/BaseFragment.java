@@ -30,9 +30,9 @@ public abstract class BaseFragment extends Fragment {
 
         mActivity = (MainActivity) getActivity();
 
-        mPreferenceManager = PreferencesManager.getInstance(getContext());
+        mPreferenceManager = PreferencesManager.getInstance(mActivity);
 
-        GoogleAnalytics analytics = GoogleAnalytics.getInstance(getContext());
+        GoogleAnalytics analytics = GoogleAnalytics.getInstance(mActivity);
         mTracker = analytics.newTracker(Constant.UA_ID);
     }
 

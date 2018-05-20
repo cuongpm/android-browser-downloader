@@ -59,7 +59,7 @@ public class OnlineFragment extends BaseFragment {
 
     private void initUI() {
         mVideos = mPreferenceManager.getSavedVideos();
-        mBinding.rvVideo.setLayoutManager(new LinearLayoutManager(getContext()));
+        mBinding.rvVideo.setLayoutManager(new LinearLayoutManager(mActivity));
         mSavedVideoAdapter = new SavedVideoAdapter(mVideos, view -> {
             mActivity.showInterstitlaAd();
             showEmptyData();

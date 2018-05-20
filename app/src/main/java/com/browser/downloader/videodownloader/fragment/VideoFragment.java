@@ -68,7 +68,7 @@ public class VideoFragment extends BaseFragment {
 
     private void initUI() {
         mListFiles = FileUtil.getListFiles();
-        mBinding.rvVideo.setLayoutManager(new LinearLayoutManager(getContext()));
+        mBinding.rvVideo.setLayoutManager(new LinearLayoutManager(mActivity));
         mVideoAdapter = new VideoAdapter(mListFiles, view -> {
             mActivity.showInterstitlaAd();
             showEmptyData();

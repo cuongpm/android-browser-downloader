@@ -67,12 +67,12 @@ public class ProgressFragment extends BaseFragment {
 
     private void initUI() {
         // Check saved videos
-        mDownloadManager = (DownloadManager) getContext().getSystemService(Context.DOWNLOAD_SERVICE);
+        mDownloadManager = (DownloadManager) mActivity.getSystemService(Context.DOWNLOAD_SERVICE);
         for (ProgressInfo progressInfo : getProgressInfos()) {
             checkDownloadProgress(progressInfo, mDownloadManager);
         }
 
-        mBinding.rvProgress.setLayoutManager(new LinearLayoutManager(getContext()));
+        mBinding.rvProgress.setLayoutManager(new LinearLayoutManager(mActivity));
         mProgressAdapter = new ProgressAdapter(getProgressInfos());
         mBinding.rvProgress.setAdapter(mProgressAdapter);
 
@@ -152,7 +152,7 @@ public class ProgressFragment extends BaseFragment {
                                 trackEvent(getString(R.string.action_download_done), website, progressInfo.getVideo().getUrl());
                             } catch (Exception e) {
                                 e.printStackTrace();
-                                trackEvent(getString(R.string.action_download_done), progressInfo.getVideo().getUrl(), "");
+                                trackEvent(mActivity.getString(R.string.action_download_done), progressInfo.getVideo().getUrl(), "");
                             }
                         });
                     } else if (cursor.getInt(cursor.getColumnIndex(DownloadManager.COLUMN_STATUS)) == DownloadManager.STATUS_FAILED) {
