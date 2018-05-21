@@ -7,6 +7,9 @@ import android.os.Handler;
 import android.support.v4.view.ViewPager;
 import android.text.TextUtils;
 
+import com.airpush.injector.internal.IAirPushAdListener;
+import com.airpush.injector.internal.IAirPushPreparedAd;
+import com.airpush.injector.internal.ads.AirPushInterstitial;
 import com.applovin.adview.AppLovinInterstitialAd;
 import com.applovin.adview.AppLovinInterstitialAdDialog;
 import com.applovin.sdk.AppLovinAd;
@@ -46,6 +49,8 @@ public class MainActivity extends BaseActivity {
     private InterstitialAd mInterstitialAd;
 
     private AppLovinAd mAppLovinAd;
+
+    private IAirPushPreparedAd mIAirPushPreparedAd;
 
     private boolean isGetLinkSuccess = false;
 
@@ -238,6 +243,9 @@ public class MainActivity extends BaseActivity {
             } else if (adType == AdType.APPLOVIN.getValue()) {
                 // AppLovin type
                 loadInterstitialAppLovin();
+            } else if (adType == AdType.AIRPUSH.getValue()) {
+                // AirPush type
+                loadInterstitialAirPush();
             } else {
                 // Default is admob type
                 loadInterstitialAdmob();
@@ -251,17 +259,19 @@ public class MainActivity extends BaseActivity {
             @Override
             public void onAdFailedToLoad(int i) {
                 super.onAdFailedToLoad(i);
-                // Load admob failed -> load AppLovin
-                AppApplication.getAppLovinSdk().getAdService().loadNextAd(AppLovinAdSize.INTERSTITIAL, new AppLovinAdLoadListener() {
+                // Load admob failed -> load AirPush
+                AirPushInterstitial airPushInterstitial = new AirPushInterstitial(MainActivity.this);
+                airPushInterstitial.setEventsListener(new IAirPushAdListener() {
                     @Override
-                    public void adReceived(AppLovinAd ad) {
-                        mAppLovinAd = ad;
+                    public void onLoad(IAirPushPreparedAd ad) {
+                        mIAirPushPreparedAd = ad;
                     }
 
                     @Override
-                    public void failedToReceiveAd(int errorCode) {
+                    public void onError(Exception e) {
                     }
                 });
+                airPushInterstitial.load();
             }
         });
     }
@@ -284,6 +294,24 @@ public class MainActivity extends BaseActivity {
         });
     }
 
+    private void loadInterstitialAirPush() {
+        AirPushInterstitial airPushInterstitial = new AirPushInterstitial(this);
+        airPushInterstitial.setEventsListener(new IAirPushAdListener() {
+            @Override
+            public void onLoad(IAirPushPreparedAd ad) {
+                mIAirPushPreparedAd = ad;
+            }
+
+            @Override
+            public void onError(Exception e) {
+                // Load AirPush failed -> load Admob
+                mInterstitialAd = new InterstitialAd(MainActivity.this);
+                AdUtil.loadInterstitialAd(mInterstitialAd, null);
+            }
+        });
+        airPushInterstitial.load();
+    }
+
     public void showInterstitlaAd() {
         numberActionShowAd++;
         if (!isAdShowed && (numberActionShowAd % totalActionShowAd == 0)) {
@@ -298,6 +326,11 @@ public class MainActivity extends BaseActivity {
                 isAdShowed = true;
                 // google analytics
                 trackEvent(getString(R.string.app_name), getString(R.string.action_show_ad_app), "AppLovin");
+            } else if (mIAirPushPreparedAd != null) {
+                mIAirPushPreparedAd.show();
+                isAdShowed = true;
+                // google analytics
+                trackEvent(getString(R.string.app_name), getString(R.string.action_show_ad_app), "AirPush");
             }
         }
     }

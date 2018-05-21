@@ -4,6 +4,7 @@ import android.app.Application;
 import android.content.Context;
 import android.support.multidex.MultiDex;
 
+import com.airpush.AirPush;
 import com.applovin.sdk.AppLovinSdk;
 import com.facebook.drawee.backends.pipeline.Fresco;
 import com.facebook.imagepipeline.core.ImagePipelineConfig;
@@ -23,6 +24,10 @@ public class AppApplication extends Application {
         AppLovinSdk.initializeSdk(this);
         mAppLovinSdk = AppLovinSdk.getInstance(this);
         mAppLovinSdk.getSettings().setTestAdsEnabled(false);
+
+        // Init Airpush
+        AirPush.init(this, "1526153644312398977", "391990");
+//        AirPush.enableTestMode();
 
         // Init Admob
         MobileAds.initialize(this, Constant.AD_APP_ID);

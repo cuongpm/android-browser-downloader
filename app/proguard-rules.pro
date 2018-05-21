@@ -154,3 +154,7 @@
 
 # bottom bar
 -dontwarn com.roughike.bottombar.**
+
+# Airpush
+-keep class com.airpush.** {*;}
+-keepattributes Signature

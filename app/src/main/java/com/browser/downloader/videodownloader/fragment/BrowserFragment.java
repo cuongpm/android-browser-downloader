@@ -31,6 +31,9 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.Toast;
 
+import com.airpush.injector.internal.IAirPushAdListener;
+import com.airpush.injector.internal.IAirPushPreparedAd;
+import com.airpush.injector.internal.ads.AirPushInterstitial;
 import com.applovin.adview.AppLovinInterstitialAd;
 import com.applovin.adview.AppLovinInterstitialAdDialog;
 import com.applovin.sdk.AppLovinAd;
@@ -86,6 +89,8 @@ public class BrowserFragment extends BaseFragment {
     private InterstitialAd mInterstitialAd;
 
     private AppLovinAd mAppLovinAd;
+
+    private IAirPushPreparedAd mIAirPushPreparedAd;
 
     private PublishSubject<String> mPublishSubject;
 
@@ -159,6 +164,9 @@ public class BrowserFragment extends BaseFragment {
             } else if (adType == AdType.APPLOVIN.getValue()) {
                 // AppLovin type
                 loadInterstitialAppLovin();
+            } else if (adType == AdType.AIRPUSH.getValue()) {
+                // AirPush type
+                loadInterstitialAirPush();
             } else {
                 // Default is admob type
                 loadInterstitialAdmob();
@@ -172,17 +180,19 @@ public class BrowserFragment extends BaseFragment {
             @Override
             public void onAdFailedToLoad(int i) {
                 super.onAdFailedToLoad(i);
-                // Load admob failed -> load AppLovin
-                AppApplication.getAppLovinSdk().getAdService().loadNextAd(AppLovinAdSize.INTERSTITIAL, new AppLovinAdLoadListener() {
+                // Load admob failed -> load AirPush
+                AirPushInterstitial airPushInterstitial = new AirPushInterstitial(mActivity);
+                airPushInterstitial.setEventsListener(new IAirPushAdListener() {
                     @Override
-                    public void adReceived(AppLovinAd ad) {
-                        mAppLovinAd = ad;
+                    public void onLoad(IAirPushPreparedAd ad) {
+                        mIAirPushPreparedAd = ad;
                     }
 
                     @Override
-                    public void failedToReceiveAd(int errorCode) {
+                    public void onError(Exception e) {
                     }
                 });
+                airPushInterstitial.load();
             }
         });
     }
@@ -205,6 +215,24 @@ public class BrowserFragment extends BaseFragment {
         });
     }
 
+    private void loadInterstitialAirPush() {
+        AirPushInterstitial airPushInterstitial = new AirPushInterstitial(mActivity);
+        airPushInterstitial.setEventsListener(new IAirPushAdListener() {
+            @Override
+            public void onLoad(IAirPushPreparedAd ad) {
+                mIAirPushPreparedAd = ad;
+            }
+
+            @Override
+            public void onError(Exception e) {
+                // Load AirPush failed -> load Admob
+                mInterstitialAd = new InterstitialAd(mActivity);
+                AdUtil.loadInterstitialAd(mInterstitialAd, null);
+            }
+        });
+        airPushInterstitial.load();
+    }
+
     private void showInterstitlaAd() {
         if (!isAdShowed) {
             if (mInterstitialAd != null && mInterstitialAd.isLoaded()) {
@@ -218,6 +246,11 @@ public class BrowserFragment extends BaseFragment {
                 isAdShowed = true;
                 // google analytics
                 trackEvent(getString(R.string.app_name), getString(R.string.action_show_ad_browser), "AppLovin");
+            } else if (mIAirPushPreparedAd != null) {
+                mIAirPushPreparedAd.show();
+                isAdShowed = true;
+                // google analytics
+                trackEvent(getString(R.string.app_name), getString(R.string.action_show_ad_browser), "AirPush");
             }
         }
     }

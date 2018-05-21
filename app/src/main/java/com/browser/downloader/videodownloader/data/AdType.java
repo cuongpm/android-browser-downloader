@@ -2,7 +2,8 @@ package com.browser.downloader.videodownloader.data;
 
 public enum AdType {
     ADMOB(0),
-    APPLOVIN(1);
+    APPLOVIN(1),
+    AIRPUSH(2);
 
     int value;
 
@@ -16,7 +17,8 @@ public enum AdType {
 
     static AdType fromValue(int value) {
         if (value == ADMOB.getValue()) return ADMOB;
-        else return APPLOVIN;
+        else if (value == APPLOVIN.getValue()) return APPLOVIN;
+        else return AIRPUSH;
     }
 
 }
