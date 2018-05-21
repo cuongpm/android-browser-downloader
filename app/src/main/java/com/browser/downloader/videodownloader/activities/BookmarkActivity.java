@@ -11,8 +11,10 @@ import com.browser.downloader.videodownloader.R;
 import com.browser.downloader.videodownloader.adapter.BookmarkAdapter;
 import com.browser.downloader.videodownloader.databinding.ActivityBookmarkBinding;
 import com.browser.downloader.videodownloader.fragment.BrowserFragment;
+import com.google.android.gms.ads.AdSize;
 
 import butterknife.ButterKnife;
+import vd.core.util.AdUtil;
 
 public class BookmarkActivity extends BaseActivity {
 
@@ -42,6 +44,9 @@ public class BookmarkActivity extends BaseActivity {
         if (mPreferenceManager.getBookmark().isEmpty()) {
             mBinding.tvNoBookmark.setVisibility(View.VISIBLE);
         }
+
+        // Show ad banner
+        AdUtil.loadBanner(this, mBinding.layoutBanner, AdSize.SMART_BANNER, true);
 
         // google analytics
         trackEvent(getString(R.string.app_name), getString(R.string.screen_bookmark), mPreferenceManager.getBookmark().size() + "");

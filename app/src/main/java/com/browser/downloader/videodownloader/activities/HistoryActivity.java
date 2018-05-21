@@ -11,8 +11,10 @@ import com.browser.downloader.videodownloader.R;
 import com.browser.downloader.videodownloader.adapter.HistoryAdapter;
 import com.browser.downloader.videodownloader.databinding.ActivityHistoryBinding;
 import com.browser.downloader.videodownloader.fragment.BrowserFragment;
+import com.google.android.gms.ads.AdSize;
 
 import butterknife.ButterKnife;
+import vd.core.util.AdUtil;
 
 public class HistoryActivity extends BaseActivity {
 
@@ -42,6 +44,9 @@ public class HistoryActivity extends BaseActivity {
         if (mPreferenceManager.getHistory().isEmpty()) {
             mBinding.tvNoHistory.setVisibility(View.VISIBLE);
         }
+
+        // Show ad banner
+        AdUtil.loadBanner(this, mBinding.layoutBanner, AdSize.SMART_BANNER, true);
 
         // google analytics
         trackEvent(getString(R.string.app_name), getString(R.string.screen_history), mPreferenceManager.getHistory().size() + "");
