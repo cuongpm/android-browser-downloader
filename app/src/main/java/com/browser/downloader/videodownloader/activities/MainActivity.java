@@ -43,8 +43,6 @@ public class MainActivity extends BaseActivity {
 
     private int mPagePosition = 0;
 
-    private IOnBackPressed mIOnBackPressed;
-
     private InterstitialAd mInterstitialAd;
 
     private AppLovinAd mAppLovinAd;
@@ -184,53 +182,39 @@ public class MainActivity extends BaseActivity {
 
     @Override
     public void onBackPressed() {
-        if (mIOnBackPressed == null || !mIOnBackPressed.onBackPressed()) {
-            if (mPagePosition != 0) {
-                mBinding.viewPager.setCurrentItem(0, true);
-                return;
-            }
-
-            if ((isGetLinkSuccess || !mPreferenceManager.isFirstTime()) && !mPreferenceManager.isRateApp()) {
-                RatingDialog.getDialog(this, new DialogListener() {
-                    @Override
-                    public void onPositiveButton(Dialog dialog) {
-                        dialog.dismiss();
-                        mPreferenceManager.setRateApp(true);
-                        IntentUtil.openGooglePlay(MainActivity.this, getPackageName());
-                        // google analytics
-                        trackEvent(getString(R.string.app_name), getString(R.string.action_rate_us_exit_app), "");
-                        finish();
-                    }
-
-                    @Override
-                    public void onNegativeButton(Dialog dialog) {
-                        dialog.dismiss();
-                        finish();
-                    }
-                }).show();
-            } else {
-                DialogUtil.showAlertDialog(this, getString(R.string.app_name), getString(R.string.message_exit),
-                        (dialogInterface, i) -> {
-                            dialogInterface.dismiss();
-                            finish();
-                        });
-            }
-
-            // set first time data
-            mPreferenceManager.setFirstTime(false);
+        if (mPagePosition != 0) {
+            mBinding.viewPager.setCurrentItem(0, true);
+            return;
         }
-    }
 
-    public IOnBackPressed getIOnBackPressed() {
-        return mIOnBackPressed;
-    }
+        if ((isGetLinkSuccess || !mPreferenceManager.isFirstTime()) && !mPreferenceManager.isRateApp()) {
+            RatingDialog.getDialog(this, new DialogListener() {
+                @Override
+                public void onPositiveButton(Dialog dialog) {
+                    dialog.dismiss();
+                    mPreferenceManager.setRateApp(true);
+                    IntentUtil.openGooglePlay(MainActivity.this, getPackageName());
+                    // google analytics
+                    trackEvent(getString(R.string.app_name), getString(R.string.action_rate_us_exit_app), "");
+                    finish();
+                }
 
-    public void setIOnBackPressed(IOnBackPressed mIOnBackPressed) {
-        this.mIOnBackPressed = mIOnBackPressed;
-    }
+                @Override
+                public void onNegativeButton(Dialog dialog) {
+                    dialog.dismiss();
+                    finish();
+                }
+            }).show();
+        } else {
+            DialogUtil.showAlertDialog(this, getString(R.string.app_name), getString(R.string.message_exit),
+                    (dialogInterface, i) -> {
+                        dialogInterface.dismiss();
+                        finish();
+                    });
+        }
 
-    public interface IOnBackPressed {
-        boolean onBackPressed();
+        // set first time data
+        mPreferenceManager.setFirstTime(false);
     }
 
     private void loadInterstitialAd() {

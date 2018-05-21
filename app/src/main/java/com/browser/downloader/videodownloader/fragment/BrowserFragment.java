@@ -304,15 +304,6 @@ public class BrowserFragment extends BaseFragment {
         mBinding.webview.setWebViewClient(webViewClient);
         mBinding.webview.setWebChromeClient(webChromeClient);
 
-        mActivity.setIOnBackPressed(() -> {
-            if (mBinding.webview.canGoBack()) {
-                mBinding.webview.goBack();
-                return true;
-            } else {
-                return false;
-            }
-        });
-
         mBinding.etSearch.setOnKeyListener((v, keyCode, event) -> {
                     if (keyCode == KeyEvent.KEYCODE_ENTER) {
                         // load data
