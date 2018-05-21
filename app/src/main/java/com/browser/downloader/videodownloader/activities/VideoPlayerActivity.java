@@ -112,22 +112,22 @@ public class VideoPlayerActivity extends BaseActivity implements SeekBar.OnSeekB
             mCurrentTime = 0;
             isPlaying = false;
             // google analytics
-            trackEvent(getString(R.string.app_name), getString(R.string.action_play_completed),
-                    mVideoState.getFileName());
+            trackEvent(getString(R.string.action_play_completed),
+                    mVideoState.getPath().startsWith("http") ? "Online" : "Offline", mVideoState.getFileName());
         });
 
         mBinding.videoView.setOnPreparedListener(mediaPlayer -> {
             mMediaPlayer = mediaPlayer;
             setVolume(isVolumeOn);
             // google analytics
-            trackEvent(getString(R.string.app_name), getString(R.string.action_play_prepared),
-                    mVideoState.getFileName());
+            trackEvent(getString(R.string.action_play_prepared),
+                    mVideoState.getPath().startsWith("http") ? "Online" : "Offline", mVideoState.getFileName());
         });
 
         mBinding.videoView.setOnErrorListener((mediaPlayer, i, i1) -> {
             // google analytics
-            trackEvent(getString(R.string.app_name), getString(R.string.action_play_error),
-                    mVideoState.getFileName());
+            trackEvent(getString(R.string.action_play_error),
+                    mVideoState.getPath().startsWith("http") ? "Online" : "Offline", mVideoState.getFileName());
             return false;
         });
 
