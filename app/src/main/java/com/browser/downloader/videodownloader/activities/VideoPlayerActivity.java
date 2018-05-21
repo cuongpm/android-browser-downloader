@@ -111,11 +111,24 @@ public class VideoPlayerActivity extends BaseActivity implements SeekBar.OnSeekB
             mBinding.ivPlay.setImageResource(R.drawable.ic_play);
             mCurrentTime = 0;
             isPlaying = false;
+            // google analytics
+            trackEvent(getString(R.string.app_name), getString(R.string.action_play_completed),
+                    mVideoState.getFileName());
         });
 
         mBinding.videoView.setOnPreparedListener(mediaPlayer -> {
             mMediaPlayer = mediaPlayer;
             setVolume(isVolumeOn);
+            // google analytics
+            trackEvent(getString(R.string.app_name), getString(R.string.action_play_prepared),
+                    mVideoState.getFileName());
+        });
+
+        mBinding.videoView.setOnErrorListener((mediaPlayer, i, i1) -> {
+            // google analytics
+            trackEvent(getString(R.string.app_name), getString(R.string.action_play_error),
+                    mVideoState.getFileName());
+            return false;
         });
 
         mBinding.videoView.requestFocus();

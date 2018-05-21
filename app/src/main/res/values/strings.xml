@@ -60,6 +60,10 @@
     <string name="action_video_download_cancel">Action Video - Download - Cancel</string>
     <string name="action_video_cancel">Action Video - Cancel</string>
 
+    <string name="action_play_prepared">Action Play - Prepared</string>
+    <string name="action_play_completed">Action Play - Completed</string>
+    <string name="action_play_error">Action Play - Error</string>
+
     <string name="event_get_link_fail">Event Get Link - Failed</string>
     <string name="event_get_link_success">Event Get Link - Succeed</string>
     <string name="event_get_link_facebook">Event Get Link - Facebook</string>
