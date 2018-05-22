@@ -17,6 +17,9 @@ public class Constant {
     // Parser server
     public final static String PARSER_SERVER = "http://bvd-dl.herokuapp.com/api/info?url=%s";
 
+    // User agent
+    public final static String USER_AGENT = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/56.0.2924.87 Safari/537.36";
+
     // App config
     public final static String UA_ID = "UA-117583490-1";
 

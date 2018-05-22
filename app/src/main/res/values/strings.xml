@@ -68,6 +68,9 @@
     <string name="event_get_link_success">Event Get Link - Succeed</string>
     <string name="event_get_link_facebook">Event Get Link - Facebook</string>
 
+    <string name="event_get_link_fail_dailymotion">Event Get Link - Failed - Dailymotion</string>
+    <string name="event_get_link_success_dailymotion">Event Get Link - Succeed - Dailymotion</string>
+
     <string name="event_report_link">Event Report Link</string>
 
     <string name="link_facebook">https://facebook.com</string>

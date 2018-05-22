@@ -47,6 +47,7 @@ import com.browser.downloader.videodownloader.activities.VideoPlayerActivity;
 import com.browser.downloader.videodownloader.adapter.SuggestionAdapter;
 import com.browser.downloader.videodownloader.data.AdType;
 import com.browser.downloader.videodownloader.data.ConfigData;
+import com.browser.downloader.videodownloader.data.Format;
 import com.browser.downloader.videodownloader.data.PagesSupported;
 import com.browser.downloader.videodownloader.data.SavedVideo;
 import com.browser.downloader.videodownloader.data.Suggestion;
@@ -57,6 +58,7 @@ import com.browser.downloader.videodownloader.databinding.DialogDownloadVideoBin
 import com.browser.downloader.videodownloader.databinding.FragmentBrowserBinding;
 import com.browser.downloader.videodownloader.dialog.GuidelineDialog;
 import com.browser.downloader.videodownloader.dialog.YoutubeDialog;
+import com.browser.downloader.videodownloader.service.DailymotionService;
 import com.browser.downloader.videodownloader.service.DownloadService;
 import com.browser.downloader.videodownloader.service.SearchService;
 import com.google.android.gms.ads.AdListener;
@@ -930,28 +932,53 @@ public class BrowserFragment extends BaseFragment {
         new DownloadService(mActivity, new DownloadService.DownloadCallback() {
             @Override
             public void onDownloadCompleted(Video video) {
-                showVideoDataDialog(video);
+                if (data.contains("dailymotion.com")) {
+                    // Download video formats for Dailymotion
+                    new DailymotionService(mActivity, new DailymotionService.DailymotionCallback() {
+                        @Override
+                        public void onDownloadCompleted(ArrayList<Format> formats) {
+                            video.setFormats(formats);
+                            // set default url is last format (best quality)
+                            if (formats.size() > 0) {
+                                video.setUrl(formats.get(formats.size() - 1).getUrl());
+                            }
+                            showVideoDataDialog(video);
+                        }
+
+                        @Override
+                        public void onDownloadFailed(String url) {
+                            showTryAgainDialog(data);
+                        }
+                    }).execute(data);
+                } else {
+                    // Show download video dialog for other sites
+                    showVideoDataDialog(video);
+                }
             }
 
             @Override
             public void onDownloadFailed(String url) {
-                DialogUtil.showAlertDialog(mActivity, "Try again", "Report link", getString(R.string.error_video_page),
-                        (dialog, i) -> {
-                            dialog.dismiss();
-                            downloadVideoService(data);
-                        }, (dialog, i) -> {
-                            dialog.dismiss();
-                            DialogUtil.showAlertDialog(mActivity, getString(R.string.message_report));
-                            try {
-                                // google analytics
-                                String website = url;
-                                if (url.contains("/")) website = url.split("/")[2];
-                                trackEvent(getString(R.string.event_report_link), website, url);
-                            } catch (Exception e) {
-                                e.printStackTrace();
-                            }
-                        });
+                showTryAgainDialog(data);
             }
         }).execute(data);
+    }
+
+    private void showTryAgainDialog(String url) {
+        DialogUtil.showAlertDialog(mActivity, "Try again", "Report link", getString(R.string.error_video_page),
+                (dialog, i) -> {
+                    dialog.dismiss();
+                    downloadVideoService(url);
+                }, (dialog, i) -> {
+                    dialog.dismiss();
+                    DialogUtil.showAlertDialog(mActivity, getString(R.string.message_report));
+                    try {
+                        // google analytics
+                        String website = url;
+                        if (url.contains("/")) website = url.split("/")[2];
+                        trackEvent(getString(R.string.event_report_link), website, url);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                });
     }
 }

@@ -16,6 +16,7 @@ import java.net.URL;
 
 import vd.core.util.AppUtil;
 import vd.core.util.DialogUtil;
+import vd.core.util.StringUtil;
 
 public class DownloadService extends AsyncTask<String, Integer, Video> {
 
@@ -45,7 +46,7 @@ public class DownloadService extends AsyncTask<String, Integer, Video> {
             }
 
             InputStream in = new BufferedInputStream(urlConnection.getInputStream());
-            JSONObject json = new JSONObject(convertStreamToString(in));
+            JSONObject json = new JSONObject(StringUtil.convertStreamToString(in));
 
             String downloadURL = json.getJSONObject("info").getString("url");
             String fileName = json.getJSONObject("info").getString("title") + "." + json.getJSONObject("info").getString("ext");
@@ -101,11 +102,6 @@ public class DownloadService extends AsyncTask<String, Integer, Video> {
                 e.printStackTrace();
             }
         }
-    }
-
-    private static String convertStreamToString(InputStream is) {
-        java.util.Scanner s = new java.util.Scanner(is).useDelimiter("\\A");
-        return s.hasNext() ? s.next() : "";
     }
 
     public interface DownloadCallback {

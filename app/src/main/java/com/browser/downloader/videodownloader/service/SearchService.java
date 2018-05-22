@@ -12,6 +12,8 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
+import vd.core.util.StringUtil;
+
 public class SearchService extends AsyncTask<String, Integer, List<String>> {
 
     private SuggestionCallback mSuggestionCallback;
@@ -35,7 +37,7 @@ public class SearchService extends AsyncTask<String, Integer, List<String>> {
             }
 
             InputStream in = new BufferedInputStream(urlConnection.getInputStream());
-            JSONArray jsonArray = new JSONArray(convertStreamToString(in));
+            JSONArray jsonArray = new JSONArray(StringUtil.convertStreamToString(in));
             JSONArray jsonArray2 = jsonArray.getJSONArray(1);
             for (int i = 0; i < jsonArray2.length(); i++) {
                 JSONArray jsonArray3 = jsonArray2.getJSONArray(i);
@@ -57,11 +59,6 @@ public class SearchService extends AsyncTask<String, Integer, List<String>> {
         if (suggestions != null && mSuggestionCallback != null) {
             mSuggestionCallback.onCompleted(suggestions);
         }
-    }
-
-    private static String convertStreamToString(InputStream is) {
-        java.util.Scanner s = new java.util.Scanner(is).useDelimiter("\\A");
-        return s.hasNext() ? s.next() : "";
     }
 
     public interface SuggestionCallback {

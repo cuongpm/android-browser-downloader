@@ -1,5 +1,7 @@
 package com.browser.downloader.videodownloader.data;
 
+import java.util.ArrayList;
+
 public class Video {
 
     public Video(String fileName, String url, String thumbnail, long duration) {
@@ -14,6 +16,8 @@ public class Video {
         this.url = url;
     }
 
+    private ArrayList<Format> formats;
+
     private String fileName;
 
     private String url;
@@ -23,6 +27,14 @@ public class Video {
     private long duration;
 
     private boolean isDownloadCompleted;
+
+    public ArrayList<Format> getFormats() {
+        return formats;
+    }
+
+    public void setFormats(ArrayList<Format> formats) {
+        this.formats = formats;
+    }
 
     public String getFileName() {
         return fileName;
