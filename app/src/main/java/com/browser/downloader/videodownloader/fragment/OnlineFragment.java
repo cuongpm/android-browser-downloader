@@ -3,11 +3,13 @@ package com.browser.downloader.videodownloader.fragment;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.browser.downloader.videodownloader.R;
+import com.browser.downloader.videodownloader.activities.VideoPlayerActivity;
 import com.browser.downloader.videodownloader.adapter.SavedVideoAdapter;
 import com.browser.downloader.videodownloader.data.SavedVideo;
 import com.browser.downloader.videodownloader.data.Video;
@@ -61,7 +63,10 @@ public class OnlineFragment extends BaseFragment {
         mVideos = mPreferenceManager.getSavedVideos();
         mBinding.rvVideo.setLayoutManager(new LinearLayoutManager(mActivity));
         mSavedVideoAdapter = new SavedVideoAdapter(mVideos, view -> {
-            mActivity.showInterstitlaAd();
+            String tag = (String) view.getTag();
+            if (!TextUtils.isEmpty(tag) && tag.equals(VideoPlayerActivity.class.getSimpleName())) {
+                mActivity.showInterstitlaAd();
+            }
             showEmptyData();
         });
         mBinding.rvVideo.setAdapter(mSavedVideoAdapter);

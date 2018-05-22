@@ -61,6 +61,7 @@ public class VideoAdapter
             intent.putExtra(VideoPlayerActivity.VIDEO_NAME, file.getName());
             view.getContext().startActivity(intent);
 
+            view.setTag(VideoPlayerActivity.class.getSimpleName());
             mOnClickListener.onClick(view);
         });
 

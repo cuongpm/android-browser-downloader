@@ -67,6 +67,7 @@ public class SavedVideoAdapter
             intent.putExtra(VideoPlayerActivity.VIDEO_NAME, video.getFileName());
             view.getContext().startActivity(intent);
 
+            view.setTag(VideoPlayerActivity.class.getSimpleName());
             mOnClickListener.onClick(view);
         });
 

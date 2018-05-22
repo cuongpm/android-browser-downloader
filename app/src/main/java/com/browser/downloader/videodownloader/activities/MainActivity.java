@@ -56,10 +56,6 @@ public class MainActivity extends BaseActivity {
 
     private boolean isAdShowed = false;
 
-    private int numberActionShowAd = 0;
-
-    private int totalActionShowAd = 5;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -93,7 +89,6 @@ public class MainActivity extends BaseActivity {
 
             @Override
             public void onPageSelected(int position) {
-                showInterstitlaAd();
                 mPagePosition = position;
                 mBinding.bottomBar.setDefaultTabPosition(position);
                 // google analytics
@@ -226,9 +221,6 @@ public class MainActivity extends BaseActivity {
         // Get config
         ConfigData configData = mPreferenceManager.getConfigData();
 
-        // Get total actions to show ad
-        totalActionShowAd = configData == null ? totalActionShowAd : configData.getTotalActionShowAd();
-
         // Check show ad
         boolean isShowAd = configData == null ? true : configData.isShowAdApp();
 
@@ -313,8 +305,7 @@ public class MainActivity extends BaseActivity {
     }
 
     public void showInterstitlaAd() {
-        numberActionShowAd++;
-        if (!isAdShowed && (numberActionShowAd % totalActionShowAd == 0)) {
+        if (!isAdShowed) {
             if (mInterstitialAd != null && mInterstitialAd.isLoaded()) {
                 mInterstitialAd.show();
                 isAdShowed = true;

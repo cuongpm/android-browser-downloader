@@ -31,21 +31,11 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.Toast;
 
-import com.airpush.injector.internal.IAirPushAdListener;
-import com.airpush.injector.internal.IAirPushPreparedAd;
-import com.airpush.injector.internal.ads.AirPushInterstitial;
-import com.applovin.adview.AppLovinInterstitialAd;
-import com.applovin.adview.AppLovinInterstitialAdDialog;
-import com.applovin.sdk.AppLovinAd;
-import com.applovin.sdk.AppLovinAdLoadListener;
-import com.applovin.sdk.AppLovinAdSize;
-import com.browser.downloader.videodownloader.AppApplication;
 import com.browser.downloader.videodownloader.R;
 import com.browser.downloader.videodownloader.activities.BookmarkActivity;
 import com.browser.downloader.videodownloader.activities.HistoryActivity;
 import com.browser.downloader.videodownloader.activities.VideoPlayerActivity;
 import com.browser.downloader.videodownloader.adapter.SuggestionAdapter;
-import com.browser.downloader.videodownloader.data.AdType;
 import com.browser.downloader.videodownloader.data.ConfigData;
 import com.browser.downloader.videodownloader.data.Format;
 import com.browser.downloader.videodownloader.data.PagesSupported;
@@ -61,9 +51,7 @@ import com.browser.downloader.videodownloader.dialog.YoutubeDialog;
 import com.browser.downloader.videodownloader.service.DailymotionService;
 import com.browser.downloader.videodownloader.service.DownloadService;
 import com.browser.downloader.videodownloader.service.SearchService;
-import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdSize;
-import com.google.android.gms.ads.InterstitialAd;
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -88,12 +76,6 @@ public class BrowserFragment extends BaseFragment {
 
     FragmentBrowserBinding mBinding;
 
-    private InterstitialAd mInterstitialAd;
-
-    private AppLovinAd mAppLovinAd;
-
-    private IAirPushPreparedAd mIAirPushPreparedAd;
-
     private PublishSubject<String> mPublishSubject;
 
     private SuggestionAdapter mSuggestionAdapter;
@@ -105,8 +87,6 @@ public class BrowserFragment extends BaseFragment {
     private Video mCurrentVideo;
 
     private Menu mMenu;
-
-    private boolean isAdShowed = false;
 
     private boolean isHasFocus = false;
 
@@ -141,120 +121,7 @@ public class BrowserFragment extends BaseFragment {
 
         initUI();
 
-        // Load ad interstitial
-        loadInterstitialAd();
-
         return mBinding.getRoot();
-    }
-
-    private void loadInterstitialAd() {
-
-        // Get config
-        ConfigData configData = mPreferenceManager.getConfigData();
-
-        // Check show ad
-        boolean isShowAd = configData == null ? true : configData.isShowAdBrowser();
-
-        // Check ad type
-        int adType = configData == null ? AdType.ADMOB.getValue() : configData.getShowAdBrowserType();
-
-        // Show ad
-        if (isShowAd) {
-            if (adType == AdType.ADMOB.getValue()) {
-                // Admob type
-                loadInterstitialAdmob();
-            } else if (adType == AdType.APPLOVIN.getValue()) {
-                // AppLovin type
-                loadInterstitialAppLovin();
-            } else if (adType == AdType.AIRPUSH.getValue()) {
-                // AirPush type
-                loadInterstitialAirPush();
-            } else {
-                // Default is admob type
-                loadInterstitialAdmob();
-            }
-        }
-    }
-
-    private void loadInterstitialAdmob() {
-        mInterstitialAd = new InterstitialAd(mActivity);
-        AdUtil.loadInterstitialAd(mInterstitialAd, new AdListener() {
-            @Override
-            public void onAdFailedToLoad(int i) {
-                super.onAdFailedToLoad(i);
-                // Load admob failed -> load AirPush
-                AirPushInterstitial airPushInterstitial = new AirPushInterstitial(mActivity);
-                airPushInterstitial.setEventsListener(new IAirPushAdListener() {
-                    @Override
-                    public void onLoad(IAirPushPreparedAd ad) {
-                        mIAirPushPreparedAd = ad;
-                    }
-
-                    @Override
-                    public void onError(Exception e) {
-                    }
-                });
-                airPushInterstitial.load();
-            }
-        });
-    }
-
-    private void loadInterstitialAppLovin() {
-        AppApplication.getAppLovinSdk().getAdService().loadNextAd(AppLovinAdSize.INTERSTITIAL, new AppLovinAdLoadListener() {
-            @Override
-            public void adReceived(AppLovinAd ad) {
-                mAppLovinAd = ad;
-            }
-
-            @Override
-            public void failedToReceiveAd(int errorCode) {
-                // Load AppLovin failed -> load Admob
-                mActivity.runOnUiThread(() -> {
-                    mInterstitialAd = new InterstitialAd(mActivity);
-                    AdUtil.loadInterstitialAd(mInterstitialAd, null);
-                });
-            }
-        });
-    }
-
-    private void loadInterstitialAirPush() {
-        AirPushInterstitial airPushInterstitial = new AirPushInterstitial(mActivity);
-        airPushInterstitial.setEventsListener(new IAirPushAdListener() {
-            @Override
-            public void onLoad(IAirPushPreparedAd ad) {
-                mIAirPushPreparedAd = ad;
-            }
-
-            @Override
-            public void onError(Exception e) {
-                // Load AirPush failed -> load Admob
-                mInterstitialAd = new InterstitialAd(mActivity);
-                AdUtil.loadInterstitialAd(mInterstitialAd, null);
-            }
-        });
-        airPushInterstitial.load();
-    }
-
-    private void showInterstitlaAd() {
-        if (!isAdShowed) {
-            if (mInterstitialAd != null && mInterstitialAd.isLoaded()) {
-                mInterstitialAd.show();
-                isAdShowed = true;
-                // google analytics
-                trackEvent(getString(R.string.app_name), getString(R.string.action_show_ad_browser), "Admob");
-            } else if (mAppLovinAd != null) {
-                AppLovinInterstitialAdDialog interstitialAd = AppLovinInterstitialAd.create(AppApplication.getAppLovinSdk(), mActivity.getApplicationContext());
-                interstitialAd.showAndRender(mAppLovinAd);
-                isAdShowed = true;
-                // google analytics
-                trackEvent(getString(R.string.app_name), getString(R.string.action_show_ad_browser), "AppLovin");
-            } else if (mIAirPushPreparedAd != null) {
-                mIAirPushPreparedAd.show();
-                isAdShowed = true;
-                // google analytics
-                trackEvent(getString(R.string.app_name), getString(R.string.action_show_ad_browser), "AirPush");
-            }
-        }
     }
 
     @Override
@@ -278,15 +145,9 @@ public class BrowserFragment extends BaseFragment {
 
         } else if (item.getItemId() == R.id.menu_bookmark) {
             startActivityForResult(new Intent(mActivity, BookmarkActivity.class), ACTIVITY_BOOKMARK);
-            if (!mPreferenceManager.getBookmark().isEmpty()) {
-                showInterstitlaAd();
-            }
 
         } else if (item.getItemId() == R.id.menu_history) {
             startActivityForResult(new Intent(mActivity, HistoryActivity.class), ACTIVITY_HISTORY);
-            if (!mPreferenceManager.getHistory().isEmpty()) {
-                showInterstitlaAd();
-            }
 
         } else if (item.getItemId() == R.id.menu_share) {
             if (mBinding.webview != null && !TextUtils.isEmpty(mBinding.webview.getUrl())) {
@@ -617,7 +478,7 @@ public class BrowserFragment extends BaseFragment {
             intent.putExtra(VideoPlayerActivity.VIDEO_NAME, video.getFileName());
             startActivity(intent);
             // Show ad
-            showInterstitlaAd();
+            mActivity.showInterstitlaAd();
             // google analytics
             logEventGA(video.getUrl(), getString(R.string.action_video_preview));
         });
@@ -666,8 +527,6 @@ public class BrowserFragment extends BaseFragment {
             mActivity.showOnlineTabBadge();
             // Send event to Online screen to update list saved video
             EventBus.getDefault().post(new SavedVideo(video));
-            // Show ad
-            showInterstitlaAd();
             // google analytics
             logEventGA(video.getUrl(), getString(R.string.action_video_save_ok));
         });
@@ -693,7 +552,6 @@ public class BrowserFragment extends BaseFragment {
         binding.layoutVideoDownload.tvOk.setOnClickListener(view -> {
             bottomSheetDialog.dismiss();
             EventBus.getDefault().post(video);
-            showInterstitlaAd();
             // google analytics
             logEventGA(video.getUrl(), getString(R.string.action_video_download_ok));
         });
