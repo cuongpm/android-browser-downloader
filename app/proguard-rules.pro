@@ -158,3 +158,4 @@
 # Airpush
 -keep class com.airpush.** {*;}
 -keepattributes Signature
+-dontwarn com.airpush.**
