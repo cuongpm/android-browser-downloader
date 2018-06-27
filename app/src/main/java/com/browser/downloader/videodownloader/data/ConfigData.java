@@ -11,10 +11,6 @@ public class ConfigData {
     @Expose
     private boolean isShowAdSplash = true;
 
-    @SerializedName("is_show_ad_browser")
-    @Expose
-    private boolean isShowAdBrowser = true;
-
     @SerializedName("is_show_ad_app")
     @Expose
     private boolean isShowAdApp = true;
@@ -27,17 +23,9 @@ public class ConfigData {
     @Expose
     private boolean isShowAllPages;
 
-    @SerializedName("total_action_show_ad")
-    @Expose
-    private int totalActionShowAd;
-
     @SerializedName("show_ad_splash_type")
     @Expose
     private int showAdSplashType;
-
-    @SerializedName("show_ad_browser_type")
-    @Expose
-    private int showAdBrowserType;
 
     @SerializedName("show_ad_app_type")
     @Expose
@@ -67,14 +55,6 @@ public class ConfigData {
         isShowAdSplash = showAdSplash;
     }
 
-    public boolean isShowAdBrowser() {
-        return isShowAdBrowser;
-    }
-
-    public void setShowAdBrowser(boolean showAdBrowser) {
-        isShowAdBrowser = showAdBrowser;
-    }
-
     public boolean isShowAdApp() {
         return isShowAdApp;
     }
@@ -99,28 +79,12 @@ public class ConfigData {
         isShowAllPages = showAllPages;
     }
 
-    public int getTotalActionShowAd() {
-        return totalActionShowAd;
-    }
-
-    public void setTotalActionShowAd(int totalActionShowAd) {
-        this.totalActionShowAd = totalActionShowAd;
-    }
-
     public int getShowAdSplashType() {
         return showAdSplashType;
     }
 
     public void setShowAdSplashType(int showAdSplashType) {
         this.showAdSplashType = showAdSplashType;
-    }
-
-    public int getShowAdBrowserType() {
-        return showAdBrowserType;
-    }
-
-    public void setShowAdBrowserType(int showAdBrowserType) {
-        this.showAdBrowserType = showAdBrowserType;
     }
 
     public int getShowAdAppType() {

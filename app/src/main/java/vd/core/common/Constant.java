@@ -9,7 +9,7 @@ public class Constant {
     public final static String GOOGLE_PLAY_LINK = "https://play.google.com/store/apps/details?id=%s";
 
     // Remote data
-    public final static String REMOTE_URL = "https://videodownloader-8b54c.firebaseapp.com/api/";
+    public final static String REMOTE_URL = "https://generaldata-79d9b.firebaseapp.com/api/";
 
     // Search url
     public final static String SUGGESTION_URL = "http://suggestqueries.google.com/complete/search?hl=en&ds=yt&client=youtube&hjson=t&cp=1&q=%s&format=5&alt=json";
@@ -21,12 +21,12 @@ public class Constant {
     public final static String USER_AGENT = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/56.0.2924.87 Safari/537.36";
 
     // App config
-    public final static String UA_ID = "UA-117583490-1";
+    public final static String UA_ID = "UA-117376697-1";
 
     // Admob
-    public final static String AD_APP_ID = "ca-app-pub-6693454642396900~1252074672";
-    public final static String AD_BANNER_ID = "ca-app-pub-6693454642396900/5927539057";
-    public final static String AD_INTERSTITIAL_ID = "ca-app-pub-6693454642396900/2726660641";
+    public final static String AD_APP_ID = "ca-app-pub-9480296373139891~6203246230";
+    public final static String AD_BANNER_ID = "ca-app-pub-9480296373139891/5792182691";
+    public final static String AD_INTERSTITIAL_ID = "ca-app-pub-9480296373139891/1768752178";
 
 //    public final static String AD_BANNER_ID = "ca-app-pub-3940256099942544/6300978111";
 //    public final static String AD_INTERSTITIAL_ID = "ca-app-pub-3940256099942544/1033173712";
