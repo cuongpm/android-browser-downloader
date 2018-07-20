@@ -282,6 +282,8 @@ public class BrowserFragment extends BaseFragment {
             trackEvent(getString(R.string.app_name), getString(R.string.action_search_suggestion), listSuggestions.get(position).getSuggestion());
             // Search keyword
             loadWebView();
+            // Show ad
+            mActivity.showInterstitialAdFullPosition();
         });
     }
 
