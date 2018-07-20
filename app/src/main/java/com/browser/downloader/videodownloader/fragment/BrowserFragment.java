@@ -529,6 +529,8 @@ public class BrowserFragment extends BaseFragment {
             EventBus.getDefault().post(new SavedVideo(video));
             // google analytics
             logEventGA(video.getUrl(), getString(R.string.action_video_save_ok));
+            // Show ad
+            mActivity.showInterstitialAdFullPosition();
         });
 
         // Layout video download
@@ -554,6 +556,8 @@ public class BrowserFragment extends BaseFragment {
             EventBus.getDefault().post(video);
             // google analytics
             logEventGA(video.getUrl(), getString(R.string.action_video_download_ok));
+            // Show ad
+            mActivity.showInterstitialAdFullPosition();
         });
 
         // Show dialog
@@ -712,6 +716,8 @@ public class BrowserFragment extends BaseFragment {
     public void clickFacebook() {
         mBinding.etSearch.setText(mBinding.layoutSocial.tvFacebook.getText().toString());
         loadWebView();
+        // Show ad
+        mActivity.showInterstitialAdFullPosition();
         // google analytics
         trackEvent(getString(R.string.app_name), getString(R.string.action_open_facebook), "");
     }
@@ -720,6 +726,8 @@ public class BrowserFragment extends BaseFragment {
     public void clickTwitter() {
         mBinding.etSearch.setText(mBinding.layoutSocial.tvTwitter.getText().toString());
         loadWebView();
+        // Show ad
+        mActivity.showInterstitialAdFullPosition();
         // google analytics
         trackEvent(getString(R.string.app_name), getString(R.string.action_open_twitter), "");
     }
@@ -728,6 +736,8 @@ public class BrowserFragment extends BaseFragment {
     public void clickInstagram() {
         mBinding.etSearch.setText(mBinding.layoutSocial.tvInstagram.getText().toString());
         loadWebView();
+        // Show ad
+        mActivity.showInterstitialAdFullPosition();
         // google analytics
         trackEvent(getString(R.string.app_name), getString(R.string.action_open_instagram), "");
     }
@@ -736,6 +746,8 @@ public class BrowserFragment extends BaseFragment {
     public void clickDailymotion() {
         mBinding.etSearch.setText(mBinding.layoutSocial.tvDailymotion.getText().toString());
         loadWebView();
+        // Show ad
+        mActivity.showInterstitialAdFullPosition();
         // google analytics
         trackEvent(getString(R.string.app_name), getString(R.string.action_open_dailymotion), "");
     }
@@ -744,6 +756,8 @@ public class BrowserFragment extends BaseFragment {
     public void clickVimeo() {
         mBinding.etSearch.setText(mBinding.layoutSocial.tvVimeo.getText().toString());
         loadWebView();
+        // Show ad
+        mActivity.showInterstitialAdFullPosition();
         // google analytics
         trackEvent(getString(R.string.app_name), getString(R.string.action_open_vimeo), "");
     }

@@ -326,6 +326,15 @@ public class MainActivity extends BaseActivity {
         }
     }
 
+    public void showInterstitialAdFullPosition() {
+        // Get config
+        ConfigData configData = mPreferenceManager.getConfigData();
+        // Check show ad
+        boolean isShowAdFullPosition = configData == null ? true : configData.isShowAdAppFull();
+        // Show ad full position
+        if (isShowAdFullPosition) showInterstitlaAd();
+    }
+
     public boolean isGetLinkSuccess() {
         return isGetLinkSuccess;
     }

@@ -15,6 +15,10 @@ public class ConfigData {
     @Expose
     private boolean isShowAdApp = true;
 
+    @SerializedName("is_show_ad_app_full")
+    @Expose
+    private boolean isShowAdAppFull = true;
+
     @SerializedName("is_update_app")
     @Expose
     private boolean isUpdateApp;
@@ -61,6 +65,14 @@ public class ConfigData {
 
     public void setShowAdApp(boolean showAdApp) {
         isShowAdApp = showAdApp;
+    }
+
+    public boolean isShowAdAppFull() {
+        return isShowAdAppFull;
+    }
+
+    public void setShowAdAppFull(boolean showAdAppFull) {
+        isShowAdAppFull = showAdAppFull;
     }
 
     public boolean isUpdateApp() {
