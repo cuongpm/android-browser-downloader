@@ -84,7 +84,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
 
-                <com.browser.downloader.videodownloader.customview.NestedScrollWebView
+                <com.browser.downloader.customview.NestedScrollWebView
                     android:id="@+id/webview"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"

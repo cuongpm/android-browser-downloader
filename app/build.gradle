@@ -30,37 +30,68 @@ dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation files('libs/air-push-x.jar')
 
-    implementation 'com.android.support:appcompat-v7:27.1.1'
-    implementation 'com.android.support:support-v4:27.1.1'
-    implementation 'com.android.support:design:27.1.1'
-    implementation 'com.android.support:recyclerview-v7:27.1.1'
-    implementation 'com.android.support:cardview-v7:27.1.1'
+    def ANDROID_SUPPORT_VERSION = '27.1.1'
+    def ANDROID_SERVICE_VERSION = '15.0.0'
+    def RETROFIT_VERSION = '2.3.0'
+    def THIRTY_INCH_VERSION = '0.8.0'
 
-    implementation 'com.google.android.gms:play-services-analytics:15.0.0'
-    implementation 'com.google.android.gms:play-services-ads:15.0.0'
+    // Android support library
+    implementation "com.android.support:appcompat-v7:$ANDROID_SUPPORT_VERSION"
+    implementation "com.android.support:support-v4:$ANDROID_SUPPORT_VERSION"
+    implementation "com.android.support:design:$ANDROID_SUPPORT_VERSION"
+    implementation "com.android.support:recyclerview-v7:$ANDROID_SUPPORT_VERSION"
+    implementation "com.android.support:cardview-v7:$ANDROID_SUPPORT_VERSION"
 
+    // Android services
+    implementation "com.google.android.gms:play-services-analytics:$ANDROID_SERVICE_VERSION"
+    implementation "com.google.android.gms:play-services-ads:$ANDROID_SERVICE_VERSION"
+
+    // Retrofit
+    implementation "com.squareup.retrofit2:retrofit:$RETROFIT_VERSION"
+    implementation "com.squareup.retrofit2:converter-gson:$RETROFIT_VERSION"
+    implementation "com.squareup.retrofit2:adapter-rxjava:$RETROFIT_VERSION"
+
+    // MVP ThirstyInch Library for activity and fragment
+    implementation "net.grandcentrix.thirtyinch:thirtyinch:$THIRTY_INCH_VERSION"
+    implementation "net.grandcentrix.thirtyinch:thirtyinch-rx:$THIRTY_INCH_VERSION"
+    testImplementation "net.grandcentrix.thirtyinch:thirtyinch-test:$THIRTY_INCH_VERSION"
+
+    // Multidex
     implementation 'com.android.support:multidex:1.0.3'
 
+    // Butterknife
     implementation 'com.jakewharton:butterknife:8.8.1'
     annotationProcessor 'com.jakewharton:butterknife-compiler:8.8.1'
 
+    // Logging library
+    implementation 'com.jakewharton.timber:timber:4.3.1'
+
+    // Event bus
     implementation 'org.greenrobot:eventbus:3.0.0'
 
-    implementation "com.squareup.retrofit2:retrofit:2.3.0"
-    implementation "com.squareup.retrofit2:converter-gson:2.3.0"
-    implementation "com.squareup.retrofit2:adapter-rxjava:2.3.0"
-
+    // Rx android
     implementation 'io.reactivex:rxandroid:1.2.1'
 
+    // Fresco
     implementation 'com.facebook.fresco:fresco:1.9.0'
 
+    // Material dialog
+    implementation 'com.afollestad.material-dialogs:core:0.9.4.5'
+
+    // Device info
+    implementation "com.github.nisrulz:easydeviceinfo:2.3.3"
+
+    // Bottom bar
     implementation 'com.roughike:bottom-bar:2.3.1'
 
+    // Rating lib
     implementation 'com.github.sujithkanna:smileyrating:1.5.0'
 
+    // Applovin
     implementation 'com.applovin:applovin-sdk:+'
 
+    // Test
     testImplementation 'junit:junit:4.12'
-    androidTestImplementation 'com.android.support.test:runner:1.0.1'
-    androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.1'
+    androidTestImplementation 'com.android.support.test:runner:1.0.2'
+    androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
 }

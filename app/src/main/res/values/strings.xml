@@ -9,6 +9,10 @@
     <string name="text_no_bookmark">No bookmark</string>
     <string name="text_no_history">No history</string>
 
+    <string name="dialog_positive">OK</string>
+    <string name="dialog_negative">Cancel</string>
+    <string name="dialog_retry">Retry</string>
+
     <string name="rename_title">Rename video</string>
     <string name="rename_invalid">Invalid name. Please try again!</string>
     <string name="rename_exist">Video name already exists!</string>
@@ -81,6 +85,10 @@
 
     <string name="error_valid_link">Please enter a valid video link!</string>
     <string name="error_video_page">Can\'t get video link. Please try again!</string>
+
+    <string name="error_internet_connection">Internet Connection Error</string>
+    <string name="error_data_format">Data Format Error</string>
+    <string name="error_unknown">Unknown Error</string>
 
     <string name="message_report">Thank you for your report. We are working hard to bring you better user experience.</string>
     <string name="message_exit">Do you want to exit this application?</string>
