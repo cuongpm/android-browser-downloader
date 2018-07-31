@@ -6,12 +6,6 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
-    <!-- These permissions are strongly recommended and will result in higher performance -->
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-
-    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
-
     <application
         android:name="com.browser.downloader.AppApplication"
         android:allowBackup="true"
@@ -21,7 +15,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name="com.browser.downloader.activities.SplashActivity"
+            android:name="com.browser.downloader.ui.splash.SplashActivity"
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -30,38 +24,20 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="com.browser.downloader.activities.MainActivity"
+            android:name="com.browser.downloader.ui.home.MainActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name="com.browser.downloader.activities.VideoPlayerActivity"
+            android:name="com.browser.downloader.ui.videoplayer.VideoPlayerActivity"
             android:configChanges="keyboard|keyboardHidden|orientation|screenSize"
             android:screenOrientation="portrait" />
         <activity
-            android:name="com.browser.downloader.activities.BookmarkActivity"
+            android:name="com.browser.downloader.ui.bookmark.BookmarkActivity"
             android:screenOrientation="portrait"
             android:theme="@style/ActivityTheme" />
         <activity
-            android:name="com.browser.downloader.activities.HistoryActivity"
+            android:name="com.browser.downloader.ui.history.HistoryActivity"
             android:screenOrientation="portrait"
             android:theme="@style/ActivityTheme" />
-
-        <!-- AppLovin SDK Key -->
-        <meta-data
-            android:name="applovin.sdk.key"
-            android:value="IW-b6vyeIRwOZ2Mbvr4XLtoeOS8o5h6NC4-J-wzGMtewv0VpsaLCR7rqa-cfgi2tn1Amy70I_fCvgihWH1kk9T" />
-
-        <activity
-            android:name="com.applovin.adview.AppLovinInterstitialActivity"
-            android:configChanges="orientation|screenSize" />
-        <activity
-            android:name="com.applovin.adview.AppLovinConfirmationActivity"
-            android:configChanges="orientation|screenSize" />
-
-        <!-- Airpush -->
-        <activity
-            android:name="com.airpush.injector.internal.activity.AirPushActivity"
-            android:configChanges="orientation|keyboardHidden|screenSize"
-            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
 
         <provider
             android:name="android.support.v4.content.FileProvider"

@@ -8,9 +8,9 @@ import android.text.TextUtils;
 import android.webkit.CookieManager;
 import android.webkit.CookieSyncManager;
 
-import com.browser.core.common.Constant;
-import com.browser.core.common.PreferencesManager;
-import com.browser.downloader.data.ConfigData;
+import com.browser.downloader.data.local.Constant;
+import com.browser.downloader.data.local.PreferencesManager;
+import com.browser.downloader.data.model.ConfigData;
 
 import timber.log.Timber;
 

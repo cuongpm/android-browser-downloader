@@ -10,7 +10,7 @@ import com.google.android.gms.ads.AdSize;
 import com.google.android.gms.ads.AdView;
 import com.google.android.gms.ads.InterstitialAd;
 
-import com.browser.core.common.Constant;
+import com.browser.downloader.data.local.Constant;
 
 public class AdUtil {
 

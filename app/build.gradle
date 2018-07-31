@@ -17,6 +17,9 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+    defaultConfig {
+        multiDexEnabled true
+    }
     dataBinding {
         enabled = true
     }
@@ -26,9 +29,14 @@ android {
     }
 }
 
+repositories {
+    maven {
+        url "https://maven.fabric.io/public"
+    }
+}
+
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-    implementation files('libs/air-push-x.jar')
 
     def ANDROID_SUPPORT_VERSION = '27.1.1'
     def ANDROID_SERVICE_VERSION = '15.0.0'
@@ -46,6 +54,22 @@ dependencies {
     implementation "com.google.android.gms:play-services-analytics:$ANDROID_SERVICE_VERSION"
     implementation "com.google.android.gms:play-services-ads:$ANDROID_SERVICE_VERSION"
 
+    // Firebase
+    implementation "com.google.firebase:firebase-crash:$ANDROID_SERVICE_VERSION"
+
+    // Crashlytics
+    implementation('com.crashlytics.sdk.android:crashlytics:2.5.5@aar') {
+        transitive = true;
+    }
+
+    // Logging
+    implementation 'org.slf4j:slf4j-api:1.7.22'
+    implementation 'com.github.tony19:logback-android-core:1.1.1-6'
+    implementation('com.github.tony19:logback-android-classic:1.1.1-6') {
+        // workaround issue #73
+        exclude group: 'com.google.android', module: 'android'
+    }
+
     // Retrofit
     implementation "com.squareup.retrofit2:retrofit:$RETROFIT_VERSION"
     implementation "com.squareup.retrofit2:converter-gson:$RETROFIT_VERSION"
@@ -55,6 +79,10 @@ dependencies {
     implementation "net.grandcentrix.thirtyinch:thirtyinch:$THIRTY_INCH_VERSION"
     implementation "net.grandcentrix.thirtyinch:thirtyinch-rx:$THIRTY_INCH_VERSION"
     testImplementation "net.grandcentrix.thirtyinch:thirtyinch-test:$THIRTY_INCH_VERSION"
+
+    // Dagger
+    implementation 'com.google.dagger:dagger:2.11'
+    annotationProcessor 'com.google.dagger:dagger-compiler:2.11'
 
     // Multidex
     implementation 'com.android.support:multidex:1.0.3'
@@ -87,8 +115,8 @@ dependencies {
     // Rating lib
     implementation 'com.github.sujithkanna:smileyrating:1.5.0'
 
-    // Applovin
-    implementation 'com.applovin:applovin-sdk:+'
+    // Commons
+    implementation "commons-io:commons-io:2.6"
 
     // Test
     testImplementation 'junit:junit:4.12'
