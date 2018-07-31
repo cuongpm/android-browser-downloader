@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "236863094601",
+    "firebase_url": "https://browserdownloader-b4856.firebaseio.com",
+    "project_id": "browserdownloader-b4856",
+    "storage_bucket": "browserdownloader-b4856.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:236863094601:android:99ed26690d9afce3",
+        "android_client_info": {
+          "package_name": "video.downloader.videodownloader.downloadvideo"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "236863094601-v7hkqherqu73atl31862sgfess0lcrk8.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAxF7qRlC2SaczguQNzgTHXU4_jaJ7sYeI"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

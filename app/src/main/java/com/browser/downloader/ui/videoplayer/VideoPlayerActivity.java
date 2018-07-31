@@ -7,6 +7,7 @@ import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.annotation.NonNull;
 import android.support.v4.content.FileProvider;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -18,21 +19,22 @@ import android.view.animation.AnimationUtils;
 import android.widget.SeekBar;
 
 import com.browser.core.R;
-import com.browser.downloader.callback.DialogListener;
-import com.browser.downloader.data.model.VideoState;
 import com.browser.core.databinding.ActivityVideoPlayerBinding;
-import com.browser.downloader.ui.BaseActivity;
+import com.browser.core.mvp.BaseTiActivity;
+import com.browser.core.util.IntentUtil;
+import com.browser.core.util.TimeUtil;
+import com.browser.downloader.callback.DialogListener;
+import com.browser.downloader.data.local.PreferencesManager;
+import com.browser.downloader.data.model.VideoState;
 import com.browser.downloader.ui.dialog.RatingDialog;
 
 import java.io.File;
 
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import com.browser.downloader.data.local.PreferencesManager;
-import com.browser.core.util.IntentUtil;
-import com.browser.core.util.TimeUtil;
 
-public class VideoPlayerActivity extends BaseActivity implements SeekBar.OnSeekBarChangeListener {
+public class VideoPlayerActivity extends BaseTiActivity<VideoPlayerPresenter, VideoPlayerView>
+        implements VideoPlayerView, SeekBar.OnSeekBarChangeListener {
 
     ActivityVideoPlayerBinding mBinding;
 
@@ -56,6 +58,11 @@ public class VideoPlayerActivity extends BaseActivity implements SeekBar.OnSeekB
 
     public final static String VIDEO_NAME = "video_name";
 
+    @NonNull
+    @Override
+    public VideoPlayerPresenter providePresenter() {
+        return new VideoPlayerPresenter();
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -175,7 +182,7 @@ public class VideoPlayerActivity extends BaseActivity implements SeekBar.OnSeekB
                 @Override
                 public void onPositiveButton(Dialog dialog) {
                     dialog.dismiss();
-                    mPreferenceManager.setRateApp(true);
+                    getPresenter().setRateApp(true);
                     IntentUtil.openGooglePlay(VideoPlayerActivity.this, getPackageName());
                     // google analytics
                     trackEvent(getString(R.string.app_name), getString(R.string.action_rate_us_video_player), "");

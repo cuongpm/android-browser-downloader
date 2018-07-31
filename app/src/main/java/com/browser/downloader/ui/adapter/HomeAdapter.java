@@ -8,7 +8,7 @@ import com.browser.downloader.ui.home.BrowserFragment;
 import com.browser.downloader.ui.videoplayer.OnlineFragment;
 import com.browser.downloader.ui.progress.ProgressFragment;
 import com.browser.downloader.ui.settings.SettingsFragment;
-import com.browser.downloader.ui.videoplayer.VideoFragment;
+import com.browser.downloader.ui.videoplayer.OfflineFragment;
 
 public class HomeAdapter extends FragmentPagerAdapter {
 
@@ -23,7 +23,7 @@ public class HomeAdapter extends FragmentPagerAdapter {
         } else if (position == 1) {
             return ProgressFragment.getInstance();
         } else if (position == 2) {
-            return VideoFragment.getInstance();
+            return OfflineFragment.getInstance();
         } else if (position == 3) {
             return OnlineFragment.getInstance();
         } else {

@@ -4,22 +4,22 @@ import android.app.Dialog;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.annotation.NonNull;
 import android.support.v4.view.ViewPager;
 import android.text.TextUtils;
 
 import com.browser.core.BuildConfig;
 import com.browser.core.R;
 import com.browser.core.databinding.ActivityMainBinding;
+import com.browser.core.mvp.BaseTiActivity;
 import com.browser.core.util.AdUtil;
 import com.browser.core.util.AppUtil;
 import com.browser.core.util.DialogUtil;
 import com.browser.core.util.FileUtil;
 import com.browser.core.util.IntentUtil;
 import com.browser.downloader.callback.DialogListener;
-import com.browser.downloader.data.model.AdType;
 import com.browser.downloader.data.model.ConfigData;
 import com.browser.downloader.data.model.Video;
-import com.browser.downloader.ui.BaseActivity;
 import com.browser.downloader.ui.adapter.HomeAdapter;
 import com.browser.downloader.ui.dialog.RatingDialog;
 import com.browser.downloader.ui.dialog.UpdateDialog;
@@ -31,7 +31,7 @@ import org.greenrobot.eventbus.Subscribe;
 
 import butterknife.ButterKnife;
 
-public class MainActivity extends BaseActivity {
+public class MainActivity extends BaseTiActivity<MainPresenter, MainView> implements MainView {
 
     ActivityMainBinding mBinding;
 
@@ -42,6 +42,12 @@ public class MainActivity extends BaseActivity {
     private boolean isGetLinkSuccess = false;
 
     private boolean isAdShowed = false;
+
+    @NonNull
+    @Override
+    public MainPresenter providePresenter() {
+        return new MainPresenter();
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,7 +61,8 @@ public class MainActivity extends BaseActivity {
         AdUtil.loadBanner(this, mBinding.layoutBanner, AdSize.BANNER, true);
 
         // Load ad interstitial
-        loadInterstitialAd();
+        mInterstitialAd = new InterstitialAd(this);
+        getPresenter().loadInterstitialAd(mInterstitialAd);
     }
 
     @Override
@@ -82,9 +89,9 @@ public class MainActivity extends BaseActivity {
                 String category = getString(position == 0 ? R.string.screen_browser
                         : position == 1 ? R.string.screen_progress : position == 2 ? R.string.screen_video
                         : position == 3 ? R.string.screen_online : R.string.screen_settings);
-                String action = (position == 1 ? (mPreferenceManager.getProgress().size() + "")
+                String action = (position == 1 ? (getPresenter().getProgress().size() + "")
                         : position == 2 ? (FileUtil.getListFiles().size() + "")
-                        : position == 3 ? (mPreferenceManager.getSavedVideos().size() + "") : "");
+                        : position == 3 ? (getPresenter().getSavedVideos().size() + "") : "");
                 trackEvent(getString(R.string.app_name), category, action);
                 trackView(category);
             }
@@ -101,11 +108,11 @@ public class MainActivity extends BaseActivity {
                 mBinding.viewPager.setCurrentItem(1, true);
             } else if (tabId == R.id.tab_video) {
                 mBinding.viewPager.setCurrentItem(2, true);
-                mPreferenceManager.setTabVideoBadge(0);
+                getPresenter().setTabVideoBadge(0);
                 mBinding.bottomBar.getTabWithId(tabId).removeBadge();
             } else if (tabId == R.id.tab_online) {
                 mBinding.viewPager.setCurrentItem(3, true);
-                mPreferenceManager.setTabOnlineBadge(0);
+                getPresenter().setTabOnlineBadge(0);
                 mBinding.bottomBar.getTabWithId(tabId).removeBadge();
             } else {
                 mBinding.viewPager.setCurrentItem(4, true);
@@ -126,9 +133,20 @@ public class MainActivity extends BaseActivity {
         showUpdateDialog();
     }
 
-    private void showUpdateDialog() {
+    @Subscribe
+    public void onDownloadVideo(Video video) {
+        // show badge in progress tab
+        showProgressBadge();
 
-        ConfigData configData = mPreferenceManager.getConfigData();
+        // show badge in video tab
+        if (video.isDownloadCompleted()) {
+            getPresenter().setTabVideoBadge(getPresenter().getTabVideoBadge() + 1);
+            mBinding.bottomBar.getTabWithId(R.id.tab_video).setBadgeCount(getPresenter().getTabVideoBadge());
+        }
+    }
+
+    public void showUpdateDialog() {
+        ConfigData configData = getPresenter().getConfigData();
         if (configData != null && configData.isUpdateApp() && !TextUtils.isEmpty(configData.getAppVersion())
                 && !configData.getAppVersion().equals(BuildConfig.VERSION_NAME)) {
             UpdateDialog.getDialog(this, configData.getAppVersion(), view -> {
@@ -139,21 +157,9 @@ public class MainActivity extends BaseActivity {
         }
     }
 
-    @Subscribe
-    public void onDownloadVideo(Video video) {
-        // show badge in progress tab
-        showProgressBadge();
-
-        // show badge in video tab
-        if (video.isDownloadCompleted()) {
-            mPreferenceManager.setTabVideoBadge(mPreferenceManager.getTabVideoBadge() + 1);
-            mBinding.bottomBar.getTabWithId(R.id.tab_video).setBadgeCount(mPreferenceManager.getTabVideoBadge());
-        }
-    }
-
     private void showProgressBadge() {
         new Handler().postDelayed(() -> {
-            int progressBadge = mPreferenceManager.getProgress().size();
+            int progressBadge = getPresenter().getProgress().size();
             if (progressBadge > 0) {
                 mBinding.bottomBar.getTabWithId(R.id.tab_progress).setBadgeCount(progressBadge);
             } else {
@@ -163,8 +169,8 @@ public class MainActivity extends BaseActivity {
     }
 
     public void showOnlineTabBadge() {
-        mPreferenceManager.setTabOnlineBadge(mPreferenceManager.getTabOnlineBadge() + 1);
-        mBinding.bottomBar.getTabWithId(R.id.tab_online).setBadgeCount(mPreferenceManager.getTabOnlineBadge());
+        getPresenter().setTabOnlineBadge(getPresenter().getTabOnlineBadge() + 1);
+        mBinding.bottomBar.getTabWithId(R.id.tab_online).setBadgeCount(getPresenter().getTabOnlineBadge());
     }
 
     @Override
@@ -174,12 +180,12 @@ public class MainActivity extends BaseActivity {
             return;
         }
 
-        if ((isGetLinkSuccess || !mPreferenceManager.isFirstTime()) && !mPreferenceManager.isRateApp()) {
+        if ((isGetLinkSuccess || !getPresenter().isFirstTime()) && !getPresenter().isRateApp()) {
             RatingDialog.getDialog(this, new DialogListener() {
                 @Override
                 public void onPositiveButton(Dialog dialog) {
                     dialog.dismiss();
-                    mPreferenceManager.setRateApp(true);
+                    getPresenter().setRateApp(true);
                     IntentUtil.openGooglePlay(MainActivity.this, getPackageName());
                     // google analytics
                     trackEvent(getString(R.string.app_name), getString(R.string.action_rate_us_exit_app), "");
@@ -201,24 +207,7 @@ public class MainActivity extends BaseActivity {
         }
 
         // set first time data
-        mPreferenceManager.setFirstTime(false);
-    }
-
-    private void loadInterstitialAd() {
-        // Get config
-        ConfigData configData = mPreferenceManager.getConfigData();
-
-        // Check show ad
-        boolean isShowAd = configData == null ? true : configData.isShowAdApp();
-
-        // Check ad type
-        int adType = configData == null ? AdType.ADMOB.getValue() : configData.getShowAdAppType();
-
-        // Show ad
-        if (isShowAd) {
-            mInterstitialAd = new InterstitialAd(this);
-            AdUtil.loadInterstitialAd(mInterstitialAd, null);
-        }
+        getPresenter().setFirstTime(false);
     }
 
     public void showInterstitlaAd() {
@@ -232,7 +221,7 @@ public class MainActivity extends BaseActivity {
 
     public void showInterstitialAdFullPosition() {
         // Get config
-        ConfigData configData = mPreferenceManager.getConfigData();
+        ConfigData configData = getPresenter().getConfigData();
         // Check show ad
         boolean isShowAdFullPosition = configData == null ? true : configData.isShowAdAppFull();
         // Show ad full position

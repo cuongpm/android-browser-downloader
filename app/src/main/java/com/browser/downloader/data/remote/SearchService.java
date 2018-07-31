@@ -3,6 +3,8 @@ package com.browser.downloader.data.remote;
 import android.os.AsyncTask;
 import android.text.Html;
 
+import com.browser.core.util.StringUtil;
+
 import org.json.JSONArray;
 
 import java.io.BufferedInputStream;
@@ -11,8 +13,6 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
-
-import com.browser.core.util.StringUtil;
 
 public class SearchService extends AsyncTask<String, Integer, List<String>> {
 

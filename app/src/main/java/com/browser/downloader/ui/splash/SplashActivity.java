@@ -70,7 +70,7 @@ public class SplashActivity extends BaseTiActivity<SplashPresenter, SplashView> 
     public void showAd() {
         mInterstitialAd.show();
         // google analytics
-//        trackEvent(getString(R.string.app_name), getString(R.string.action_show_ad_splash), "Admob");
+        trackEvent(getString(R.string.app_name), getString(R.string.action_show_ad_splash), "Admob");
     }
 
 }

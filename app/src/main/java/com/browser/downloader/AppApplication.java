@@ -15,13 +15,13 @@ import com.browser.downloader.data.local.Constant;
 import com.browser.downloader.injection.component.ApplicationComponent;
 import com.browser.downloader.injection.component.DaggerApplicationComponent;
 import com.browser.downloader.injection.module.ApplicationModule;
+import com.crashlytics.android.Crashlytics;
 import com.facebook.drawee.backends.pipeline.Fresco;
 import com.facebook.imagepipeline.core.ImagePipelineConfig;
 import com.google.android.gms.ads.MobileAds;
-import com.google.android.gms.analytics.GoogleAnalytics;
-import com.google.android.gms.analytics.HitBuilders;
-import com.google.android.gms.analytics.Tracker;
+import com.google.firebase.FirebaseApp;
 
+import io.fabric.sdk.android.Fabric;
 import timber.log.Timber;
 
 public class AppApplication extends MultiDexApplication {
@@ -30,14 +30,21 @@ public class AppApplication extends MultiDexApplication {
 
     private static AppApplication mApplication;
 
-    private Tracker mTracker;
-
     @Override
     public void onCreate() {
         super.onCreate();
 
         // singleton
         mApplication = this;
+
+        // Init global context
+        GlobalContext.setContext(this);
+
+        // Init Firebase
+        FirebaseApp.initializeApp(this);
+
+        // Init Fabric
+        Fabric.with(this, new Crashlytics());
 
         // Init Admob
         MobileAds.initialize(this, Constant.AD_APP_ID);
@@ -47,13 +54,6 @@ public class AppApplication extends MultiDexApplication {
 
         // Init Timber
         initTimber();
-
-        // Init global context
-        GlobalContext.setContext(this);
-
-        // Init GA
-        GoogleAnalytics analytics = GoogleAnalytics.getInstance(this);
-        mTracker = analytics.newTracker(Constant.UA_ID);
     }
 
     @Override
@@ -85,15 +85,4 @@ public class AppApplication extends MultiDexApplication {
         return mApplication;
     }
 
-    public void trackView(String screenName) {
-        mTracker.setScreenName(screenName);
-        mTracker.send(new HitBuilders.ScreenViewBuilder().build());
-    }
-
-    public void trackEvent(String category, String action, String label) {
-        mTracker.send(new HitBuilders.EventBuilder().setCategory(category)
-                .setAction(action)
-                .setLabel(label)
-                .build());
-    }
 }

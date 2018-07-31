@@ -2,6 +2,7 @@ package com.browser.downloader.ui.videoplayer;
 
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v7.widget.LinearLayoutManager;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -9,10 +10,11 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.browser.core.R;
-import com.browser.downloader.ui.settings.BaseFragment;
-import com.browser.downloader.ui.adapter.VideoAdapter;
-import com.browser.downloader.data.model.Video;
 import com.browser.core.databinding.FragmentVideoBinding;
+import com.browser.core.mvp.BaseTiFragment;
+import com.browser.core.util.FileUtil;
+import com.browser.downloader.data.model.Video;
+import com.browser.downloader.ui.adapter.VideoAdapter;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -20,9 +22,7 @@ import org.greenrobot.eventbus.Subscribe;
 import java.io.File;
 import java.util.ArrayList;
 
-import com.browser.core.util.FileUtil;
-
-public class VideoFragment extends BaseFragment {
+public class OfflineFragment extends BaseTiFragment<OfflinePresenter, OfflineView> implements OfflineView {
 
     FragmentVideoBinding mBinding;
 
@@ -30,8 +30,14 @@ public class VideoFragment extends BaseFragment {
 
     private ArrayList<File> mListFiles;
 
-    public static VideoFragment getInstance() {
-        return new VideoFragment();
+    public static OfflineFragment getInstance() {
+        return new OfflineFragment();
+    }
+
+    @NonNull
+    @Override
+    public OfflinePresenter providePresenter() {
+        return new OfflinePresenter();
     }
 
     @Override

@@ -6,7 +6,10 @@ import android.os.StrictMode;
 import android.text.TextUtils;
 
 import com.browser.core.R;
-import com.browser.downloader.ui.BaseActivity;
+import com.browser.core.ui.BaseActivity;
+import com.browser.core.util.DialogUtil;
+import com.browser.core.util.StringUtil;
+import com.browser.downloader.data.local.Constant;
 import com.browser.downloader.data.model.Format;
 
 import org.json.JSONException;
@@ -17,10 +20,6 @@ import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
-
-import com.browser.downloader.data.local.Constant;
-import com.browser.core.util.DialogUtil;
-import com.browser.core.util.StringUtil;
 
 public class DailymotionService extends AsyncTask<String, String, String> {
 

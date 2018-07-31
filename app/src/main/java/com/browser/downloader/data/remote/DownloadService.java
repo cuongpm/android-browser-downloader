@@ -4,7 +4,10 @@ import android.content.Context;
 import android.os.AsyncTask;
 
 import com.browser.core.R;
-import com.browser.downloader.ui.BaseActivity;
+import com.browser.core.ui.BaseActivity;
+import com.browser.core.util.AppUtil;
+import com.browser.core.util.DialogUtil;
+import com.browser.core.util.StringUtil;
 import com.browser.downloader.data.model.Video;
 
 import org.json.JSONObject;
@@ -13,10 +16,6 @@ import java.io.BufferedInputStream;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
-
-import com.browser.core.util.AppUtil;
-import com.browser.core.util.DialogUtil;
-import com.browser.core.util.StringUtil;
 
 public class DownloadService extends AsyncTask<String, Integer, Video> {
 

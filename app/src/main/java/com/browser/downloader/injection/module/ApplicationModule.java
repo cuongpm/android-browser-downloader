@@ -5,7 +5,6 @@ import android.content.Context;
 
 import com.browser.downloader.data.local.PreferencesManager;
 import com.browser.downloader.data.remote.DataService;
-import com.browser.downloader.injection.ApplicationContext;
 
 import javax.inject.Singleton;
 
@@ -27,7 +26,6 @@ public class ApplicationModule {
     }
 
     @Provides
-    @ApplicationContext
     Context provideApplicationContext() {
         return mApplication;
     }

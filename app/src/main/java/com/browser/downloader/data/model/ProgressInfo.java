@@ -10,6 +10,10 @@ public class ProgressInfo {
 
     private String progressSize;
 
+    private int bytesDownloaded;
+
+    private int bytesTotal;
+
     public long getDownloadId() {
         return downloadId;
     }
@@ -42,4 +46,19 @@ public class ProgressInfo {
         this.progressSize = progressSize;
     }
 
+    public int getBytesDownloaded() {
+        return bytesDownloaded;
+    }
+
+    public void setBytesDownloaded(int bytesDownloaded) {
+        this.bytesDownloaded = bytesDownloaded;
+    }
+
+    public int getBytesTotal() {
+        return bytesTotal;
+    }
+
+    public void setBytesTotal(int bytesTotal) {
+        this.bytesTotal = bytesTotal;
+    }
 }

@@ -13,6 +13,11 @@ import android.view.View;
 import com.browser.core.R;
 import com.browser.core.ui.dialog.DialogAction;
 import com.browser.core.util.RestApiUtil;
+import com.browser.downloader.data.local.Constant;
+import com.browser.downloader.ui.home.MainActivity;
+import com.google.android.gms.analytics.GoogleAnalytics;
+import com.google.android.gms.analytics.HitBuilders;
+import com.google.android.gms.analytics.Tracker;
 
 import net.grandcentrix.thirtyinch.TiFragment;
 
@@ -23,6 +28,10 @@ public abstract class BaseTiFragment<P extends BaseTiPresenter<V>, V extends Bas
         extends TiFragment<P, V> implements BaseTiView {
 
     private ProgressDialog mLoading;
+
+    private Tracker mTracker;
+
+    protected MainActivity mActivity;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -59,7 +68,24 @@ public abstract class BaseTiFragment<P extends BaseTiPresenter<V>, V extends Bas
     }
 
     private void initBase() {
+        mActivity = (MainActivity) getActivity();
         mLoading = new ProgressDialog(getActivity(), R.style.ProgressDialogDim);
+
+        // Init GA
+        GoogleAnalytics analytics = GoogleAnalytics.getInstance(getContext());
+        mTracker = analytics.newTracker(Constant.UA_ID);
+    }
+
+    public void trackView(String screenName) {
+        mTracker.setScreenName(screenName);
+        mTracker.send(new HitBuilders.ScreenViewBuilder().build());
+    }
+
+    public void trackEvent(String category, String action, String label) {
+        mTracker.send(new HitBuilders.EventBuilder().setCategory(category)
+                .setAction(action)
+                .setLabel(label)
+                .build());
     }
 
     @Override

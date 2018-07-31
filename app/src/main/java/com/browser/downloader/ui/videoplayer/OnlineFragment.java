@@ -2,6 +2,7 @@ package com.browser.downloader.ui.videoplayer;
 
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v7.widget.LinearLayoutManager;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -9,18 +10,18 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.browser.core.R;
-import com.browser.downloader.ui.settings.BaseFragment;
-import com.browser.downloader.ui.adapter.SavedVideoAdapter;
+import com.browser.core.databinding.FragmentOnlineBinding;
+import com.browser.core.mvp.BaseTiFragment;
 import com.browser.downloader.data.model.SavedVideo;
 import com.browser.downloader.data.model.Video;
-import com.browser.core.databinding.FragmentOnlineBinding;
+import com.browser.downloader.ui.adapter.SavedVideoAdapter;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
 import java.util.ArrayList;
 
-public class OnlineFragment extends BaseFragment {
+public class OnlineFragment extends BaseTiFragment<OnlinePresenter, OnlineView> implements OnlineView {
 
     FragmentOnlineBinding mBinding;
 
@@ -30,6 +31,12 @@ public class OnlineFragment extends BaseFragment {
 
     public static OnlineFragment getInstance() {
         return new OnlineFragment();
+    }
+
+    @NonNull
+    @Override
+    public OnlinePresenter providePresenter() {
+        return new OnlinePresenter();
     }
 
     @Override
@@ -60,7 +67,7 @@ public class OnlineFragment extends BaseFragment {
     }
 
     private void initUI() {
-        mVideos = mPreferenceManager.getSavedVideos();
+        mVideos = getPresenter().getSavedVideos();
         mBinding.rvVideo.setLayoutManager(new LinearLayoutManager(mActivity));
         mSavedVideoAdapter = new SavedVideoAdapter(mVideos, view -> {
             String tag = (String) view.getTag();

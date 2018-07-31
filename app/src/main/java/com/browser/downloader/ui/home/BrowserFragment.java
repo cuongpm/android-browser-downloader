@@ -9,6 +9,7 @@ import android.databinding.DataBindingUtil;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.BottomSheetDialog;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
@@ -32,26 +33,32 @@ import android.webkit.WebViewClient;
 import android.widget.Toast;
 
 import com.browser.core.R;
-import com.browser.downloader.ui.bookmark.BookmarkActivity;
-import com.browser.downloader.ui.settings.BaseFragment;
-import com.browser.downloader.ui.history.HistoryActivity;
-import com.browser.downloader.ui.videoplayer.VideoPlayerActivity;
-import com.browser.downloader.ui.adapter.SuggestionAdapter;
+import com.browser.core.databinding.DialogDownloadVideoBinding;
+import com.browser.core.databinding.FragmentBrowserBinding;
+import com.browser.core.mvp.BaseTiFragment;
+import com.browser.core.util.AdUtil;
+import com.browser.core.util.AppUtil;
+import com.browser.core.util.DialogUtil;
+import com.browser.core.util.IntentUtil;
+import com.browser.core.util.ScriptUtil;
+import com.browser.core.util.TimeUtil;
+import com.browser.core.util.ViewUtil;
+import com.browser.downloader.data.local.Constant;
 import com.browser.downloader.data.model.ConfigData;
 import com.browser.downloader.data.model.Format;
 import com.browser.downloader.data.model.PagesSupported;
 import com.browser.downloader.data.model.SavedVideo;
 import com.browser.downloader.data.model.Suggestion;
-import com.browser.downloader.data.model.SuggestionType;
 import com.browser.downloader.data.model.Video;
-import com.browser.downloader.data.model.WebViewData;
-import com.browser.core.databinding.DialogDownloadVideoBinding;
-import com.browser.core.databinding.FragmentBrowserBinding;
-import com.browser.downloader.ui.dialog.GuidelineDialog;
-import com.browser.downloader.ui.dialog.YoutubeDialog;
 import com.browser.downloader.data.remote.DailymotionService;
 import com.browser.downloader.data.remote.DownloadService;
 import com.browser.downloader.data.remote.SearchService;
+import com.browser.downloader.ui.adapter.SuggestionAdapter;
+import com.browser.downloader.ui.bookmark.BookmarkActivity;
+import com.browser.downloader.ui.dialog.GuidelineDialog;
+import com.browser.downloader.ui.dialog.YoutubeDialog;
+import com.browser.downloader.ui.history.HistoryActivity;
+import com.browser.downloader.ui.videoplayer.VideoPlayerActivity;
 import com.google.android.gms.ads.AdSize;
 
 import org.greenrobot.eventbus.EventBus;
@@ -64,26 +71,14 @@ import java.util.concurrent.TimeUnit;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import rx.subjects.PublishSubject;
-import com.browser.downloader.data.local.Constant;
-import com.browser.core.util.AdUtil;
-import com.browser.core.util.AppUtil;
-import com.browser.core.util.DialogUtil;
-import com.browser.core.util.IntentUtil;
-import com.browser.core.util.ScriptUtil;
-import com.browser.core.util.TimeUtil;
-import com.browser.core.util.ViewUtil;
 
-public class BrowserFragment extends BaseFragment {
+public class BrowserFragment extends BaseTiFragment<BrowserPresenter, BrowserView> implements BrowserView {
 
     FragmentBrowserBinding mBinding;
 
     private PublishSubject<String> mPublishSubject;
 
     private SuggestionAdapter mSuggestionAdapter;
-
-    private ArrayList<WebViewData> mHistoryData;
-
-    private ArrayList<WebViewData> mBookmarData;
 
     private Video mCurrentVideo;
 
@@ -105,6 +100,12 @@ public class BrowserFragment extends BaseFragment {
 
     public static BrowserFragment getInstance() {
         return new BrowserFragment();
+    }
+
+    @NonNull
+    @Override
+    public BrowserPresenter providePresenter() {
+        return new BrowserPresenter();
     }
 
     @Override
@@ -136,10 +137,10 @@ public class BrowserFragment extends BaseFragment {
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == R.id.menu_add_bookmark) {
             if (mBinding.webview != null) {
-                if (isBookmarkLink(mBinding.webview)) {
-                    removeBookmark(mBinding.webview);
+                if (getPresenter().isBookmarkLink(mBinding.webview)) {
+                    getPresenter().removeBookmark(mBinding.webview);
                 } else {
-                    saveWebViewBookmark(mBinding.webview);
+                    getPresenter().saveWebViewBookmark(mBinding.webview);
                 }
                 updateBookmarkMenu(mBinding.webview);
             }
@@ -193,7 +194,7 @@ public class BrowserFragment extends BaseFragment {
             ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 0);
         }
 
-        ConfigData configData = mPreferenceManager.getConfigData();
+        ConfigData configData = getPresenter().getConfigData();
         mBinding.layoutSocial.layoutMostVisited.setVisibility(configData != null && configData.isShowAllPages() ? View.VISIBLE : View.GONE);
 
         mBinding.webview.getSettings().setJavaScriptEnabled(true);
@@ -248,7 +249,7 @@ public class BrowserFragment extends BaseFragment {
 
         mPublishSubject = PublishSubject.create();
         mPublishSubject.debounce(300, TimeUnit.MILLISECONDS).subscribe(searchValue -> {
-            List<Suggestion> listSuggestions = addAllSupportedPages(searchValue);
+            List<Suggestion> listSuggestions = getPresenter().addAllSupportedPages(searchValue);
             if (searchValue.length() > 0 && !searchValue.startsWith("http://") && !searchValue.startsWith("https://")) {
                 getActivity().runOnUiThread(() -> {
                     new SearchService(suggestions -> {
@@ -271,7 +272,7 @@ public class BrowserFragment extends BaseFragment {
 
     private void showSuggestion(List<Suggestion> suggestionList, List<String> suggestions) {
 
-        List<Suggestion> listSuggestions = addAllSuggestions(suggestionList, suggestions);
+        List<Suggestion> listSuggestions = getPresenter().addAllSuggestions(suggestionList, suggestions);
 
         mSuggestionAdapter = new SuggestionAdapter(mActivity, R.layout.item_suggestion, listSuggestions);
         mBinding.etSearch.setAdapter(mSuggestionAdapter);
@@ -287,42 +288,6 @@ public class BrowserFragment extends BaseFragment {
             mActivity.showInterstitialAdFullPosition();
         });
     }
-
-    private List<Suggestion> addAllSupportedPages(String searchValue) {
-        List<Suggestion> suggestionList = new ArrayList<>();
-
-        // Add all supported pages
-        ConfigData configData = mPreferenceManager.getConfigData();
-        if (configData != null && configData.getPagesSupported() != null) {
-            for (PagesSupported pagesSupported : configData.getPagesSupported()) {
-                if (pagesSupported.getName().contains(searchValue.toLowerCase())) {
-                    Suggestion suggestionWeb = new Suggestion();
-                    suggestionWeb.setSuggestion(pagesSupported.getName());
-                    suggestionWeb.setSuggestionType(SuggestionType.WEB.getValue());
-                    suggestionList.add(suggestionWeb);
-                }
-            }
-        }
-
-        return suggestionList;
-    }
-
-    private List<Suggestion> addAllSuggestions(List<Suggestion> suggestionList, List<String> suggestions) {
-        if (suggestions == null || suggestions.size() == 0) {
-            return suggestionList;
-        }
-
-        // Add all suggestions
-        for (String suggestion : suggestions) {
-            Suggestion suggestionString = new Suggestion();
-            suggestionString.setSuggestion(suggestion);
-            suggestionString.setSuggestionType(SuggestionType.SUGGESTION.getValue());
-            suggestionList.add(suggestionString);
-        }
-
-        return suggestionList;
-    }
-
 
     WebChromeClient webChromeClient = new WebChromeClient() {
         @Override
@@ -373,91 +338,17 @@ public class BrowserFragment extends BaseFragment {
             mBinding.etSearch.setText(view.getUrl());
             mBinding.progressBar.setVisibility(View.GONE);
             checkLinkStatus(view.getUrl());
-            saveWebViewHistory(view);
+            getPresenter().saveWebViewHistory(view);
             updateBookmarkMenu(view);
             super.onPageFinished(view, url);
         }
     };
 
-    private void saveWebViewHistory(WebView webView) {
-        WebViewData webViewData = new WebViewData();
-        String url = webView.getUrl();
-        if (!TextUtils.isEmpty(url)) {
-            webViewData.setUrl(url);
-            String title = webView.getTitle();
-            if (TextUtils.isEmpty(title)) {
-                try {
-                    title = url.split("/")[2];
-                } catch (Exception e) {
-                    e.printStackTrace();
-                    title = url;
-                }
-            }
-            webViewData.setTitle(title);
-            getWebViewHistory().add(0, webViewData);
-            mPreferenceManager.setHistory(getWebViewHistory());
-        }
-    }
-
-    private ArrayList<WebViewData> getWebViewHistory() {
-        if (mHistoryData == null) {
-            mHistoryData = mPreferenceManager.getHistory();
-        }
-        return mHistoryData;
-    }
-
-    private void saveWebViewBookmark(WebView webView) {
-        WebViewData webViewData = new WebViewData();
-        String url = webView.getUrl();
-        if (!TextUtils.isEmpty(url)) {
-            webViewData.setUrl(url);
-            String title = webView.getTitle();
-            if (TextUtils.isEmpty(title)) {
-                try {
-                    title = url.split("/")[2];
-                } catch (Exception e) {
-                    e.printStackTrace();
-                    title = url;
-                }
-            }
-            webViewData.setTitle(title);
-            getWebViewBookmark().add(0, webViewData);
-            mPreferenceManager.setBookmark(getWebViewBookmark());
-        }
-    }
-
-    private ArrayList<WebViewData> getWebViewBookmark() {
-        if (mBookmarData == null) {
-            mBookmarData = mPreferenceManager.getBookmark();
-        }
-        return mBookmarData;
-    }
-
-    private boolean isBookmarkLink(WebView webView) {
-        for (WebViewData webViewData : getWebViewBookmark()) {
-            if (webViewData.getUrl().equals(webView.getUrl())) {
-                return true;
-            }
-        }
-
-        return false;
-    }
-
-    private void removeBookmark(WebView webView) {
-        for (WebViewData webViewData : getWebViewBookmark()) {
-            if (webViewData.getUrl().equals(webView.getUrl())) {
-                getWebViewBookmark().remove(webViewData);
-                mPreferenceManager.setBookmark(getWebViewBookmark());
-                return;
-            }
-        }
-    }
-
     private void updateBookmarkMenu(WebView webView) {
         try {
-            mMenu.getItem(0).getSubMenu().getItem(0).setIcon(isBookmarkLink(webView)
+            mMenu.getItem(0).getSubMenu().getItem(0).setIcon(getPresenter().isBookmarkLink(webView)
                     ? R.drawable.ic_star_yellow_24dp : R.drawable.ic_star_border_gray_24dp);
-            mMenu.getItem(0).getSubMenu().getItem(0).setTitle(isBookmarkLink(webView)
+            mMenu.getItem(0).getSubMenu().getItem(0).setTitle(getPresenter().isBookmarkLink(webView)
                     ? "Remove bookmark" : "Add bookmark");
         } catch (Exception e) {
             e.printStackTrace();
@@ -523,9 +414,9 @@ public class BrowserFragment extends BaseFragment {
         binding.layoutVideoSave.tvOk.setOnClickListener(view -> {
             bottomSheetDialog.dismiss();
             // Save video
-            ArrayList<Video> currentVideos = mPreferenceManager.getSavedVideos();
+            ArrayList<Video> currentVideos = getPresenter().getSavedVideos();
             currentVideos.add(video);
-            mPreferenceManager.setSavedVideos(currentVideos);
+            getPresenter().setSavedVideos(currentVideos);
             // Show badge for tab online
             mActivity.showOnlineTabBadge();
             // Send event to Online screen to update list saved video
@@ -611,7 +502,7 @@ public class BrowserFragment extends BaseFragment {
             return;
         }
 
-        ConfigData configData = mPreferenceManager.getConfigData();
+        ConfigData configData = getPresenter().getConfigData();
         if (configData != null) {
             // Check site and pattern
             if (configData.getPagesSupported() != null) {
