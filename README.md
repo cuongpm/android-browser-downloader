@@ -1,5 +1,8 @@
-# Browser Downloader
+# Notice: This repository is deprecated
+This repository is not maintained anymore. But you could find a better version of this app with Kotlin language and MVVM architecture:
+https://github.com/cuongpm/youtube-dl-android
 
+## Browser Downloader
 An Android browser based on webview helps you detect and download your favorites videos from Youtube, Facebook, Twitter, Instagram, Dailymotion, Vimeo and more than [other 1000 sites](http://rg3.github.io/youtube-dl/supportedsites.html)
 
 ## Features
@@ -11,10 +14,9 @@ An Android browser based on webview helps you detect and download your favorites
 - Just onne click to download and watch your favorites video from Youtube, Facebook, Twitter, Instagram, Dailymotion, Vimeo or other sites
 
 ## Major technologies
-- Architecture: MVP Clearn Architecture
+- Architecture: MVP Architecture
 - Dependency injection: Dagger2
 - Network: Retrofit, RxJava
-- Testing: JUnit, Espresso, Mockito
 
 ## License
 This package is licensed under the MIT license. See [LICENSE](./LICENSE) for details.
