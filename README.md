@@ -1,3 +1,7 @@
+# Notice: This repository is deprecated
+This repository is not maintained anymore. But you could find a better version of this app with Kotlin language and MVVM architecture:
+https://github.com/cuongpm/youtube-dl-android
+
 ## Browser Downloader
 An Android browser based on webview helps you detect and download your favorites videos from Youtube, Facebook, Twitter, Instagram, Dailymotion, Vimeo and more than [other 1000 sites](http://rg3.github.io/youtube-dl/supportedsites.html)
 
